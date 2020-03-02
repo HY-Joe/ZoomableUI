@@ -35,7 +35,7 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var textfield2: UITextField!
     
-    @IBAction func handlePan(_ gesture: UIPanGestureRecognizer) {
+    @IBAction func handlePan(_ gesture: UIPanGestureRecognizer){
         /*
         // 1
         let translation = gesture.translation(in: view)
@@ -53,7 +53,49 @@ class ViewController: UIViewController {
         // 3
         gesture.setTranslation(.zero, in: view)
         */
+        
         textfield2.text = "Pan detected"
+    }
+    
+    @IBAction func handlePinch(_ gesture: UIPinchGestureRecognizer){
+        /*
+         guard let gestureView = gesture.view else {
+         return
+         }
+         
+         gestureView.transform = gestureView.transform.scaledBy(
+         x: gesture.scale,
+         y: gesture.scale
+         )
+         gesture.scale = 1
+        */
+        
+        textfield2.text = "Pinch detected"
+    }
+    
+    @IBAction func handleRotate(_ gesture: UIRotationGestureRecognizer){
+        /*
+         guard let gestureView = gesture.view else {
+         return
+         }
+         
+         gestureView.transform = gestureView.transform.rotated(
+         by: gesture.rotation
+         )
+         gesture.rotation = 0
+         */
+        
+        textfield2.text = "Rotation detected"
+    }
+    
+    @IBAction func handleTap(_ gesture: UITapGestureRecognizer){
+        
+        textfield2.text = "Tap detected"
+    }
+
+    @IBAction func handleSwipe(_ gesture: UISwipeGestureRecognizer){
+        
+        textfield2.text = "Swipe detected"
     }
     
 }

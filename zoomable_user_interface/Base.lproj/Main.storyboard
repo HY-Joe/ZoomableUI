@@ -70,6 +70,10 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="5Aa-ZA-QWP" appends="YES" id="ZeP-NG-s2Y"/>
+                            <outletCollection property="gestureRecognizers" destination="pV6-0N-haJ" appends="YES" id="ufM-IP-cbj"/>
+                            <outletCollection property="gestureRecognizers" destination="VuX-HG-T8I" appends="YES" id="iHL-zF-YqG"/>
+                            <outletCollection property="gestureRecognizers" destination="gWp-LX-TVL" appends="YES" id="5Ax-fb-OTI"/>
+                            <outletCollection property="gestureRecognizers" destination="dAR-e1-81z" appends="YES" id="RU4-qY-umw"/>
                         </connections>
                     </view>
                     <connections>
@@ -83,6 +87,26 @@
                         <action selector="handlePan:" destination="BYZ-38-t0r" id="zgl-ed-BQt"/>
                     </connections>
                 </panGestureRecognizer>
+                <pinchGestureRecognizer id="pV6-0N-haJ">
+                    <connections>
+                        <action selector="handlePinch:" destination="BYZ-38-t0r" id="7lJ-Dc-X1s"/>
+                    </connections>
+                </pinchGestureRecognizer>
+                <rotationGestureRecognizer id="VuX-HG-T8I">
+                    <connections>
+                        <action selector="handleRotate:" destination="BYZ-38-t0r" id="rhy-HG-gBO"/>
+                    </connections>
+                </rotationGestureRecognizer>
+                <tapGestureRecognizer id="gWp-LX-TVL">
+                    <connections>
+                        <action selector="handleTap:" destination="BYZ-38-t0r" id="To9-gH-ccQ"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <swipeGestureRecognizer direction="right" id="dAR-e1-81z">
+                    <connections>
+                        <action selector="handleSwipe:" destination="BYZ-38-t0r" id="AEL-aG-N9E"/>
+                    </connections>
+                </swipeGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="136.80000000000001" y="132.68365817091455"/>
         </scene>
