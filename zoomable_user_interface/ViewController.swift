@@ -15,6 +15,23 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
     }
 
-
+    @IBAction func B1Clicked(_ sender: Any) {
+        textfield.text = "B1 cliked"
+    }
+    
+    @IBAction func B2Clicked(_ sender: Any) {
+        textfield.text = "B2 cliked"
+    }
+    
+    @IBAction func B3Clicked(_ sender: Any) {
+        textfield.text = "B3 cliked"
+    }
+    
+    @IBAction func B4Clicked(_ sender: Any) {
+        textfield.text = "B4 cliked"
+    }
+    
+    @IBOutlet weak var textfield: UITextField!
+    
 }
 
