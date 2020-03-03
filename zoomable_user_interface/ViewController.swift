@@ -14,14 +14,21 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        // triple tap
+        let tripletap = UITapGestureRecognizer(target: self, action: #selector(tripleTapped))
+        tripletap.numberOfTapsRequired = 3
+        view.addGestureRecognizer(tripletap)
+        
         // double tap
         let doubletap = UITapGestureRecognizer(target: self, action: #selector(doubleTapped))
         doubletap.numberOfTapsRequired = 2
+        doubletap.require(toFail: tripletap)
         view.addGestureRecognizer(doubletap)
         
         // tap
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         tap.require(toFail: doubletap)
+        tap.require(toFail: tripletap)
         view.addGestureRecognizer(tap)
         
         // swipe
@@ -147,6 +154,10 @@ class ViewController: UIViewController {
     @objc func doubleTapped() {
         // do something here
         textfield2.text = "Double tap detected"
+    }
+    
+    @objc func tripleTapped(){
+        textfield2.text = "triple tap detected"
     }
     
 }
