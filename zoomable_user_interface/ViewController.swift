@@ -13,6 +13,31 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        let doubletap = UITapGestureRecognizer(target: self, action: #selector(doubleTapped))
+        doubletap.numberOfTapsRequired = 2
+        view.addGestureRecognizer(doubletap)
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        tap.require(toFail: doubletap)
+        view.addGestureRecognizer(tap)
+        
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        swipeLeft.direction = .left
+        self.view.addGestureRecognizer(swipeLeft)
+        
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        swipeRight.direction = .right
+        self.view.addGestureRecognizer(swipeRight)
+        
+        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        swipeUp.direction = .up
+        self.view.addGestureRecognizer(swipeUp)
+        
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        swipeDown.direction = .down
+        self.view.addGestureRecognizer(swipeDown)
+ 
     }
 
     @IBAction func B1Clicked(_ sender: Any) {
@@ -88,15 +113,32 @@ class ViewController: UIViewController {
         textfield2.text = "Rotation detected"
     }
     
-    @IBAction func handleTap(_ gesture: UITapGestureRecognizer){
+    @IBAction func handleTap(){
         
         textfield2.text = "Tap detected"
     }
 
     @IBAction func handleSwipe(_ gesture: UISwipeGestureRecognizer){
-        
-        textfield2.text = "Swipe detected"
+        if gesture.direction == .right {
+            textfield.text = "Swipe right detected"
+        }
+        else if gesture.direction == .left {
+            textfield.text = "Swipe left detected"
+        }
+        else if gesture.direction == .up {
+            textfield.text = "Swipe up detected"
+        }
+        else if gesture.direction == .down {
+            textfield.text = "Swipe down detected"
+        }
+    }
+    
+    
+    @objc func doubleTapped() {
+        // do something here
+        textfield2.text = "Double tap detected"
     }
     
 }
+
 
