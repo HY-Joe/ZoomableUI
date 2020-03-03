@@ -14,14 +14,17 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        // double tap
         let doubletap = UITapGestureRecognizer(target: self, action: #selector(doubleTapped))
         doubletap.numberOfTapsRequired = 2
         view.addGestureRecognizer(doubletap)
         
+        // tap
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         tap.require(toFail: doubletap)
         view.addGestureRecognizer(tap)
         
+        // swipe
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
         swipeLeft.direction = .left
         self.view.addGestureRecognizer(swipeLeft)
@@ -37,7 +40,14 @@ class ViewController: UIViewController {
         let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
         swipeDown.direction = .down
         self.view.addGestureRecognizer(swipeDown)
- 
+        
+        // pan
+        let pan = UIPanGestureRecognizer(target:self, action: #selector(handlePan))
+        pan.require(toFail: swipeLeft)
+        pan.require(toFail: swipeRight)
+        pan.require(toFail: swipeUp)
+        pan.require(toFail: swipeDown)
+        view.addGestureRecognizer(pan)
     }
 
     @IBAction func B1Clicked(_ sender: Any) {
@@ -60,7 +70,7 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var textfield2: UITextField!
     
-    @IBAction func handlePan(_ gesture: UIPanGestureRecognizer){
+    @IBAction func handlePan(){
         /*
         // 1
         let translation = gesture.translation(in: view)
@@ -120,16 +130,16 @@ class ViewController: UIViewController {
 
     @IBAction func handleSwipe(_ gesture: UISwipeGestureRecognizer){
         if gesture.direction == .right {
-            textfield.text = "Swipe right detected"
+            textfield2.text = "Swipe right detected"
         }
         else if gesture.direction == .left {
-            textfield.text = "Swipe left detected"
+            textfield2.text = "Swipe left detected"
         }
         else if gesture.direction == .up {
-            textfield.text = "Swipe up detected"
+            textfield2.text = "Swipe up detected"
         }
         else if gesture.direction == .down {
-            textfield.text = "Swipe down detected"
+            textfield2.text = "Swipe down detected"
         }
     }
     
