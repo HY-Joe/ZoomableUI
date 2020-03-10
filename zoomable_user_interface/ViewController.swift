@@ -7,12 +7,14 @@
 //
 
 import UIKit
+import AVFoundation
 
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        //drawHouse(origin_x: 0, origin_y: 0)
         
         // triple tap
         let tripletap = UITapGestureRecognizer(target: self, action: #selector(tripleTapped))
@@ -55,6 +57,9 @@ class ViewController: UIViewController {
         pan.require(toFail: swipeUp)
         pan.require(toFail: swipeDown)
         view.addGestureRecognizer(pan)
+        
+        house1.accessibilityLabel = "test"
+        house1.accessibilityHint = "Your current score"
     }
 
     @IBAction func B1Clicked(_ sender: Any) {
@@ -100,7 +105,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func handlePinch(_ gesture: UIPinchGestureRecognizer){
-        /*
+
          guard let gestureView = gesture.view else {
          return
          }
@@ -110,9 +115,10 @@ class ViewController: UIViewController {
          y: gesture.scale
          )
          gesture.scale = 1
-        */
+        
         
         textfield2.text = "Pinch detected"
+
     }
     
     @IBAction func handleRotate(_ gesture: UIRotationGestureRecognizer){
@@ -159,6 +165,112 @@ class ViewController: UIViewController {
     @objc func tripleTapped(){
         textfield2.text = "triple tap detected"
     }
+    
+    // image view
+    @IBOutlet weak var imageView: UIImageView!
+    
+    func drawLines() {
+        // 1
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 280, height: 250))
+        
+        let img = renderer.image { ctx in
+            // 2
+            ctx.cgContext.move(to: CGPoint(x: 20.0, y: 20.0))
+            ctx.cgContext.addLine(to: CGPoint(x: 260.0, y: 230.0))
+            ctx.cgContext.addLine(to: CGPoint(x: 100.0, y: 200.0))
+            ctx.cgContext.addLine(to: CGPoint(x: 20.0, y: 20.0))
+            
+            ctx.cgContext.setLineWidth(10)
+            ctx.cgContext.setStrokeColor(UIColor.black.cgColor)
+            
+            // 3
+            ctx.cgContext.strokePath()
+        }
+        
+        imageView.image = img
+    }
+    
+    func drawRectangle() {
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 280, height: 250))
+        
+        let img = renderer.image { ctx in
+            let rectangle = CGRect(x: 0, y: 0, width: 280, height: 250)
+            
+            // 4
+            ctx.cgContext.setFillColor(UIColor.yellow.cgColor)
+            ctx.cgContext.setStrokeColor(UIColor.gray.cgColor)
+            ctx.cgContext.setLineWidth(20)
+            
+            // 5
+            ctx.cgContext.addRect(rectangle)
+            ctx.cgContext.drawPath(using: .fillStroke)
+        }
+        
+        imageView.image = img
+    }
+    
+    func drawCircle() {
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 280, height: 250))
+        
+        let img = renderer.image { ctx in
+            let rect = CGRect(x: 5, y: 5, width: 270, height: 240)
+            
+            // 6
+            ctx.cgContext.setFillColor(UIColor.blue.cgColor)
+            ctx.cgContext.setStrokeColor(UIColor.black.cgColor)
+            ctx.cgContext.setLineWidth(10)
+            
+            ctx.cgContext.addEllipse(in: rect)
+            ctx.cgContext.drawPath(using: .fillStroke)
+        }
+        
+        imageView.image = img
+    }
+    
+    func drawHouse(origin_x: Int, origin_y: Int) {
+        let imgwidth = imageView.frame.width
+        let imgheight = imageView.frame.height
+        
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: imgwidth, height: imgheight))
+        
+        let img = renderer.image{ctx in
+            let rectangle = [CGRect(x:origin_x, y:origin_y, width: 100, height: 150), CGRect(x:100/2-6, y:100/2+6, width: 12, height: 12)]
+        
+            // 4
+            ctx.cgContext.setFillColor(UIColor.white.cgColor)
+            ctx.cgContext.setStrokeColor(UIColor.black.cgColor)
+            ctx.cgContext.setLineWidth(1)
+            
+            // 5
+            ctx.cgContext.addRect(rectangle[0])
+            ctx.cgContext.addRect(rectangle[1])
+            ctx.cgContext.drawPath(using: .fillStroke)
+            
+        }
+        
+        imageView.image = img
+        
+    }
+    
+    // objects
+    @IBOutlet weak var house1: UIButton!
+    @IBOutlet weak var flower1: UIButton!
+    
+    @IBOutlet weak var house2: UIButton!    
+    @IBOutlet weak var flower2: UIButton!
+    
+    @IBAction func handleHouse1(_ sender: Any) {
+        textfield2.text = "house1 touched"
+        
+        let string = "Hello, World!"
+        let utterance = AVSpeechUtterance(string: string)
+        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+
+        let synth = AVSpeechSynthesizer()
+        synth.speak(utterance)
+
+    }
+    
     
 }
 
