@@ -56,7 +56,13 @@ class ViewController: UIViewController {
         pan.require(toFail: swipeRight)
         pan.require(toFail: swipeUp)
         pan.require(toFail: swipeDown)
+        pan.minimumNumberOfTouches = 3
+        pan.maximumNumberOfTouches = 3
         view.addGestureRecognizer(pan)
+        
+        let pinch = UIPinchGestureRecognizer(target:self, action: #selector(handlePinch))
+        
+        view.addGestureRecognizer(pinch)
         
         house1.accessibilityLabel = "test"
         house1.accessibilityHint = "Your current score"
@@ -82,8 +88,8 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var textfield2: UITextField!
     
-    @IBAction func handlePan(){
-        /*
+    @IBAction func handlePan(_ gesture: UIPanGestureRecognizer){
+        
         // 1
         let translation = gesture.translation(in: view)
         
@@ -99,7 +105,7 @@ class ViewController: UIViewController {
         
         // 3
         gesture.setTranslation(.zero, in: view)
-        */
+        
         
         textfield2.text = "Pan detected"
     }
@@ -115,7 +121,6 @@ class ViewController: UIViewController {
          y: gesture.scale
          )
          gesture.scale = 1
-        
         
         textfield2.text = "Pinch detected"
 
