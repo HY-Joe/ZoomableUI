@@ -8,9 +8,14 @@
 
 import UIKit
 import AVFoundation
+import CoreGraphics
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UIScrollViewDelegate {
 
+    @IBOutlet weak var scrollView: UIScrollView!
+    
+    @IBOutlet weak var innerView: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -50,22 +55,42 @@ class ViewController: UIViewController {
         swipeDown.direction = .down
         self.view.addGestureRecognizer(swipeDown)
         
+        /*
         // pan
         let pan = UIPanGestureRecognizer(target:self, action: #selector(handlePan))
-        pan.require(toFail: swipeLeft)
-        pan.require(toFail: swipeRight)
-        pan.require(toFail: swipeUp)
-        pan.require(toFail: swipeDown)
-        pan.minimumNumberOfTouches = 3
-        pan.maximumNumberOfTouches = 3
-        view.addGestureRecognizer(pan)
+        //pan.require(toFail: swipeLeft)
+        //pan.require(toFail: swipeRight)
+        //pan.require(toFail: swipeUp)
+        //pan.require(toFail: swipeDown)
+        pan.minimumNumberOfTouches = 2
+        pan.maximumNumberOfTouches = 2
+        innerView.addGestureRecognizer(pan)
         
         let pinch = UIPinchGestureRecognizer(target:self, action: #selector(handlePinch))
         
-        view.addGestureRecognizer(pinch)
+        innerView.addGestureRecognizer(pinch)
         
         house1.accessibilityLabel = "test"
         house1.accessibilityHint = "Your current score"
+        */
+        //house1.addGestureRecognizer(pinch)
+        
+        scrollView.alwaysBounceVertical = false
+        scrollView.alwaysBounceHorizontal = false
+        
+        scrollView.minimumZoomScale = 1.0
+        scrollView.maximumZoomScale = 2.0
+        scrollView.delegate = self
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
+    @available(iOS 2.0, *)
+    public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return self.innerView
     }
 
     @IBAction func B1Clicked(_ sender: Any) {
@@ -88,8 +113,8 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var textfield2: UITextField!
     
-    @IBAction func handlePan(_ gesture: UIPanGestureRecognizer){
-        
+    @IBAction func handlePan(_ sender: UIPanGestureRecognizer){
+        /*
         // 1
         let translation = gesture.translation(in: view)
         
@@ -107,24 +132,47 @@ class ViewController: UIViewController {
         gesture.setTranslation(.zero, in: view)
         
         
+        let translation = sender.translation(in: self.view)
+        let statusFrame = UIApplication.shared.statusBarFrame
+
+        if let senderView = sender.view {
+            if senderView.frame.origin.x < 0.0 {
+                senderView.frame.origin = CGPoint(x: 0.0, y: senderView.frame.origin.y)
+            }
+            if senderView.frame.origin.y < statusFrame.height {
+                senderView.frame.origin = CGPoint(x: senderView.frame.origin.x, y: statusFrame.height)
+            }
+            if senderView.frame.origin.x + senderView.frame.size.width > view.frame.width {
+                senderView.frame.origin = CGPoint(x: view.frame.width - senderView.frame.size.width, y: senderView.frame.origin.y)
+            }
+            if senderView.frame.origin.y + senderView.frame.size.height > view.frame.height {
+                senderView.frame.origin = CGPoint(x: senderView.frame.origin.x, y: view.frame.height - senderView.frame.size.height)
+            }
+        }
+
+        if let centerX = sender.view?.center.x, let centerY = sender.view?.center.y {
+            sender.view?.center = CGPoint.init(x: centerX + translation.x , y: centerY + translation.y)
+            sender.setTranslation(CGPoint.zero, in: self.view)
+        }
+        */
         textfield2.text = "Pan detected"
     }
     
     @IBAction func handlePinch(_ gesture: UIPinchGestureRecognizer){
-
+        /*
          guard let gestureView = gesture.view else {
          return
          }
+           
+        gestureView.transform = gestureView.transform.scaledBy(
+            x: gesture.scale,
+            y: gesture.scale
+        )
          
-         gestureView.transform = gestureView.transform.scaledBy(
-         x: gesture.scale,
-         y: gesture.scale
-         )
-         gesture.scale = 1
-        
-        textfield2.text = "Pinch detected"
-
+        gesture.scale = 1.0
+*/
     }
+    
     
     @IBAction func handleRotate(_ gesture: UIRotationGestureRecognizer){
         /*
