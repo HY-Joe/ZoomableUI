@@ -26,15 +26,16 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         tripletap.numberOfTapsRequired = 3
         view.addGestureRecognizer(tripletap)
         
-        // double tap
-        let doubletap = UITapGestureRecognizer(target: self, action: #selector(doubleTapped))
-        doubletap.numberOfTapsRequired = 2
-        doubletap.require(toFail: tripletap)
-        view.addGestureRecognizer(doubletap)
+        // two finger double tap
+        let tfdoubletap = UITapGestureRecognizer(target: self, action: #selector(twoFingerDoubleTap))
+        tfdoubletap.numberOfTapsRequired = 2
+        tfdoubletap.numberOfTouchesRequired = 2
+        tfdoubletap.require(toFail: tripletap)
+        view.addGestureRecognizer(tfdoubletap)
         
         // tap
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-        tap.require(toFail: doubletap)
+        tap.require(toFail: tfdoubletap)
         tap.require(toFail: tripletap)
         view.addGestureRecognizer(tap)
         
@@ -81,6 +82,9 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         scrollView.minimumZoomScale = 1.0
         scrollView.maximumZoomScale = 2.0
         scrollView.delegate = self
+        
+        house1.tag = 1
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -209,10 +213,46 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
+    @objc func handleDoubleTap(_ recognizer: UITapGestureRecognizer) {
+        let scale = min(scrollView.zoomScale * 2, scrollView.maximumZoomScale)
+
+        if scale != scrollView.zoomScale { // zoom in
+            let point = recognizer.location(in: imageView)
+
+            let scrollSize = scrollView.frame.size
+            let size = CGSize(width: scrollSize.width / scrollView.maximumZoomScale,
+                              height: scrollSize.height / scrollView.maximumZoomScale)
+            let origin = CGPoint(x: point.x - size.width / 2,
+                                 y: point.y - size.height / 2)
+            scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
+        } else if scrollView.zoomScale == 1 { //zoom out
+            scrollView.zoom(to: zoomRectForScale(scale: scrollView.maximumZoomScale, center: recognizer.location(in: imageView)), animated: true)
+        }
+    }
     
-    @objc func doubleTapped() {
+    @objc func zoomRectForScale(scale: CGFloat, center: CGPoint) -> CGRect {
+        var zoomRect = CGRect.zero
+        zoomRect.size.height = imageView.frame.size.height / scale
+        zoomRect.size.width  = imageView.frame.size.width  / scale
+        let newCenter = scrollView.convert(center, from: imageView)
+        zoomRect.origin.x = newCenter.x - (zoomRect.size.width / 2.0)
+        zoomRect.origin.y = newCenter.y - (zoomRect.size.height / 2.0)
+        return zoomRect
+    }
+    
+    @objc func twoFingerDoubleTap() {
         // do something here
         textfield2.text = "Double tap detected"
+        if scrollView.maximumZoomScale == 2.0{
+            scrollView.maximumZoomScale = 1.0
+            scrollView.isScrollEnabled = false
+            tts(input: "zoom disabled")
+        }
+        else if scrollView.maximumZoomScale == 1.0 {
+            scrollView.maximumZoomScale = 2.0
+            scrollView.isScrollEnabled = true
+            tts(input: "zoom enabled")
+        }
     }
     
     @objc func tripleTapped(){
@@ -314,14 +354,23 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     
     @IBAction func handleHouse1(_ sender: Any) {
         textfield2.text = "house1 touched"
-        
-        let string = "Hello, World!"
+        let button = sender as! UIButton
+        let string = String(button.tag)
         let utterance = AVSpeechUtterance(string: string)
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
 
         let synth = AVSpeechSynthesizer()
         synth.speak(utterance)
 
+    }
+    
+    func tts(input: String){
+
+        let utterance = AVSpeechUtterance(string: input)
+        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+
+        let synth = AVSpeechSynthesizer()
+        synth.speak(utterance)
     }
     
     
