@@ -239,6 +239,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     }
     
     @objc func zoomRectForScale(scale: CGFloat, center: CGPoint) -> CGRect {
+        print("test")
         var zoomRect = CGRect.zero
         zoomRect.size.height = imageView.frame.size.height / scale
         zoomRect.size.width  = imageView.frame.size.width  / scale
@@ -252,6 +253,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         let scale = min(scrollView.zoomScale * 2, scrollView.maximumZoomScale)
 
         if scale != scrollView.zoomScale { // zoom in
+            
             let point = recognizer.location(in: imageView)
 
             let scrollSize = scrollView.frame.size
@@ -260,8 +262,16 @@ class ViewController: UIViewController, UIScrollViewDelegate {
             let origin = CGPoint(x: point.x - size.width / 2,
                                  y: point.y - size.height / 2)
             scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
-        } else if scrollView.zoomScale == 1 { //zoom out
-            scrollView.zoom(to: zoomRectForScale(scale: scrollView.maximumZoomScale, center: recognizer.location(in: imageView)), animated: true)
+            print(scrollView.zoomScale)
+        } else if scrollView.zoomScale == 2.0 { //zoom out
+            let point = recognizer.location(in: imageView)
+
+            let scrollSize = scrollView.frame.size
+            let size = CGSize(width: scrollSize.width,
+                              height: scrollSize.height)
+            let origin = CGPoint(x: point.x - size.width / 2,
+                                 y: point.y - size.height / 2)
+            scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
         }
     }
     
