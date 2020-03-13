@@ -28,9 +28,6 @@
                                                 <rect key="frame" x="37" y="101" width="113" height="144"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <state key="normal" image="house_1"/>
-                                                <connections>
-                                                    <action selector="handleHouse1:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sRM-MA-Nxb"/>
-                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Na5-et-EyC">
                                                 <rect key="frame" x="158" y="188" width="28" height="57"/>

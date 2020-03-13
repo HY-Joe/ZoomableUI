@@ -92,7 +92,47 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         scrollView.delegate = self
         
         house1.tag = 1
+        house2.tag = 3
+        flower1.tag = 2
+        flower2.tag = 4
+        house1.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
+        house2.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
+        flower1.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
+        flower2.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
         
+    }
+    
+    @objc func buttonTap(_ sender: UIButton){
+        print(sender.tag)
+        let scale = min(scrollView.zoomScale * 2, scrollView.maximumZoomScale)
+
+        if scale != scrollView.zoomScale { // zoom in
+            
+            let point = sender.frame.origin
+            
+            let point_x = point.x + sender.frame.width/2
+            let point_y = point.y + sender.frame.height/2
+        
+            let scrollSize = scrollView.frame.size
+            let size = CGSize(width: scrollSize.width / scrollView.maximumZoomScale,
+                              height: scrollSize.height / scrollView.maximumZoomScale)
+            let origin = CGPoint(x: point_x - size.width / 2,
+                                 y: point_y - size.height / 2)
+            scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
+            print(scrollView.zoomScale)
+        } else if scrollView.zoomScale == 2.0 { //zoom out
+            let point = sender.frame.origin
+            
+            let point_x = point.x + sender.frame.width/2
+            let point_y = point.y + sender.frame.height/2
+
+            let scrollSize = scrollView.frame.size
+            let size = CGSize(width: scrollSize.width,
+                              height: scrollSize.height)
+            let origin = CGPoint(x: point_x - size.width / 2,
+                                 y: point_y - size.height / 2)
+            scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -105,24 +145,6 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         return self.innerView
     }
 
-    @IBAction func B1Clicked(_ sender: Any) {
-        textfield.text = "B1 cliked"
-    }
-    
-    @IBAction func B2Clicked(_ sender: Any) {
-        textfield.text = "B2 cliked"
-    }
-    
-    @IBAction func B3Clicked(_ sender: Any) {
-        textfield.text = "B3 cliked"
-    }
-    
-    @IBAction func B4Clicked(_ sender: Any) {
-        textfield.text = "B4 cliked"
-    }
-    
-    @IBOutlet weak var textfield: UITextField!
-    
     @IBOutlet weak var textfield2: UITextField!
     
     @IBAction func handlePan(_ sender: UIPanGestureRecognizer){
@@ -386,18 +408,6 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     
     @IBOutlet weak var house2: UIButton!    
     @IBOutlet weak var flower2: UIButton!
-    
-    @IBAction func handleHouse1(_ sender: Any) {
-        textfield2.text = "house1 touched"
-        let button = sender as! UIButton
-        let string = String(button.tag)
-        let utterance = AVSpeechUtterance(string: string)
-        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-
-        let synth = AVSpeechSynthesizer()
-        synth.speak(utterance)
-
-    }
     
     func tts(input: String){
 
