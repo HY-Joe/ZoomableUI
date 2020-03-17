@@ -126,16 +126,47 @@ class ViewController3: UIViewController, UIScrollViewDelegate {
         }
     }
     
-    @objc func twoFingerDoubleTap() {
-        if scrollView.maximumZoomScale == 2.0{
-            scrollView.maximumZoomScale = 1.0
-            scrollView.isScrollEnabled = false
-            tts(input: "zoom disabled")
+    @objc func twoFingerDoubleTap(_ recognizer: UITapGestureRecognizer) {
+        if scrollView.zoomScale == 1.0 { // zoom in
+        
         }
-        else if scrollView.maximumZoomScale == 1.0 {
-            scrollView.maximumZoomScale = 2.0
-            scrollView.isScrollEnabled = true
-            tts(input: "zoom enabled")
+        else if scrollView.zoomScale == 2.0{
+            print("doubleTap zoomout")
+            print(scrollView.zoomScale)
+            let point = recognizer.location(in: innerView)
+
+            let scrollSize = UIScreen.main.bounds.size
+            let size = CGSize(width: scrollSize.width,
+                              height: scrollSize.height)
+            let origin = CGPoint(x: point.x - size.width / 2,
+                                 y: point.y - size.height / 2)
+            scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
+        }
+        else if scrollView.zoomScale == 4.0{
+            let point = recognizer.location(in: innerView)
+            print(point)
+            let scrollSize = scrollView.frame.size
+            let size = CGSize(width: scrollSize.width / 2,
+                              height: scrollSize.height / 2)
+            let origin = CGPoint(x: point.x - size.width / 2,
+                                 y: point.y - size.height / 2)
+            scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
+            print("doubleTap zoomin")
+            print(scrollView.zoomScale)
+        }
+        else if scrollView.zoomScale == 8.0 { //zoom out
+            let point = recognizer.location(in: innerView)
+            print(point)
+            let scrollSize = scrollView.frame.size
+            print("frame size")
+            print(scrollView.frame.size)
+            let size = CGSize(width: scrollSize.width / 4,
+                              height: scrollSize.height / 4)
+            let origin = CGPoint(x: point.x - size.width / 2,
+                                 y: point.y - size.height / 2)
+            scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
+            print("doubleTap zoomin")
+            print(scrollView.zoomScale)
         }
     }
     
