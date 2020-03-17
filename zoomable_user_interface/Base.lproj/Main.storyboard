@@ -164,6 +164,10 @@
                     <navigationItem key="navigationItem" id="fI0-U8-Gc9"/>
                     <connections>
                         <outlet property="innerView" destination="h7N-PX-Ofv" id="LbZ-nL-brT"/>
+                        <outlet property="rect1" destination="RMC-7h-Auy" id="nmI-5u-0r8"/>
+                        <outlet property="rect2" destination="GzJ-Je-I0v" id="pZ5-uC-vIY"/>
+                        <outlet property="rect3" destination="RiX-Vg-LNw" id="v3t-Qb-MO3"/>
+                        <outlet property="rect4" destination="pik-TN-zIb" id="zJe-WD-qqG"/>
                         <outlet property="scrollView" destination="3RI-Q2-o06" id="5h5-we-2Yp"/>
                     </connections>
                 </viewController>
