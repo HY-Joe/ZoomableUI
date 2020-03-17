@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Sfo-2e-BPd">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -21,7 +21,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zDz-jX-pIm">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JhY-q7-Kva">
@@ -44,14 +44,18 @@
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <state key="normal" image="flower_2"/>
                                             </button>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="56U-US-wyb">
+                                                <rect key="frame" x="237" y="101" width="108" height="142"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" image="rectangle"/>
+                                            </button>
                                             <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kgY-Ky-fLn">
-                                                <rect key="frame" x="11" y="617" width="165" height="30"/>
+                                                <rect key="frame" x="11" y="566" width="165" height="30"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
                                             </textField>
                                         </subviews>
-                                        <color key="backgroundColor" systemColor="opaqueSeparatorColor" red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </view>
                                 </subviews>
                                 <viewLayoutGuide key="contentLayoutGuide" id="dOA-sY-Ct7"/>
@@ -69,6 +73,7 @@
                             <outletCollection property="gestureRecognizers" destination="dAR-e1-81z" appends="YES" id="RU4-qY-umw"/>
                         </connections>
                     </view>
+                    <navigationItem key="navigationItem" id="4Y6-YU-aj6"/>
                     <connections>
                         <outlet property="flower1" destination="Na5-et-EyC" id="07e-q9-hyw"/>
                         <outlet property="flower2" destination="wak-bR-HBe" id="sDx-Aj-jV4"/>
@@ -106,7 +111,67 @@
                     </connections>
                 </swipeGestureRecognizer>
             </objects>
+            <point key="canvasLocation" x="1612" y="133"/>
+        </scene>
+        <!--Main Navigation Controller-->
+        <scene sceneID="11S-4k-3l8">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Sfo-2e-BPd" customClass="MainNavigationController" customModule="zoomable_user_interface" customModuleProvider="target" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="0NK-xf-6Rz">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Mvs-bS-NYw" kind="relationship" relationship="rootViewController" id="6Ox-kR-fw2"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9KJ-bf-Icj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
             <point key="canvasLocation" x="136.80000000000001" y="132.68365817091455"/>
+        </scene>
+        <!--First View Controller-->
+        <scene sceneID="2ac-vC-Qrr">
+            <objects>
+                <viewController id="Mvs-bS-NYw" customClass="FirstViewController" customModule="zoomable_user_interface" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="h9Y-Nd-MgR">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="49" translatesAutoresizingMaskIntoConstraints="NO" id="Bue-4S-Ry4">
+                                <rect key="frame" x="130" y="239.5" width="115" height="188"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cSK-YU-yAS">
+                                        <rect key="frame" x="0.0" y="0.0" width="115" height="30"/>
+                                        <state key="normal" title="Pinch-to-Zoom"/>
+                                        <connections>
+                                            <segue destination="BYZ-38-t0r" kind="show" id="NJd-p2-TFO"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YFZ-mq-KFA">
+                                        <rect key="frame" x="0.0" y="79" width="115" height="30"/>
+                                        <state key="normal" title="Functional Zoom"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zib-SS-wvD">
+                                        <rect key="frame" x="0.0" y="158" width="115" height="30"/>
+                                        <state key="normal" title="Fixed Zoom"/>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="Bue-4S-Ry4" firstAttribute="centerY" secondItem="h9Y-Nd-MgR" secondAttribute="centerY" id="dBZ-l0-9iL"/>
+                            <constraint firstItem="Bue-4S-Ry4" firstAttribute="centerX" secondItem="h9Y-Nd-MgR" secondAttribute="centerX" id="mfg-9S-Zos"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="R8e-CZ-Gw4"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="nBH-b9-mh7"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WJ4-hS-BF3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="922" y="133"/>
         </scene>
     </scenes>
     <resources>
@@ -114,5 +179,6 @@
         <image name="flower_2" width="174" height="354"/>
         <image name="house_1" width="358" height="464"/>
         <image name="house_2" width="510" height="686"/>
+        <image name="rectangle" width="270" height="316"/>
     </resources>
 </document>
