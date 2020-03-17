@@ -71,6 +71,8 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         scrollView.maximumZoomScale = 10.0
         scrollView.delegate = self
         
+        scrollView.isScrollEnabled = false
+        
         house1.tag = 1
         house2.tag = 3
         flower1.tag = 2

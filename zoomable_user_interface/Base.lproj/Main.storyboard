@@ -160,18 +160,45 @@
         <!--View Controller3-->
         <scene sceneID="0aP-fU-MfU">
             <objects>
-                <viewController id="kg6-FI-CsI" customClass="ViewController3" customModule="zoomable_user_interface" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController autoresizesArchivedViewToFullSize="NO" id="kg6-FI-CsI" customClass="ViewController3" customModule="zoomable_user_interface" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="pEi-p3-3g5">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="V0N-zK-ERs">
+                                <rect key="frame" x="0.0" y="44" width="375" height="623"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xiz-sH-taH">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rip-3R-CQU">
+                                                <rect key="frame" x="226" y="331" width="109" height="106"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                    </view>
+                                </subviews>
+                                <viewLayoutGuide key="contentLayoutGuide" id="07E-na-jxY"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="qLI-FU-MsE"/>
+                            </scrollView>
+                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="dDD-Iv-Ebb"/>
                     </view>
                     <navigationItem key="navigationItem" id="uYX-Kw-x0a"/>
+                    <connections>
+                        <outlet property="innerView" destination="xiz-sH-taH" id="e4P-l6-PPW"/>
+                        <outlet property="rect1" destination="rip-3R-CQU" id="IMI-ac-kVD"/>
+                        <outlet property="scrollView" destination="V0N-zK-ERs" id="DUJ-5p-39l"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gqP-kT-tzo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1622" y="804"/>
+            <point key="canvasLocation" x="1621.5999999999999" y="803.74812593703155"/>
         </scene>
         <!--Main Navigation Controller-->
         <scene sceneID="11S-4k-3l8">
