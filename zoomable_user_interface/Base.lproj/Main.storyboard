@@ -56,6 +56,7 @@
                                                 <textInputTraits key="textInputTraits"/>
                                             </textField>
                                         </subviews>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                     </view>
                                 </subviews>
                                 <viewLayoutGuide key="contentLayoutGuide" id="dOA-sY-Ct7"/>
@@ -111,7 +112,66 @@
                     </connections>
                 </swipeGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1612" y="133"/>
+            <point key="canvasLocation" x="1622" y="-552"/>
+        </scene>
+        <!--View Controller2-->
+        <scene sceneID="9FL-7q-CiI">
+            <objects>
+                <viewController id="4Aw-Re-ayH" customClass="ViewController2" customModule="zoomable_user_interface" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="A7V-e5-Zny">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3RI-Q2-o06">
+                                <rect key="frame" x="0.0" y="44" width="375" height="623"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h7N-PX-Ofv">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cyM-ou-Yh5">
+                                                <rect key="frame" x="188" y="414" width="112" height="116"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                    </view>
+                                </subviews>
+                                <viewLayoutGuide key="contentLayoutGuide" id="Voq-5B-3y3"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="TVb-KB-XXp"/>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="IRH-Gd-Wzi"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="fI0-U8-Gc9"/>
+                    <connections>
+                        <outlet property="innerView" destination="h7N-PX-Ofv" id="LbZ-nL-brT"/>
+                        <outlet property="rect1" destination="cyM-ou-Yh5" id="3Db-rf-17x"/>
+                        <outlet property="scrollView" destination="3RI-Q2-o06" id="5h5-we-2Yp"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3aA-JL-RD6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1621.5999999999999" y="132.68365817091455"/>
+        </scene>
+        <!--View Controller3-->
+        <scene sceneID="0aP-fU-MfU">
+            <objects>
+                <viewController id="kg6-FI-CsI" customClass="ViewController3" customModule="zoomable_user_interface" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="pEi-p3-3g5">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="dDD-Iv-Ebb"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="uYX-Kw-x0a"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gqP-kT-tzo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1622" y="804"/>
         </scene>
         <!--Main Navigation Controller-->
         <scene sceneID="11S-4k-3l8">
@@ -152,10 +212,16 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YFZ-mq-KFA">
                                         <rect key="frame" x="0.0" y="79" width="115" height="30"/>
                                         <state key="normal" title="Functional Zoom"/>
+                                        <connections>
+                                            <segue destination="4Aw-Re-ayH" kind="show" id="RFJ-Zf-qB1"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zib-SS-wvD">
                                         <rect key="frame" x="0.0" y="158" width="115" height="30"/>
                                         <state key="normal" title="Fixed Zoom"/>
+                                        <connections>
+                                            <segue destination="kg6-FI-CsI" kind="show" id="P67-bN-lEN"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>

@@ -63,32 +63,12 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
         swipeDown.direction = .down
         self.view.addGestureRecognizer(swipeDown)
-        
-        /*
-        // pan
-        let pan = UIPanGestureRecognizer(target:self, action: #selector(handlePan))
-        //pan.require(toFail: swipeLeft)
-        //pan.require(toFail: swipeRight)
-        //pan.require(toFail: swipeUp)
-        //pan.require(toFail: swipeDown)
-        pan.minimumNumberOfTouches = 2
-        pan.maximumNumberOfTouches = 2
-        innerView.addGestureRecognizer(pan)
-        
-        let pinch = UIPinchGestureRecognizer(target:self, action: #selector(handlePinch))
-        
-        innerView.addGestureRecognizer(pinch)
-        
-        house1.accessibilityLabel = "test"
-        house1.accessibilityHint = "Your current score"
-        */
-        //house1.addGestureRecognizer(pinch)
-        
+    
         scrollView.alwaysBounceVertical = false
         scrollView.alwaysBounceHorizontal = false
         
         scrollView.minimumZoomScale = 1.0
-        scrollView.maximumZoomScale = 2.0
+        scrollView.maximumZoomScale = 10.0
         scrollView.delegate = self
         
         house1.tag = 1
