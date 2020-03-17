@@ -130,8 +130,7 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
 
         if scale != scrollView.zoomScale { // zoom in
             
-            let point = recognizer.location(in: imageView)
-
+            let point = recognizer.location(in: innerView)
             let scrollSize = scrollView.frame.size
             let size = CGSize(width: scrollSize.width / scrollView.maximumZoomScale,
                               height: scrollSize.height / scrollView.maximumZoomScale)
@@ -143,7 +142,7 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
         } else if scrollView.zoomScale != 1.0 { //zoom out
             print("doubleTap zoomout")
             print(scrollView.zoomScale)
-            let point = recognizer.location(in: imageView)
+            let point = recognizer.location(in: innerView)
 
             let scrollSize = scrollView.frame.size
             let size = CGSize(width: scrollSize.width,
@@ -170,9 +169,6 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
     @objc func tripleTapped(){
      
     }
-    
-    // image view
-    @IBOutlet weak var imageView: UIImageView!
     
     func tts(input: String){
 

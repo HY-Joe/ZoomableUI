@@ -47,11 +47,11 @@ class ViewController3: UIViewController, UIScrollViewDelegate {
         scrollView.alwaysBounceHorizontal = false
         
         scrollView.minimumZoomScale = 1.0
-        scrollView.maximumZoomScale = 2.0
+        scrollView.maximumZoomScale = 8.0
         scrollView.delegate = self
     
         scrollView.isScrollEnabled = false
-        scrollView.isUserInteractionEnabled = false
+        //scrollView.isUserInteractionEnabled = false
         
         //rect1.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
     
@@ -66,57 +66,58 @@ class ViewController3: UIViewController, UIScrollViewDelegate {
     public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return self.innerView
     }
-
-    
-    @objc func handleDoubleTap(_ recognizer: UITapGestureRecognizer) {
-        let scale = min(scrollView.zoomScale * 2, scrollView.maximumZoomScale)
-
-        if scale != scrollView.zoomScale { // zoom in
-            let point = recognizer.location(in: imageView)
-
-            let scrollSize = scrollView.frame.size
-            let size = CGSize(width: scrollSize.width / scrollView.maximumZoomScale,
-                              height: scrollSize.height / scrollView.maximumZoomScale)
-            let origin = CGPoint(x: point.x - size.width / 2,
-                                 y: point.y - size.height / 2)
-            scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
-        } else if scrollView.zoomScale == scrollView.maximumZoomScale { //zoom out
-            scrollView.zoom(to: zoomRectForScale(scale: scrollView.maximumZoomScale, center: recognizer.location(in: imageView)), animated: true)
-        }
-    }
-    
-    @objc func zoomRectForScale(scale: CGFloat, center: CGPoint) -> CGRect {
-        print("test")
-        var zoomRect = CGRect.zero
-        zoomRect.size.height = imageView.frame.size.height / scale
-        zoomRect.size.width  = imageView.frame.size.width  / scale
-        let newCenter = scrollView.convert(center, from: imageView)
-        zoomRect.origin.x = newCenter.x - (zoomRect.size.width / 2.0)
-        zoomRect.origin.y = newCenter.y - (zoomRect.size.height / 2.0)
-        return zoomRect
-    }
     
     @objc func doubleTap(_ recognizer: UITapGestureRecognizer) {
-        let scale = min(scrollView.zoomScale * 2, scrollView.maximumZoomScale)
-
-        if scale != scrollView.zoomScale { // zoom in
+        //let scale = scrollView.zoomScale * 2
+        
+        if scrollView.zoomScale == 1.0 { // zoom in
             
-            let point = recognizer.location(in: imageView)
-
+            let point = recognizer.location(in: innerView)
+            print(point)
             let scrollSize = scrollView.frame.size
-            let size = CGSize(width: scrollSize.width / scrollView.maximumZoomScale,
-                              height: scrollSize.height / scrollView.maximumZoomScale)
+            let size = CGSize(width: scrollSize.width / 2,
+                              height: scrollSize.height / 2)
             let origin = CGPoint(x: point.x - size.width / 2,
                                  y: point.y - size.height / 2)
             scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
             print("doubleTap zoomin")
             print(scrollView.zoomScale)
-        } else if scrollView.zoomScale != 1.0 { //zoom out
-            print("doubleTap zoomout")
+        
+        }
+        else if scrollView.zoomScale == 2.0{
+            let point = recognizer.location(in: innerView)
+            print(point)
+            let scrollSize = scrollView.frame.size
+            print("frame size")
+            print(scrollView.frame.size)
+            let size = CGSize(width: scrollSize.width / 4,
+                              height: scrollSize.height / 4)
+            let origin = CGPoint(x: point.x - size.width / 2,
+                                 y: point.y - size.height / 2)
+            scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
+            print("doubleTap zoomin")
             print(scrollView.zoomScale)
-            let point = recognizer.location(in: imageView)
+        }
+        else if scrollView.zoomScale == 4.0{
+            let point = recognizer.location(in: innerView)
 
             let scrollSize = scrollView.frame.size
+            print("frame size")
+            print(scrollView.frame.size)
+            let size = CGSize(width: scrollSize.width / 8,
+                              height: scrollSize.height / 8)
+            let origin = CGPoint(x: point.x - size.width / 2,
+                                 y: point.y - size.height / 2)
+            scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
+            print("doubleTap zoomin")
+            print(scrollView.zoomScale)
+        }
+        else if scrollView.zoomScale == 8.0 { //zoom out
+            print("doubleTap zoomout")
+            print(scrollView.zoomScale)
+            let point = recognizer.location(in: innerView)
+
+            let scrollSize = UIScreen.main.bounds.size
             let size = CGSize(width: scrollSize.width,
                               height: scrollSize.height)
             let origin = CGPoint(x: point.x - size.width / 2,
@@ -141,9 +142,6 @@ class ViewController3: UIViewController, UIScrollViewDelegate {
     @objc func tripleTapped(){
      
     }
-    
-    // image view
-    @IBOutlet weak var imageView: UIImageView!
     
     func tts(input: String){
 
