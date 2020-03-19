@@ -9,6 +9,35 @@
 import UIKit
 import Foundation
 import AVFoundation
+import SwiftUI
+
+extension UIView {
+
+    class func getAllSubviews<T: UIView>(from parenView: UIView) -> [T] {
+        return parenView.subviews.flatMap { subView -> [T] in
+            var result = getAllSubviews(from: subView) as [T]
+            if let view = subView as? T { result.append(view) }
+            return result
+        }
+    }
+
+    class func getAllSubviews(from parenView: UIView, types: [UIView.Type]) -> [UIView] {
+        return parenView.subviews.flatMap { subView -> [UIView] in
+            var result = getAllSubviews(from: subView) as [UIView]
+            for type in types {
+                if subView.classForCoder == type {
+                    result.append(subView)
+                    return result
+                }
+            }
+            return result
+        }
+    }
+
+    func getAllSubviews<T: UIView>() -> [T] { return UIView.getAllSubviews(from: self) as [T] }
+    func get<T: UIView>(all type: T.Type) -> [T] { return UIView.getAllSubviews(from: self) as [T] }
+    func get(all types: [UIView.Type]) -> [UIView] { return UIView.getAllSubviews(from: self, types: types) }
+}
 
 class ViewController2: UIViewController, UIScrollViewDelegate {
     
@@ -19,6 +48,12 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var rect2: UIButton!
     @IBOutlet weak var rect3: UIButton!
     @IBOutlet weak var rect4: UIButton!
+    
+    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var imageView2: UIImageView!
+    
+    var flag = "none"
+    //var flag = String(innerView.accessibilityLabel!)
     
     override func viewDidLoad() {
     
@@ -56,16 +91,68 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
     
         scrollView.isScrollEnabled = false
         //scrollView.isUserInteractionEnabled = false
-        
+        /*
         rect1.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
         rect2.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
         rect3.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
         rect4.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
+        */
+        
+        var flag = "innerView"
+        
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+        innerView.addGestureRecognizer(pan)
+        
+        var allViews = UIView.getAllSubviews(from: innerView)
+        
+        func printResult(with text: String) {
+            print("\n==============================================")
+            print("\(text):\n\(allViews.map { $0.classForCoder } )")
+        }
+        printResult(with: "UIView.getAllSubviews(from: innerView)")
+        
+        imageView.tag = 1
+        imageView2.tag = 2
+        
+        imageView.accessibilityLabel = "view 1"
+        imageView2.accessibilityLabel = "view 2"
+        
+        innerView.accessibilityLabel = "none"
+        
+    }
+   
+    @objc func isInsideView(){
+    }
     
+    @objc func handlePan(_ recognizer: UIPanGestureRecognizer){
+        let position = recognizer.location(in: innerView)
+
+        let allViews = UIView.getAllSubviews(from: innerView)
+    
+        for view in allViews{
+            let origin = view.frame.origin
+            if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
+                
+                if flag != String(view.accessibilityLabel!){
+                    flag = String(view.accessibilityLabel!)
+                    //tts(input: flag)
+                    print(flag)
+                    
+                }
+            }
+        }
+       
+        
+    
+    }
+    
+    @objc func imageViewTap(_ gesture: UITapGestureRecognizer){
+        print("imageview touched")
     }
     
     @objc func buttonTap(_ sender: UIButton){
         //print(sender.tag)
+        print("imageview touched")
         let scale = sender.frame.width
 
         if scale != scrollView.zoomScale { //zoom in
@@ -114,14 +201,16 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
       
         print("doubleTap zoomout")
         print(scrollView.zoomScale)
-        let point = recognizer.location(in: innerView)
+            if scrollView.zoomScale != 1.0{
+            let point = recognizer.location(in: innerView)
 
-        let scrollSize = scrollView.frame.size
-        let size = CGSize(width: scrollSize.width,
-                          height: scrollSize.height)
-        let origin = CGPoint(x: point.x - size.width / 2,
-                             y: point.y - size.height / 2)
-        scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
+            let scrollSize = scrollView.frame.size
+            let size = CGSize(width: scrollSize.width,
+                              height: scrollSize.height)
+            let origin = CGPoint(x: point.x - size.width / 2,
+                                 y: point.y - size.height / 2)
+            scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
+        }
     
     }
     
