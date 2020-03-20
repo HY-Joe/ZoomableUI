@@ -51,6 +51,7 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
     
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var imageView2: UIImageView!
+    @IBOutlet weak var imageView3: UIImageView!
     
     var flag = "none"
     //var flag = String(innerView.accessibilityLabel!)
@@ -116,6 +117,7 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
         
         imageView.accessibilityLabel = "view 1"
         imageView2.accessibilityLabel = "view 2"
+        imageView3.accessibilityLabel = "view 3"
         
         innerView.accessibilityLabel = "none"
         
