@@ -54,6 +54,13 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var imageView3: UIImageView!
     @IBOutlet weak var imageView4: UIImageView!
     
+    
+    @IBOutlet weak var button_1: UIButton!
+    @IBOutlet weak var button_2: UIButton!
+    @IBOutlet weak var button_3: UIButton!
+    @IBOutlet weak var button_4: UIButton!
+    @IBOutlet weak var button_5: UIButton!
+    
     var flag = "none"
     var current = "none"
     var previous = "none"
@@ -95,35 +102,15 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
     
         scrollView.isScrollEnabled = false
         //scrollView.isUserInteractionEnabled = false
-        /*
-        rect1.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
-        rect2.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
-        rect3.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
-        rect4.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
-        */
         
-        var flag = "innerView"
+        button_1.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
+        button_2.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
+        button_3.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
+        button_4.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
+        button_5.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
         
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         innerView.addGestureRecognizer(pan)
-        
-        var allViews = UIView.getAllSubviews(from: innerView)
-        
-        func printResult(with text: String) {
-            print("\n==============================================")
-            print("\(text):\n\(allViews.map { $0.classForCoder } )")
-        }
-        printResult(with: "UIView.getAllSubviews(from: innerView)")
-        
-        imageView.tag = 1
-        imageView2.tag = 2
-        
-        imageView.accessibilityLabel = "view 1"
-        imageView2.accessibilityLabel = "view 2"
-        imageView3.accessibilityLabel = "view 3"
-        imageView4.accessibilityLabel = "view 4"
-        
-        innerView.accessibilityLabel = "none"
         
     }
    
@@ -134,23 +121,31 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
         let position = recognizer.location(in: innerView)
 
         let allViews = UIView.getAllSubviews(from: innerView)
-    
+       
+        previous = flag
+        
         for view in allViews{
-            let origin = view.frame.origin
-            if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
-                
-                if flag != String(view.accessibilityLabel!){
-                    previous = flag
-                    flag = String(view.accessibilityLabel!)
-                    current = flag
+            if let btn = view as? UIButton {
+                let origin = btn.frame.origin
+                if position.x >= origin.x && position.x <= origin.x + btn.frame.width && position.y >= origin.y && position.y <= origin.y + btn.frame.height{
                     
+                    if flag != String(btn.currentTitle!){
+                        
+                        flag = String(btn.currentTitle!)
+                    }
                 }
             }
         }
-        if previous != current{
-          print(flag)
+        if previous != flag{
+            
+            //tts(input: String(flag))
+            let utterance = AVSpeechUtterance(string: flag)
+            utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+
+            let synth = AVSpeechSynthesizer()
+            synth.stopSpeaking(at: .immediate)
+            synth.speak(utterance)
         }
-        
     
     }
     
