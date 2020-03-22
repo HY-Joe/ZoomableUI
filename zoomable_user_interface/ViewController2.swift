@@ -52,8 +52,11 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var imageView2: UIImageView!
     @IBOutlet weak var imageView3: UIImageView!
+    @IBOutlet weak var imageView4: UIImageView!
     
     var flag = "none"
+    var current = "none"
+    var previous = "none"
     //var flag = String(innerView.accessibilityLabel!)
     
     override func viewDidLoad() {
@@ -118,6 +121,7 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
         imageView.accessibilityLabel = "view 1"
         imageView2.accessibilityLabel = "view 2"
         imageView3.accessibilityLabel = "view 3"
+        imageView4.accessibilityLabel = "view 4"
         
         innerView.accessibilityLabel = "none"
         
@@ -136,14 +140,16 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
             if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
                 
                 if flag != String(view.accessibilityLabel!){
+                    previous = flag
                     flag = String(view.accessibilityLabel!)
-                    //tts(input: flag)
-                    print(flag)
+                    current = flag
                     
                 }
             }
         }
-       
+        if previous != current{
+          print(flag)
+        }
         
     
     }
