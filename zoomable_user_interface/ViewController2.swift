@@ -64,6 +64,8 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
     var flag = "none"
     var current = "none"
     var previous = "none"
+    
+    let synth = AVSpeechSynthesizer()
     //var flag = String(innerView.accessibilityLabel!)
     
     override func viewDidLoad() {
@@ -137,12 +139,10 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
             }
         }
         if previous != flag{
-            
-            //tts(input: String(flag))
+           
             let utterance = AVSpeechUtterance(string: flag)
             utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
 
-            let synth = AVSpeechSynthesizer()
             synth.stopSpeaking(at: .immediate)
             synth.speak(utterance)
         }
