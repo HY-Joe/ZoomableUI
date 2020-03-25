@@ -80,9 +80,9 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
         tripletap.numberOfTapsRequired = 3
         view.addGestureRecognizer(tripletap)
         
-        let doubletap = UITapGestureRecognizer(target: self, action: #selector(doubleTap))
+        let doubletap = UITapGestureRecognizer(target: self, action: #selector(buttonTap))
         doubletap.numberOfTapsRequired = 2
-        doubletap.numberOfTouchesRequired = 1
+        doubletap.numberOfTouchesRequired = 2
         doubletap.require(toFail: tripletap)
         doubletap.require(toFail: doubletap)
         view.addGestureRecognizer(doubletap)
@@ -106,12 +106,7 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
         scrollView.isScrollEnabled = false
         //scrollView.isUserInteractionEnabled = false
         
-        button_1.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
-        button_2.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
-        button_3.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
-        button_4.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
-        button_5.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
-        background.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
+        let allViews = UIView.getAllSubviews(from: innerView)
         
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         innerView.addGestureRecognizer(pan)
@@ -148,45 +143,47 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
     
     }
     
-    @objc func imageViewTap(_ gesture: UITapGestureRecognizer){
-        print("imageview touched")
-    }
-    
-    @objc func buttonTap(_ sender: UIButton){
-        //print(sender.tag)
-        print("imageview touched")
+    @objc func buttonDoubleTap(_ sender: UIButton){
+        
         let scale = sender.frame.width
 
-        if scale != scrollView.zoomScale { //zoom in
-            
-            let point = sender.frame.origin
-            
-            let point_x = point.x + sender.frame.width/2
-            let point_y = point.y + sender.frame.height/2
-    
-            let size = CGSize(width: scale,
-                              height: scale)
-            let origin = CGPoint(x: point_x - size.width / 2,
-                                 y: point_y - size.height / 2)
-            scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
-            
-            print("buttonTap zoom in")
-            print(scrollView.zoomScale)
-        } else if scrollView.zoomScale == sender.frame.width { //zoom out
-            let point = sender.frame.origin
-            
-            let point_x = point.x + sender.frame.width/2
-            let point_y = point.y + sender.frame.height/2
+            if scale != scrollView.zoomScale { //zoom in
+                
+                let point = sender.frame.origin
+                
+                let point_x = point.x + sender.frame.width/2
+                let point_y = point.y + sender.frame.height/2
+        
+                let size = CGSize(width: scale,
+                                  height: scale)
+                let origin = CGPoint(x: point_x - size.width / 2,
+                                     y: point_y - size.height / 2)
+                scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
+                
+            } else if scrollView.zoomScale == sender.frame.width { //zoom out
+                let point = sender.frame.origin
+                
+                let point_x = point.x + sender.frame.width/2
+                let point_y = point.y + sender.frame.height/2
 
-            let scrollSize = scrollView.frame.size
-            let size = CGSize(width: scrollSize.width,
-                              height: scrollSize.height)
-            let origin = CGPoint(x: point_x - size.width / 2,
-                                 y: point_y - size.height / 2)
-            scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
-            print("buttonTap zoom out")
-            print(scrollView.zoomScale)
-        }
+                let scrollSize = scrollView.frame.size
+                let size = CGSize(width: scrollSize.width,
+                                  height: scrollSize.height)
+                let origin = CGPoint(x: point_x - size.width / 2,
+                                     y: point_y - size.height / 2)
+                scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
+           
+            }
+    }
+    
+    @objc func buttonTap(_ recognizer: UIPanGestureRecognizer, _ sender: UIButton){
+      
+        let utterance = AVSpeechUtterance(string: sender.accessibilityIdentifier!)
+        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+
+        synth.stopSpeaking(at: .immediate)
+        synth.speak(utterance)
+         
     }
     
     override func didReceiveMemoryWarning() {
