@@ -44,22 +44,16 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var innerView: UIView!
     
-    @IBOutlet weak var rect1: UIButton!
-    @IBOutlet weak var rect2: UIButton!
-    @IBOutlet weak var rect3: UIButton!
-    @IBOutlet weak var rect4: UIButton!
-    
-    @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var imageView2: UIImageView!
-    @IBOutlet weak var imageView3: UIImageView!
-    @IBOutlet weak var imageView4: UIImageView!
-    
-    
-    @IBOutlet weak var button_1: UIButton!
-    @IBOutlet weak var button_2: UIButton!
-    @IBOutlet weak var button_3: UIButton!
-    @IBOutlet weak var button_4: UIButton!
-    @IBOutlet weak var button_5: UIButton!
+    @IBOutlet weak var background: UIButton!
+    @IBOutlet weak var house: UIButton!
+    @IBOutlet weak var window1: UIButton!
+    @IBOutlet weak var window2: UIButton!
+    @IBOutlet weak var door: UIButton!
+    @IBOutlet weak var flowerpot: UIButton!
+    @IBOutlet weak var petal1: UIButton!
+    @IBOutlet weak var petal2: UIButton!
+    @IBOutlet weak var petal3: UIButton!
+    @IBOutlet weak var petal4: UIButton!
     
     var flag = "none"
     var current = "none"
@@ -74,51 +68,49 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
         // Do any additional setup after loading the view, typically from a nib.
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         
-        // triple tap
-        let tripletap = UITapGestureRecognizer(target: self, action: #selector(tripleTapped))
-        tripletap.numberOfTapsRequired = 3
-        view.addGestureRecognizer(tripletap)
-        
-        let doubletap = UITapGestureRecognizer(target: self, action: #selector(doubleTap))
-        doubletap.numberOfTapsRequired = 2
-        doubletap.numberOfTouchesRequired = 1
-        doubletap.require(toFail: tripletap)
-        doubletap.require(toFail: doubletap)
-        view.addGestureRecognizer(doubletap)
-        
         // two finger double tap
         let tfdoubletap = UITapGestureRecognizer(target: self, action: #selector(twoFingerDoubleTap))
         tfdoubletap.numberOfTapsRequired = 2
         tfdoubletap.numberOfTouchesRequired = 2
-        tfdoubletap.require(toFail: tripletap)
-        tfdoubletap.require(toFail: doubletap)
-        view.addGestureRecognizer(tfdoubletap)
+        innerView.addGestureRecognizer(tfdoubletap)
         
 
         scrollView.alwaysBounceVertical = false
         scrollView.alwaysBounceHorizontal = false
         
         scrollView.minimumZoomScale = 1.0
-        scrollView.maximumZoomScale = 200.0
+        scrollView.maximumZoomScale = 30.0
         scrollView.delegate = self
     
         scrollView.isScrollEnabled = false
         //scrollView.isUserInteractionEnabled = false
         
-        button_1.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
-        button_2.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
-        button_3.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
-        button_4.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
-        button_5.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
+        house.accessibilityIdentifier = "house"
+        window1.accessibilityIdentifier = "window_1"
+        window2.accessibilityIdentifier = "window_2"
+        door.accessibilityIdentifier = "door"
+        flowerpot.accessibilityIdentifier = "flower pot"
+        background.accessibilityIdentifier = "background"
+        petal1.accessibilityIdentifier = "petal_1"
+        petal2.accessibilityIdentifier = "petal_2"
+        petal3.accessibilityIdentifier = "petal_3"
+        petal4.accessibilityIdentifier = "petal_4"
+        
+        
+        let allViews = UIView.getAllSubviews(from: innerView)
+        
+        for view in allViews{
+            if let btn = view as? UIButton {
+                btn.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
+                btn.addTarget(self,action: #selector(buttonDoubleTap), for: .touchDownRepeat)
+            }
+        }
         
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         innerView.addGestureRecognizer(pan)
         
     }
-   
-    @objc func isInsideView(){
-    }
-    
+
     @objc func handlePan(_ recognizer: UIPanGestureRecognizer){
         let position = recognizer.location(in: innerView)
 
@@ -131,16 +123,16 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
                 let origin = btn.frame.origin
                 if position.x >= origin.x && position.x <= origin.x + btn.frame.width && position.y >= origin.y && position.y <= origin.y + btn.frame.height{
                     
-                    if flag != String(btn.currentTitle!){
+                    if flag != String(btn.accessibilityIdentifier!){
                         
-                        flag = String(btn.currentTitle!)
+                        flag = String(btn.accessibilityIdentifier!)
                     }
                 }
             }
         }
         if previous != flag{
            
-            let utterance = AVSpeechUtterance(string: flag)
+            let utterance = AVSpeechUtterance(string: flag.components(separatedBy: "_")[0])
             utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
 
             synth.stopSpeaking(at: .immediate)
@@ -149,45 +141,44 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
     
     }
     
-    @objc func imageViewTap(_ gesture: UITapGestureRecognizer){
-        print("imageview touched")
+    @objc func buttonDoubleTap(_ sender: UIButton){
+        
+        let scale = sender.frame.width
+
+            if scale != scrollView.zoomScale { //zoom in
+                
+                let point = sender.frame.origin
+                
+                let point_x = point.x + sender.frame.width/2
+                let point_y = point.y + sender.frame.height/2
+        
+                let size = CGSize(width: scale,
+                                  height: scale)
+                let origin = CGPoint(x: point_x - size.width / 2,
+                                     y: point_y - size.height / 2)
+                scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
+                
+            } else if scrollView.zoomScale == sender.frame.width { //zoom out
+                let point = sender.frame.origin
+                
+                let point_x = point.x + sender.frame.width/2
+                let point_y = point.y + sender.frame.height/2
+
+                let scrollSize = scrollView.frame.size
+                let size = CGSize(width: scrollSize.width,
+                                  height: scrollSize.height)
+                let origin = CGPoint(x: point_x - size.width / 2,
+                                     y: point_y - size.height / 2)
+                scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
+           
+            }
+
     }
     
     @objc func buttonTap(_ sender: UIButton){
-        //print(sender.tag)
-        print("imageview touched")
-        let scale = sender.frame.width
-
-        if scale != scrollView.zoomScale { //zoom in
-            
-            let point = sender.frame.origin
-            
-            let point_x = point.x + sender.frame.width/2
-            let point_y = point.y + sender.frame.height/2
-    
-            let size = CGSize(width: scale,
-                              height: scale)
-            let origin = CGPoint(x: point_x - size.width / 2,
-                                 y: point_y - size.height / 2)
-            scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
-            
-            print("buttonTap zoom in")
-            print(scrollView.zoomScale)
-        } else if scrollView.zoomScale == sender.frame.width { //zoom out
-            let point = sender.frame.origin
-            
-            let point_x = point.x + sender.frame.width/2
-            let point_y = point.y + sender.frame.height/2
-
-            let scrollSize = scrollView.frame.size
-            let size = CGSize(width: scrollSize.width,
-                              height: scrollSize.height)
-            let origin = CGPoint(x: point_x - size.width / 2,
-                                 y: point_y - size.height / 2)
-            scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
-            print("buttonTap zoom out")
-            print(scrollView.zoomScale)
-        }
+      
+        tts(input: sender.accessibilityIdentifier!.components(separatedBy: "_")[0])
+         
     }
     
     override func didReceiveMemoryWarning() {
@@ -203,43 +194,22 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
     @objc func doubleTap(_ recognizer: UITapGestureRecognizer) {
       
         print("doubleTap zoomout")
-        print(scrollView.zoomScale)
-            if scrollView.zoomScale != 1.0{
-            let point = recognizer.location(in: innerView)
-
-            let scrollSize = scrollView.frame.size
-            let size = CGSize(width: scrollSize.width,
-                              height: scrollSize.height)
-            let origin = CGPoint(x: point.x - size.width / 2,
-                                 y: point.y - size.height / 2)
-            scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
-        }
+        
     
     }
     
     @objc func twoFingerDoubleTap() {
-        if scrollView.maximumZoomScale == 2.0{
-            scrollView.maximumZoomScale = 1.0
-            scrollView.isScrollEnabled = false
-            tts(input: "zoom disabled")
-        }
-        else if scrollView.maximumZoomScale == 1.0 {
-            scrollView.maximumZoomScale = 2.0
-            scrollView.isScrollEnabled = true
-            tts(input: "zoom enabled")
-        }
+        let origin = scrollView.frame.origin
+        
+        scrollView.zoom(to:CGRect(origin: origin, size: scrollView.frame.size), animated: true)
     }
-    
-    @objc func tripleTapped(){
-     
-    }
-    
+
     func tts(input: String){
 
         let utterance = AVSpeechUtterance(string: input)
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
 
-        let synth = AVSpeechSynthesizer()
+        synth.stopSpeaking(at: .immediate)
         synth.speak(utterance)
     }
         
