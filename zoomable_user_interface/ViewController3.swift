@@ -17,12 +17,17 @@ class ViewController3: UIViewController, UIScrollViewDelegate {
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var innerView: UIView!
-    @IBOutlet weak var button_1: UIButton!
-    @IBOutlet weak var button_2: UIButton!
-    @IBOutlet weak var button_3: UIButton!
-    @IBOutlet weak var button_4: UIButton!
-    @IBOutlet weak var button_5: UIButton!
+    
     @IBOutlet weak var background: UIButton!
+    @IBOutlet weak var house: UIButton!
+    @IBOutlet weak var window1: UIButton!
+    @IBOutlet weak var window2: UIButton!
+    @IBOutlet weak var door: UIButton!
+    @IBOutlet weak var flowerpot: UIButton!
+    @IBOutlet weak var petal1: UIButton!
+    @IBOutlet weak var petal2: UIButton!
+    @IBOutlet weak var petal3: UIButton!
+    @IBOutlet weak var petal4: UIButton!
     
     var flag = "none"
     var current = "none"
@@ -59,11 +64,22 @@ class ViewController3: UIViewController, UIScrollViewDelegate {
         scrollView.alwaysBounceHorizontal = false
         
         scrollView.minimumZoomScale = 1.0
-        scrollView.maximumZoomScale = 8.0
+        scrollView.maximumZoomScale = 30.0
         scrollView.delegate = self
     
         scrollView.isScrollEnabled = false
         //scrollView.isUserInteractionEnabled = false
+        
+        house.accessibilityIdentifier = "house"
+        window1.accessibilityIdentifier = "window_1"
+        window2.accessibilityIdentifier = "window_2"
+        door.accessibilityIdentifier = "door"
+        flowerpot.accessibilityIdentifier = "flower pot"
+        background.accessibilityIdentifier = "background"
+        petal1.accessibilityIdentifier = "petal_1"
+        petal2.accessibilityIdentifier = "petal_2"
+        petal3.accessibilityIdentifier = "petal_3"
+        petal4.accessibilityIdentifier = "petal_4"
         
     let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         innerView.addGestureRecognizer(pan)
@@ -72,7 +88,7 @@ class ViewController3: UIViewController, UIScrollViewDelegate {
     
     @objc func buttonTap(_ sender: UIButton){
       
-        let utterance = AVSpeechUtterance(string: sender.currentTitle!)
+        let utterance = AVSpeechUtterance(string: sender.accessibilityIdentifier!.components(separatedBy: "_")[0])
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
 
         synth.stopSpeaking(at: .immediate)
@@ -92,16 +108,16 @@ class ViewController3: UIViewController, UIScrollViewDelegate {
                 let origin = btn.frame.origin
                 if position.x >= origin.x && position.x <= origin.x + btn.frame.width && position.y >= origin.y && position.y <= origin.y + btn.frame.height{
                     
-                    if flag != String(btn.currentTitle!){
+                    if flag != String(btn.accessibilityIdentifier!){
                         
-                        flag = String(btn.currentTitle!)
+                        flag = String(btn.accessibilityIdentifier!)
                     }
                 }
             }
         }
         if previous != flag{
            
-            let utterance = AVSpeechUtterance(string: flag)
+            let utterance = AVSpeechUtterance(string: flag.components(separatedBy: "_")[0])
             utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
 
             synth.stopSpeaking(at: .immediate)

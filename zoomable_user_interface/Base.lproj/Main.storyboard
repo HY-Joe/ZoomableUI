@@ -29,30 +29,41 @@
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             </imageView>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Xi-3l-VCR">
-                                                <rect key="frame" x="67" y="75" width="240" height="128"/>
+                                                <rect key="frame" x="57" y="553" width="72" height="124"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             </imageView>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nom-53-Guz">
-                                                <rect key="frame" x="109" y="94" width="157" height="91"/>
+                                                <rect key="frame" x="81" y="581" width="20" height="19"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" systemColor="systemPinkColor" red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             </imageView>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ek8-sq-I5z">
-                                                <rect key="frame" x="50" y="350" width="275" height="220"/>
+                                                <rect key="frame" x="81" y="605" width="20" height="19"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                             </imageView>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AHA-7n-Oy3">
-                                                <rect key="frame" x="67" y="445" width="115" height="89"/>
+                                                <rect key="frame" x="97" y="649" width="22" height="28"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" systemColor="systemTealColor" red="0.35294117650000001" green="0.7843137255" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <color key="tintColor" systemColor="systemTealColor" red="0.35294117650000001" green="0.7843137255" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             </imageView>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kIC-5g-guq">
-                                                <rect key="frame" x="203" y="407" width="104" height="89"/>
+                                                <rect key="frame" x="137" y="667" width="13" height="14"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" systemColor="systemYellowColor" red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </imageView>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Z0G-rF-eE4">
+                                                <rect key="frame" x="141" y="643" width="6" height="9"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </imageView>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cHy-wA-jBQ">
+                                                <rect key="frame" x="145" y="651" width="9" height="5"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </imageView>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zdf-fg-o5d">
+                                                <rect key="frame" x="134" y="650" width="8" height="6"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </imageView>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EJY-ZV-nCJ">
+                                                <rect key="frame" x="140" y="655" width="7" height="8"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             </imageView>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -81,6 +92,10 @@
                         <outlet property="imageview4" destination="AHA-7n-Oy3" id="r50-Mg-tgR"/>
                         <outlet property="imageview5" destination="kIC-5g-guq" id="u4Q-yE-P9Y"/>
                         <outlet property="innerView" destination="zDz-jX-pIm" id="pIW-Vc-XYD"/>
+                        <outlet property="petal1" destination="Z0G-rF-eE4" id="NIY-6K-OSC"/>
+                        <outlet property="petal2" destination="cHy-wA-jBQ" id="lOx-UR-ERV"/>
+                        <outlet property="petal3" destination="zdf-fg-o5d" id="yl1-UI-Ga3"/>
+                        <outlet property="petal4" destination="EJY-ZV-nCJ" id="xfa-xa-Vmt"/>
                         <outlet property="scrollView" destination="Gc0-Ne-Rb6" id="ZJb-F6-VO5"/>
                     </connections>
                 </viewController>
@@ -123,37 +138,42 @@
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sdy-wa-deC">
                                                 <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <state key="normal" title="background"/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ogb-zI-hxB">
-                                                <rect key="frame" x="83" y="53" width="209" height="161"/>
+                                                <rect key="frame" x="58" y="556" width="71" height="124"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <state key="normal" title="1"/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tLc-N3-Exz">
-                                                <rect key="frame" x="121" y="83" width="146" height="101"/>
+                                                <rect key="frame" x="82" y="586" width="16" height="18"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" systemColor="systemPinkColor" red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <state key="normal" title="2"/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nrx-Xh-c9q">
-                                                <rect key="frame" x="35" y="352" width="305" height="215"/>
+                                                <rect key="frame" x="82" y="610" width="18" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                <state key="normal" title="3"/>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nw1-1u-7D3">
-                                                <rect key="frame" x="204" y="398" width="100" height="79"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" systemColor="systemYellowColor" red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <state key="normal" title="5"/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Eq1-XO-Yfm">
-                                                <rect key="frame" x="83" y="405" width="88" height="72"/>
+                                                <rect key="frame" x="98" y="655" width="20" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" systemColor="systemTealColor" red="0.35294117650000001" green="0.7843137255" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <state key="normal" title="4"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nw1-1u-7D3">
+                                                <rect key="frame" x="137" y="673" width="13" height="12"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ml1-Tz-X8T">
+                                                <rect key="frame" x="141" y="648" width="6" height="8"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G9F-tB-579">
+                                                <rect key="frame" x="133" y="655" width="9" height="5"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wvx-bi-Aqj">
+                                                <rect key="frame" x="143" y="655" width="11" height="5"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RSA-fq-LjQ">
+                                                <rect key="frame" x="139" y="659" width="8" height="8"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             </button>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -168,14 +188,18 @@
                     </view>
                     <navigationItem key="navigationItem" id="fI0-U8-Gc9"/>
                     <connections>
-                        <outlet property="background" destination="Sdy-wa-deC" id="uld-wg-lcB"/>
-                        <outlet property="button_1" destination="Ogb-zI-hxB" id="4iw-kJ-qyi"/>
-                        <outlet property="button_2" destination="tLc-N3-Exz" id="7TS-z9-J9r"/>
-                        <outlet property="button_3" destination="nrx-Xh-c9q" id="PJd-jl-jDn"/>
-                        <outlet property="button_4" destination="Eq1-XO-Yfm" id="WFa-IU-oBy"/>
-                        <outlet property="button_5" destination="Nw1-1u-7D3" id="8Ic-n6-VIl"/>
+                        <outlet property="background" destination="Sdy-wa-deC" id="uXg-yW-aZA"/>
+                        <outlet property="door" destination="Eq1-XO-Yfm" id="y0t-DT-g4i"/>
+                        <outlet property="flowerpot" destination="Nw1-1u-7D3" id="U8u-Uu-Hwh"/>
+                        <outlet property="house" destination="Ogb-zI-hxB" id="Cr6-zH-UuG"/>
                         <outlet property="innerView" destination="h7N-PX-Ofv" id="LbZ-nL-brT"/>
+                        <outlet property="petal1" destination="ml1-Tz-X8T" id="NhM-kT-DKX"/>
+                        <outlet property="petal2" destination="G9F-tB-579" id="MHf-UM-ymS"/>
+                        <outlet property="petal3" destination="Wvx-bi-Aqj" id="kA8-I9-GlZ"/>
+                        <outlet property="petal4" destination="RSA-fq-LjQ" id="cFj-M0-mPY"/>
                         <outlet property="scrollView" destination="3RI-Q2-o06" id="5h5-we-2Yp"/>
+                        <outlet property="window1" destination="tLc-N3-Exz" id="ICX-EG-R1T"/>
+                        <outlet property="window2" destination="nrx-Xh-c9q" id="ZOg-KN-StI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3aA-JL-RD6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -205,37 +229,42 @@
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fk0-IZ-bFS">
                                                 <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <state key="normal" title="background"/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rip-3R-CQU">
-                                                <rect key="frame" x="73" y="60" width="228" height="163"/>
+                                                <rect key="frame" x="59" y="556" width="70" height="123"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <state key="normal" title="1"/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fMS-vf-tm7">
-                                                <rect key="frame" x="48" y="345" width="282" height="213"/>
+                                                <rect key="frame" x="81" y="609" width="17" height="19"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                <state key="normal" title="3"/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sMY-RO-fs9">
-                                                <rect key="frame" x="130" y="96" width="119" height="91"/>
+                                                <rect key="frame" x="81" y="585" width="17" height="16"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" systemColor="systemPinkColor" red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <state key="normal" title="2"/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="01G-yY-qDo">
-                                                <rect key="frame" x="73" y="431" width="96" height="79"/>
+                                                <rect key="frame" x="97" y="654" width="22" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" systemColor="systemTealColor" red="0.35294117650000001" green="0.7843137255" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <state key="normal" title="4"/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bb8-b5-1e7">
-                                                <rect key="frame" x="206" y="394" width="95" height="77"/>
+                                                <rect key="frame" x="137" y="672" width="13" height="13"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" systemColor="systemYellowColor" red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <state key="normal" title="5"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xb8-Z8-hud">
+                                                <rect key="frame" x="133" y="654" width="9" height="7"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yLa-TN-qEX">
+                                                <rect key="frame" x="141" y="646" width="6" height="9"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BWq-57-2Fh">
+                                                <rect key="frame" x="139" y="659" width="8" height="8"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gfJ-qe-ehl">
+                                                <rect key="frame" x="146" y="654" width="8" height="7"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             </button>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -251,14 +280,17 @@
                     <navigationItem key="navigationItem" id="uYX-Kw-x0a"/>
                     <connections>
                         <outlet property="background" destination="fk0-IZ-bFS" id="PK9-Yt-P02"/>
-                        <outlet property="button_1" destination="rip-3R-CQU" id="ltS-4X-dBw"/>
-                        <outlet property="button_2" destination="sMY-RO-fs9" id="vtd-sB-WSx"/>
-                        <outlet property="button_3" destination="fMS-vf-tm7" id="Pmw-F6-bxV"/>
-                        <outlet property="button_4" destination="01G-yY-qDo" id="xT5-5C-5w3"/>
-                        <outlet property="button_5" destination="bb8-b5-1e7" id="aYM-oT-jyW"/>
+                        <outlet property="door" destination="01G-yY-qDo" id="vC6-9Y-7MP"/>
+                        <outlet property="flowerpot" destination="bb8-b5-1e7" id="Rm5-Ig-jVu"/>
+                        <outlet property="house" destination="rip-3R-CQU" id="9kK-D3-VM7"/>
                         <outlet property="innerView" destination="xiz-sH-taH" id="e4P-l6-PPW"/>
-                        <outlet property="rect1" destination="rip-3R-CQU" id="IMI-ac-kVD"/>
+                        <outlet property="petal1" destination="xb8-Z8-hud" id="gwo-VU-jLg"/>
+                        <outlet property="petal2" destination="yLa-TN-qEX" id="Zrh-o5-9Nm"/>
+                        <outlet property="petal3" destination="BWq-57-2Fh" id="zVK-9L-Qyc"/>
+                        <outlet property="petal4" destination="gfJ-qe-ehl" id="ouC-bp-jbf"/>
                         <outlet property="scrollView" destination="V0N-zK-ERs" id="DUJ-5p-39l"/>
+                        <outlet property="window1" destination="fMS-vf-tm7" id="wJc-Fd-qHo"/>
+                        <outlet property="window2" destination="sMY-RO-fs9" id="6Lj-7o-r1R"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gqP-kT-tzo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
