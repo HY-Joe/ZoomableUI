@@ -53,9 +53,14 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         innerView.addGestureRecognizer(pan)
         
-        let pinch = UIGestureRecognizer(target: self, action: #selector(handlePinch))
-        scrollView.addGestureRecognizer(pinch)
-            
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        innerView.addGestureRecognizer(tap)
+        
+        
+    }
+    
+    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+        tts(input: "decelerating")
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
@@ -66,16 +71,29 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        var zoomscale = Int(Double(round(1000 * scrollView.zoomScale) / 1000) * 100 / 10) * 10
+        let zoomscale = Int(Double(round(1000 * scrollView.zoomScale) / 1000) * 100 / 10) * 10
         tts(input: String(zoomscale) + "%")
     }
     
-    
-    @IBAction func handlePinch(_ gesture: UIGestureRecognizer){
-        print("pinch")
-        if gesture.state == UIGestureRecognizer.State.ended{
-            print("pinch ended")
-        }
+    @objc func handleTap(_ recognizer: UITapGestureRecognizer){
+        
+        let position = recognizer.location(in: innerView)
+
+        let allViews = UIView.getAllSubviews(from: innerView)
+        
+        var touched = "background"
+        
+        for view in allViews{
+            
+             let origin = view.frame.origin
+             if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
+                
+                touched = view.accessibilityIdentifier!
+             }
+             
+         }
+        
+        tts(input: touched)
         
     }
 

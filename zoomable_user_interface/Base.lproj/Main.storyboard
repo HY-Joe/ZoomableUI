@@ -85,11 +85,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <panGestureRecognizer cancelsTouchesInView="NO" minimumNumberOfTouches="1" id="5Aa-ZA-QWP">
-                    <connections>
-                        <action selector="handlePan:" destination="BYZ-38-t0r" id="zgl-ed-BQt"/>
-                    </connections>
-                </panGestureRecognizer>
+                <panGestureRecognizer cancelsTouchesInView="NO" minimumNumberOfTouches="1" id="5Aa-ZA-QWP"/>
                 <pinchGestureRecognizer id="pV6-0N-haJ">
                     <connections>
                         <action selector="handlePinch:" destination="BYZ-38-t0r" id="7lJ-Dc-X1s"/>

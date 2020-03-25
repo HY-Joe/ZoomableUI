@@ -33,16 +33,9 @@ class ViewController3: UIViewController, UIScrollViewDelegate {
     override func viewDidLoad(){
         super.viewDidLoad()
         
-        
-        // triple tap
-        let tripletap = UITapGestureRecognizer(target: self, action: #selector(tripleTapped))
-        tripletap.numberOfTapsRequired = 3
-        view.addGestureRecognizer(tripletap)
-        
         let doubletap = UITapGestureRecognizer(target: self, action: #selector(doubleTap))
         doubletap.numberOfTapsRequired = 2
         doubletap.numberOfTouchesRequired = 1
-        doubletap.require(toFail: tripletap)
         doubletap.require(toFail: doubletap)
         view.addGestureRecognizer(doubletap)
         
@@ -50,9 +43,16 @@ class ViewController3: UIViewController, UIScrollViewDelegate {
         let tfdoubletap = UITapGestureRecognizer(target: self, action: #selector(twoFingerDoubleTap))
         tfdoubletap.numberOfTapsRequired = 2
         tfdoubletap.numberOfTouchesRequired = 2
-        tfdoubletap.require(toFail: tripletap)
         tfdoubletap.require(toFail: doubletap)
         view.addGestureRecognizer(tfdoubletap)
+        
+        let allViews = UIView.getAllSubviews(from: innerView)
+        
+        for view in allViews{
+            if let btn = view as? UIButton {
+                btn.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
+            }
+        }
         
 
         scrollView.alwaysBounceVertical = false
@@ -68,6 +68,16 @@ class ViewController3: UIViewController, UIScrollViewDelegate {
     let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         innerView.addGestureRecognizer(pan)
         
+    }
+    
+    @objc func buttonTap(_ sender: UIButton){
+      
+        let utterance = AVSpeechUtterance(string: sender.currentTitle!)
+        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+
+        synth.stopSpeaking(at: .immediate)
+        synth.speak(utterance)
+         
     }
 
     @objc func handlePan(_ recognizer: UIPanGestureRecognizer){
@@ -115,6 +125,8 @@ class ViewController3: UIViewController, UIScrollViewDelegate {
         
         if scrollView.zoomScale == 1.0 { // zoom in
             
+            tts(input: "200%")
+            
             let point = recognizer.location(in: innerView)
             print(point)
             let scrollSize = scrollView.frame.size
@@ -128,6 +140,9 @@ class ViewController3: UIViewController, UIScrollViewDelegate {
         
         }
         else if scrollView.zoomScale == 2.0{
+            
+            tts(input: "400%")
+            
             let point = recognizer.location(in: innerView)
             print(point)
             let scrollSize = scrollView.frame.size
@@ -142,6 +157,9 @@ class ViewController3: UIViewController, UIScrollViewDelegate {
             print(scrollView.zoomScale)
         }
         else if scrollView.zoomScale == 4.0{
+            
+            tts(input: "800%")
+            
             let point = recognizer.location(in: innerView)
 
             let scrollSize = scrollView.frame.size
@@ -155,7 +173,11 @@ class ViewController3: UIViewController, UIScrollViewDelegate {
             print("doubleTap zoomin")
             print(scrollView.zoomScale)
         }
+            /*
         else if scrollView.zoomScale == 8.0 { //zoom out
+            
+            tts(input: "100%")
+            
             print("doubleTap zoomout")
             print(scrollView.zoomScale)
             let point = recognizer.location(in: innerView)
@@ -167,6 +189,7 @@ class ViewController3: UIViewController, UIScrollViewDelegate {
                                  y: point.y - size.height / 2)
             scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
         }
+ */
     }
     
     @objc func twoFingerDoubleTap(_ recognizer: UITapGestureRecognizer) {
@@ -174,6 +197,9 @@ class ViewController3: UIViewController, UIScrollViewDelegate {
         
         }
         else if scrollView.zoomScale == 2.0{
+            
+            tts(input: "100%")
+            
             print("doubleTap zoomout")
             print(scrollView.zoomScale)
             let point = recognizer.location(in: innerView)
@@ -186,6 +212,9 @@ class ViewController3: UIViewController, UIScrollViewDelegate {
             scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
         }
         else if scrollView.zoomScale == 4.0{
+            
+            tts(input: "200%")
+            
             let point = recognizer.location(in: innerView)
             print(point)
             let scrollSize = scrollView.frame.size
@@ -198,6 +227,9 @@ class ViewController3: UIViewController, UIScrollViewDelegate {
             print(scrollView.zoomScale)
         }
         else if scrollView.zoomScale == 8.0 { //zoom out
+            
+            tts(input: "400%")
+            
             let point = recognizer.location(in: innerView)
             print(point)
             let scrollSize = scrollView.frame.size
