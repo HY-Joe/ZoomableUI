@@ -21,6 +21,10 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var imageview4: UIImageView!
     @IBOutlet weak var imageview5: UIImageView!
     @IBOutlet weak var background: UIImageView!
+    @IBOutlet weak var petal1: UIImageView!
+    @IBOutlet weak var petal2: UIImageView!
+    @IBOutlet weak var petal3: UIImageView!
+    @IBOutlet weak var petal4: UIImageView!
     
     var flag = "none"
     var current = "none"
@@ -33,19 +37,28 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         // Do any additional setup after loading the view, typically from a nib.
         //drawHouse(origin_x: 0, origin_y: 0)
         
-        imageview1.accessibilityIdentifier = "1"
-        imageview2.accessibilityIdentifier = "2"
-        imageview3.accessibilityIdentifier = "3"
-        imageview4.accessibilityIdentifier = "4"
-        imageview5.accessibilityIdentifier = "5"
-        background.accessibilityIdentifier = "background"
+        // two finger double tap
+        let tfdoubletap = UITapGestureRecognizer(target: self, action: #selector(twoFingerDoubleTap))
+        tfdoubletap.numberOfTapsRequired = 2
+        tfdoubletap.numberOfTouchesRequired = 2
+        innerView.addGestureRecognizer(tfdoubletap)
         
-   
+        imageview1.accessibilityIdentifier = "house"
+        imageview2.accessibilityIdentifier = "window_1"
+        imageview3.accessibilityIdentifier = "window_2"
+        imageview4.accessibilityIdentifier = "door"
+        imageview5.accessibilityIdentifier = "flower pot"
+        background.accessibilityIdentifier = "background"
+        petal1.accessibilityIdentifier = "petal_1"
+        petal2.accessibilityIdentifier = "petal_2"
+        petal3.accessibilityIdentifier = "petal_3"
+        petal4.accessibilityIdentifier = "petal_4"
+        
         scrollView.alwaysBounceVertical = false
         scrollView.alwaysBounceHorizontal = false
         
         scrollView.minimumZoomScale = 1.0
-        scrollView.maximumZoomScale = 10.0
+        scrollView.maximumZoomScale = scrollView.frame.width / petal1.frame.width
         scrollView.delegate = self
         
         scrollView.isScrollEnabled = false
@@ -56,6 +69,11 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         innerView.addGestureRecognizer(tap)
         
+        
+    }
+    
+    func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
+        AudioServicesPlaySystemSound(1201);
         
     }
     
@@ -73,6 +91,12 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         let zoomscale = Int(Double(round(1000 * scrollView.zoomScale) / 1000) * 100 / 10) * 10
         tts(input: String(zoomscale) + "%")
+    }
+    
+    @objc func twoFingerDoubleTap() {
+        let origin = scrollView.frame.origin
+        
+        scrollView.zoom(to:CGRect(origin: origin, size: scrollView.frame.size), animated: true)
     }
     
     @objc func handleTap(_ recognizer: UITapGestureRecognizer){
@@ -93,7 +117,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
              
          }
         
-        tts(input: touched)
+        tts(input: String(touched.components(separatedBy: "_")[0]))
         
     }
 
@@ -115,12 +139,8 @@ class ViewController: UIViewController, UIScrollViewDelegate {
             }
         }
         if previous != flag{
-           
-            let utterance = AVSpeechUtterance(string: flag)
-            utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-
-            synth.stopSpeaking(at: .immediate)
-            synth.speak(utterance)
+            
+            tts(input: String(flag.components(separatedBy: "_")[0]))
             //print(flag)
         }
     
