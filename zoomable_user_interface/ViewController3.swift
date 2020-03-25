@@ -17,6 +17,18 @@ class ViewController3: UIViewController, UIScrollViewDelegate {
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var innerView: UIView!
+    @IBOutlet weak var button_1: UIButton!
+    @IBOutlet weak var button_2: UIButton!
+    @IBOutlet weak var button_3: UIButton!
+    @IBOutlet weak var button_4: UIButton!
+    @IBOutlet weak var button_5: UIButton!
+    @IBOutlet weak var background: UIButton!
+    
+    var flag = "none"
+    var current = "none"
+    var previous = "none"
+    
+    let synth = AVSpeechSynthesizer()
     
     override func viewDidLoad(){
         super.viewDidLoad()
@@ -53,7 +65,38 @@ class ViewController3: UIViewController, UIScrollViewDelegate {
         scrollView.isScrollEnabled = false
         //scrollView.isUserInteractionEnabled = false
         
-        //rect1.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
+    let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+        innerView.addGestureRecognizer(pan)
+        
+    }
+
+    @objc func handlePan(_ recognizer: UIPanGestureRecognizer){
+        let position = recognizer.location(in: innerView)
+
+        let allViews = UIView.getAllSubviews(from: innerView)
+       
+        previous = flag
+        
+        for view in allViews{
+            if let btn = view as? UIButton {
+                let origin = btn.frame.origin
+                if position.x >= origin.x && position.x <= origin.x + btn.frame.width && position.y >= origin.y && position.y <= origin.y + btn.frame.height{
+                    
+                    if flag != String(btn.currentTitle!){
+                        
+                        flag = String(btn.currentTitle!)
+                    }
+                }
+            }
+        }
+        if previous != flag{
+           
+            let utterance = AVSpeechUtterance(string: flag)
+            utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+
+            synth.stopSpeaking(at: .immediate)
+            synth.speak(utterance)
+        }
     
     }
     

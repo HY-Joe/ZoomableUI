@@ -60,6 +60,7 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var button_3: UIButton!
     @IBOutlet weak var button_4: UIButton!
     @IBOutlet weak var button_5: UIButton!
+    @IBOutlet weak var background: UIButton!
     
     var flag = "none"
     var current = "none"
@@ -110,15 +111,13 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
         button_3.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
         button_4.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
         button_5.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
+        background.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
         
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         innerView.addGestureRecognizer(pan)
         
     }
-   
-    @objc func isInsideView(){
-    }
-    
+
     @objc func handlePan(_ recognizer: UIPanGestureRecognizer){
         let position = recognizer.location(in: innerView)
 

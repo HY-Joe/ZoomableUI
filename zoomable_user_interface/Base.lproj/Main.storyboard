@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Sfo-2e-BPd">
-    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
@@ -13,48 +13,47 @@
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="zoomable_user_interface" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gc0-Ne-Rb6">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zDz-jX-pIm">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JhY-q7-Kva">
-                                                <rect key="frame" x="37" y="101" width="113" height="144"/>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="inW-s1-Lwj">
+                                                <rect key="frame" x="0.0" y="-9" width="414" height="817"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <state key="normal" image="house_1"/>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Na5-et-EyC">
-                                                <rect key="frame" x="158" y="188" width="28" height="57"/>
+                                            </imageView>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Xi-3l-VCR">
+                                                <rect key="frame" x="67" y="75" width="240" height="128"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <state key="normal" image="flower_1"/>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wVh-gF-EMz">
-                                                <rect key="frame" x="193" y="413" width="111" height="144"/>
+                                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </imageView>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nom-53-Guz">
+                                                <rect key="frame" x="109" y="94" width="157" height="91"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <state key="normal" image="house_2"/>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wak-bR-HBe">
-                                                <rect key="frame" x="312" y="500" width="33" height="57"/>
+                                                <color key="backgroundColor" systemColor="systemPinkColor" red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </imageView>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ek8-sq-I5z">
+                                                <rect key="frame" x="50" y="350" width="275" height="220"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <state key="normal" image="flower_2"/>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="56U-US-wyb">
-                                                <rect key="frame" x="237" y="101" width="108" height="142"/>
+                                                <color key="backgroundColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            </imageView>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AHA-7n-Oy3">
+                                                <rect key="frame" x="67" y="445" width="115" height="89"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <state key="normal" image="rectangle"/>
-                                            </button>
-                                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kgY-Ky-fLn">
-                                                <rect key="frame" x="11" y="566" width="165" height="30"/>
+                                                <color key="backgroundColor" systemColor="systemTealColor" red="0.35294117650000001" green="0.7843137255" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <color key="tintColor" systemColor="systemTealColor" red="0.35294117650000001" green="0.7843137255" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </imageView>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kIC-5g-guq">
+                                                <rect key="frame" x="203" y="407" width="104" height="89"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits"/>
-                                            </textField>
+                                                <color key="backgroundColor" systemColor="systemYellowColor" red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </imageView>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                     </view>
@@ -76,13 +75,14 @@
                     </view>
                     <navigationItem key="navigationItem" id="4Y6-YU-aj6"/>
                     <connections>
-                        <outlet property="flower1" destination="Na5-et-EyC" id="07e-q9-hyw"/>
-                        <outlet property="flower2" destination="wak-bR-HBe" id="sDx-Aj-jV4"/>
-                        <outlet property="house1" destination="JhY-q7-Kva" id="Og8-63-dCB"/>
-                        <outlet property="house2" destination="wVh-gF-EMz" id="09t-nx-Grl"/>
+                        <outlet property="background" destination="inW-s1-Lwj" id="JXf-JN-RLa"/>
+                        <outlet property="imageview1" destination="2Xi-3l-VCR" id="tU7-oQ-Ave"/>
+                        <outlet property="imageview2" destination="nom-53-Guz" id="abj-8o-fFy"/>
+                        <outlet property="imageview3" destination="ek8-sq-I5z" id="XLi-K1-ypb"/>
+                        <outlet property="imageview4" destination="AHA-7n-Oy3" id="r50-Mg-tgR"/>
+                        <outlet property="imageview5" destination="kIC-5g-guq" id="u4Q-yE-P9Y"/>
                         <outlet property="innerView" destination="zDz-jX-pIm" id="pIW-Vc-XYD"/>
                         <outlet property="scrollView" destination="Gc0-Ne-Rb6" id="ZJb-F6-VO5"/>
-                        <outlet property="textfield2" destination="kgY-Ky-fLn" id="Ad7-GP-UCM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -112,26 +112,26 @@
                     </connections>
                 </swipeGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1622" y="-552"/>
+            <point key="canvasLocation" x="1620.289855072464" y="-553.125"/>
         </scene>
         <!--View Controller2-->
         <scene sceneID="9FL-7q-CiI">
             <objects>
                 <viewController id="4Aw-Re-ayH" customClass="ViewController2" customModule="zoomable_user_interface" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="A7V-e5-Zny">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3RI-Q2-o06">
-                                <rect key="frame" x="0.0" y="44" width="375" height="623"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="852"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h7N-PX-Ofv">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sdy-wa-deC">
-                                                <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                                 <state key="normal" title="background"/>
@@ -179,6 +179,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="fI0-U8-Gc9"/>
                     <connections>
+                        <outlet property="background" destination="Sdy-wa-deC" id="uld-wg-lcB"/>
                         <outlet property="button_1" destination="Ogb-zI-hxB" id="4iw-kJ-qyi"/>
                         <outlet property="button_2" destination="tLc-N3-Exz" id="7TS-z9-J9r"/>
                         <outlet property="button_3" destination="nrx-Xh-c9q" id="PJd-jl-jDn"/>
@@ -190,43 +191,58 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3aA-JL-RD6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1621.5999999999999" y="132.68365817091455"/>
+            <point key="canvasLocation" x="1620.289855072464" y="132.58928571428572"/>
         </scene>
         <!--View Controller3-->
         <scene sceneID="0aP-fU-MfU">
             <objects>
                 <viewController autoresizesArchivedViewToFullSize="NO" id="kg6-FI-CsI" customClass="ViewController3" customModule="zoomable_user_interface" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="pEi-p3-3g5">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="V0N-zK-ERs">
-                                <rect key="frame" x="0.0" y="44" width="375" height="623"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="852"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xiz-sH-taH">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fk0-IZ-bFS">
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" title="background"/>
+                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rip-3R-CQU">
-                                                <rect key="frame" x="45" y="51" width="285" height="476"/>
+                                                <rect key="frame" x="73" y="60" width="228" height="163"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" title="1"/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fMS-vf-tm7">
-                                                <rect key="frame" x="84" y="118" width="193" height="344"/>
+                                                <rect key="frame" x="48" y="345" width="282" height="213"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <state key="normal" title="3"/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sMY-RO-fs9">
-                                                <rect key="frame" x="134" y="185" width="107" height="210"/>
+                                                <rect key="frame" x="130" y="96" width="119" height="91"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <color key="backgroundColor" systemColor="systemPinkColor" red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" title="2"/>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U3j-hq-qtz">
-                                                <rect key="frame" x="164" y="275" width="46" height="30"/>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="01G-yY-qDo">
+                                                <rect key="frame" x="73" y="431" width="96" height="79"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <state key="normal" title="Button"/>
+                                                <color key="backgroundColor" systemColor="systemTealColor" red="0.35294117650000001" green="0.7843137255" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" title="4"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bb8-b5-1e7">
+                                                <rect key="frame" x="206" y="394" width="95" height="77"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" systemColor="systemYellowColor" red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" title="5"/>
                                             </button>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -241,6 +257,12 @@
                     </view>
                     <navigationItem key="navigationItem" id="uYX-Kw-x0a"/>
                     <connections>
+                        <outlet property="background" destination="fk0-IZ-bFS" id="PK9-Yt-P02"/>
+                        <outlet property="button_1" destination="rip-3R-CQU" id="ltS-4X-dBw"/>
+                        <outlet property="button_2" destination="sMY-RO-fs9" id="vtd-sB-WSx"/>
+                        <outlet property="button_3" destination="fMS-vf-tm7" id="Pmw-F6-bxV"/>
+                        <outlet property="button_4" destination="01G-yY-qDo" id="xT5-5C-5w3"/>
+                        <outlet property="button_5" destination="bb8-b5-1e7" id="aYM-oT-jyW"/>
                         <outlet property="innerView" destination="xiz-sH-taH" id="e4P-l6-PPW"/>
                         <outlet property="rect1" destination="rip-3R-CQU" id="IMI-ac-kVD"/>
                         <outlet property="scrollView" destination="V0N-zK-ERs" id="DUJ-5p-39l"/>
@@ -248,7 +270,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gqP-kT-tzo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1621.5999999999999" y="803.74812593703155"/>
+            <point key="canvasLocation" x="1620.289855072464" y="803.57142857142856"/>
         </scene>
         <!--Main Navigation Controller-->
         <scene sceneID="11S-4k-3l8">
@@ -256,7 +278,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Sfo-2e-BPd" customClass="MainNavigationController" customModule="zoomable_user_interface" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="0NK-xf-6Rz">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -273,11 +295,11 @@
             <objects>
                 <viewController id="Mvs-bS-NYw" customClass="FirstViewController" customModule="zoomable_user_interface" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="h9Y-Nd-MgR">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="49" translatesAutoresizingMaskIntoConstraints="NO" id="Bue-4S-Ry4">
-                                <rect key="frame" x="130" y="239.5" width="115" height="188"/>
+                                <rect key="frame" x="149.5" y="354" width="115" height="188"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cSK-YU-yAS">
                                         <rect key="frame" x="0.0" y="0.0" width="115" height="30"/>
@@ -317,11 +339,4 @@
             <point key="canvasLocation" x="922" y="133"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="flower_1" width="136" height="234"/>
-        <image name="flower_2" width="174" height="354"/>
-        <image name="house_1" width="358" height="464"/>
-        <image name="house_2" width="510" height="686"/>
-        <image name="rectangle" width="270" height="316"/>
-    </resources>
 </document>

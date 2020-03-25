@@ -15,55 +15,32 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     
     @IBOutlet weak var innerView: UIView!
+    @IBOutlet weak var imageview1: UIImageView!
+    @IBOutlet weak var imageview2: UIImageView!
+    @IBOutlet weak var imageview3: UIImageView!
+    @IBOutlet weak var imageview4: UIImageView!
+    @IBOutlet weak var imageview5: UIImageView!
+    @IBOutlet weak var background: UIImageView!
+    
+    var flag = "none"
+    var current = "none"
+    var previous = "none"
+    
+    let synth = AVSpeechSynthesizer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         //drawHouse(origin_x: 0, origin_y: 0)
         
-        // triple tap
-        let tripletap = UITapGestureRecognizer(target: self, action: #selector(tripleTapped))
-        tripletap.numberOfTapsRequired = 3
-        view.addGestureRecognizer(tripletap)
+        imageview1.accessibilityIdentifier = "1"
+        imageview2.accessibilityIdentifier = "2"
+        imageview3.accessibilityIdentifier = "3"
+        imageview4.accessibilityIdentifier = "4"
+        imageview5.accessibilityIdentifier = "5"
+        background.accessibilityIdentifier = "background"
         
-        let doubletap = UITapGestureRecognizer(target: self, action: #selector(doubleTap))
-        doubletap.numberOfTapsRequired = 2
-        doubletap.numberOfTouchesRequired = 1
-        doubletap.require(toFail: tripletap)
-        doubletap.require(toFail: doubletap)
-        view.addGestureRecognizer(doubletap)
-        
-        // two finger double tap
-        let tfdoubletap = UITapGestureRecognizer(target: self, action: #selector(twoFingerDoubleTap))
-        tfdoubletap.numberOfTapsRequired = 2
-        tfdoubletap.numberOfTouchesRequired = 2
-        tfdoubletap.require(toFail: tripletap)
-        tfdoubletap.require(toFail: doubletap)
-        view.addGestureRecognizer(tfdoubletap)
-        
-        // tap
-        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-        tap.require(toFail: tfdoubletap)
-        tap.require(toFail: tripletap)
-        view.addGestureRecognizer(tap)
-        
-        // swipe
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
-        swipeLeft.direction = .left
-        self.view.addGestureRecognizer(swipeLeft)
-        
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
-        swipeRight.direction = .right
-        self.view.addGestureRecognizer(swipeRight)
-        
-        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
-        swipeUp.direction = .up
-        self.view.addGestureRecognizer(swipeUp)
-        
-        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
-        swipeDown.direction = .down
-        self.view.addGestureRecognizer(swipeDown)
-    
+   
         scrollView.alwaysBounceVertical = false
         scrollView.alwaysBounceHorizontal = false
         
@@ -73,15 +50,38 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         
         scrollView.isScrollEnabled = false
         
-        house1.tag = 1
-        house2.tag = 3
-        flower1.tag = 2
-        flower2.tag = 4
-        house1.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
-        house2.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
-        flower1.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
-        flower2.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+        innerView.addGestureRecognizer(pan)
+            
+    }
+
+    @objc func handlePan(_ recognizer: UIPanGestureRecognizer){
+        let position = recognizer.location(in: innerView)
+
+        let allViews = UIView.getAllSubviews(from: innerView)
+       
+        previous = flag
         
+        for view in allViews{
+            let origin = view.frame.origin
+            if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
+                
+                if flag != view.accessibilityIdentifier!{
+                    
+                    flag = view.accessibilityIdentifier!
+                }
+            }
+        }
+        if previous != flag{
+           
+            let utterance = AVSpeechUtterance(string: flag)
+            utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+
+            synth.stopSpeaking(at: .immediate)
+            synth.speak(utterance)
+            //print(flag)
+        }
+    
     }
     
     @objc func buttonTap(_ sender: UIButton){
@@ -129,51 +129,6 @@ class ViewController: UIViewController, UIScrollViewDelegate {
 
     @IBOutlet weak var textfield2: UITextField!
     
-    @IBAction func handlePan(_ sender: UIPanGestureRecognizer){
-        /*
-        // 1
-        let translation = gesture.translation(in: view)
-        
-        // 2
-        guard let gestureView = gesture.view else {
-            return
-        }
-        
-        gestureView.center = CGPoint(
-            x: gestureView.center.x + translation.x,
-            y: gestureView.center.y + translation.y
-        )
-        
-        // 3
-        gesture.setTranslation(.zero, in: view)
-        
-        
-        let translation = sender.translation(in: self.view)
-        let statusFrame = UIApplication.shared.statusBarFrame
-
-        if let senderView = sender.view {
-            if senderView.frame.origin.x < 0.0 {
-                senderView.frame.origin = CGPoint(x: 0.0, y: senderView.frame.origin.y)
-            }
-            if senderView.frame.origin.y < statusFrame.height {
-                senderView.frame.origin = CGPoint(x: senderView.frame.origin.x, y: statusFrame.height)
-            }
-            if senderView.frame.origin.x + senderView.frame.size.width > view.frame.width {
-                senderView.frame.origin = CGPoint(x: view.frame.width - senderView.frame.size.width, y: senderView.frame.origin.y)
-            }
-            if senderView.frame.origin.y + senderView.frame.size.height > view.frame.height {
-                senderView.frame.origin = CGPoint(x: senderView.frame.origin.x, y: view.frame.height - senderView.frame.size.height)
-            }
-        }
-
-        if let centerX = sender.view?.center.x, let centerY = sender.view?.center.y {
-            sender.view?.center = CGPoint.init(x: centerX + translation.x , y: centerY + translation.y)
-            sender.setTranslation(CGPoint.zero, in: self.view)
-        }
-        */
-        textfield2.text = "Pan detected"
-    }
-    
     @IBAction func handlePinch(_ gesture: UIPinchGestureRecognizer){
         /*
          guard let gestureView = gesture.view else {
@@ -203,11 +158,6 @@ class ViewController: UIViewController, UIScrollViewDelegate {
          */
         
         textfield2.text = "Rotation detected"
-    }
-    
-    @IBAction func handleTap(){
-        
-        textfield2.text = "Tap detected"
     }
 
     @IBAction func handleSwipe(_ gesture: UISwipeGestureRecognizer){
