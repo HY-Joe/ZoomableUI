@@ -68,7 +68,6 @@
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="5Aa-ZA-QWP" appends="YES" id="ZeP-NG-s2Y"/>
                             <outletCollection property="gestureRecognizers" destination="pV6-0N-haJ" appends="YES" id="ufM-IP-cbj"/>
-                            <outletCollection property="gestureRecognizers" destination="VuX-HG-T8I" appends="YES" id="iHL-zF-YqG"/>
                             <outletCollection property="gestureRecognizers" destination="gWp-LX-TVL" appends="YES" id="5Ax-fb-OTI"/>
                             <outletCollection property="gestureRecognizers" destination="dAR-e1-81z" appends="YES" id="RU4-qY-umw"/>
                         </connections>
@@ -96,11 +95,6 @@
                         <action selector="handlePinch:" destination="BYZ-38-t0r" id="7lJ-Dc-X1s"/>
                     </connections>
                 </pinchGestureRecognizer>
-                <rotationGestureRecognizer id="VuX-HG-T8I">
-                    <connections>
-                        <action selector="handleRotate:" destination="BYZ-38-t0r" id="rhy-HG-gBO"/>
-                    </connections>
-                </rotationGestureRecognizer>
                 <tapGestureRecognizer id="gWp-LX-TVL"/>
                 <swipeGestureRecognizer direction="right" id="dAR-e1-81z">
                     <connections>

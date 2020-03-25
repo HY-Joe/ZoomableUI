@@ -108,6 +108,13 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
         
         let allViews = UIView.getAllSubviews(from: innerView)
         
+        for view in allViews{
+            if let btn = view as? UIButton {
+                btn.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
+                btn.addTarget(self,action: #selector(buttonDoubleTap), for: .touchDownRepeat)
+            }
+        }
+        
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         innerView.addGestureRecognizer(pan)
         
@@ -174,11 +181,17 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
                 scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
            
             }
+        
+        let utterance = AVSpeechUtterance(string: sender.currentTitle! + " zoomed")
+        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+
+        synth.stopSpeaking(at: .immediate)
+        synth.speak(utterance)
     }
     
-    @objc func buttonTap(_ recognizer: UIPanGestureRecognizer, _ sender: UIButton){
+    @objc func buttonTap(_ sender: UIButton){
       
-        let utterance = AVSpeechUtterance(string: sender.accessibilityIdentifier!)
+        let utterance = AVSpeechUtterance(string: sender.currentTitle!)
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
 
         synth.stopSpeaking(at: .immediate)
