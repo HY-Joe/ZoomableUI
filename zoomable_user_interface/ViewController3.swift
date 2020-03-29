@@ -116,6 +116,7 @@ class ViewController3: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
             //print("Swipe right detected")
             if highlighted < count - 1{
                 highlighted += 1
+
                 tts(input: allViews[highlighted].accessibilityIdentifier!.components(separatedBy: "_")[0])
             }
             else if highlighted == count - 1 {
@@ -126,6 +127,7 @@ class ViewController3: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
             //print("Swipe left detected")
             if highlighted > 0 {
                 highlighted -= 1
+
                 tts(input: allViews[highlighted].accessibilityIdentifier!.components(separatedBy: "_")[0])
             }
             else if highlighted == 0{
