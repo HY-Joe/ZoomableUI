@@ -11,7 +11,7 @@ import UIKit
 import Foundation
 import AVFoundation
 
-class ViewController3: UIViewController, UIScrollViewDelegate {
+class ViewController3: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var rect1: UIButton!
     
@@ -33,10 +33,15 @@ class ViewController3: UIViewController, UIScrollViewDelegate {
     var current = "none"
     var previous = "none"
     
+    var highlighted = 0
+    
     let synth = AVSpeechSynthesizer()
     
     override func viewDidLoad(){
         super.viewDidLoad()
+        
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+        
         
         let doubletap = UITapGestureRecognizer(target: self, action: #selector(doubleTap))
         doubletap.numberOfTapsRequired = 2
@@ -81,9 +86,52 @@ class ViewController3: UIViewController, UIScrollViewDelegate {
         petal3.accessibilityIdentifier = "petal_3"
         petal4.accessibilityIdentifier = "petal_4"
         
-    let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        swipeLeft.direction = .left
+        swipeLeft.delegate = self
+        self.view.addGestureRecognizer(swipeLeft)
+        
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        swipeRight.direction = .right
+        swipeRight.delegate = self
+        self.view.addGestureRecognizer(swipeRight)
+        
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+        pan.delegate = self
         innerView.addGestureRecognizer(pan)
         
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer)
+        -> Bool {
+        return true
+    }
+    
+    @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer){
+        let allViews = UIView.getAllSubviews(from: innerView)
+        let count = allViews.count
+        
+        if gesture.direction == .right {
+            //print("Swipe right detected")
+            if highlighted < count - 1{
+                highlighted += 1
+                tts(input: allViews[highlighted].accessibilityIdentifier!.components(separatedBy: "_")[0])
+            }
+            else if highlighted == count - 1 {
+                AudioServicesPlaySystemSound(1112)
+            }
+        }
+        else if gesture.direction == .left {
+            //print("Swipe left detected")
+            if highlighted > 0 {
+                highlighted -= 1
+                tts(input: allViews[highlighted].accessibilityIdentifier!.components(separatedBy: "_")[0])
+            }
+            else if highlighted == 0{
+                AudioServicesPlaySystemSound(1112)
+            }
+        }
     }
     
     @objc func buttonTap(_ sender: UIButton){
@@ -270,7 +318,7 @@ class ViewController3: UIViewController, UIScrollViewDelegate {
         let utterance = AVSpeechUtterance(string: input)
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
 
-        let synth = AVSpeechSynthesizer()
+        synth.stopSpeaking(at: .immediate)
         synth.speak(utterance)
     }
 

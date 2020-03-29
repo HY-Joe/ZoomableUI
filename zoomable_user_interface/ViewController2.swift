@@ -39,7 +39,7 @@ extension UIView {
     func get(all types: [UIView.Type]) -> [UIView] { return UIView.getAllSubviews(from: self, types: types) }
 }
 
-class ViewController2: UIViewController, UIScrollViewDelegate {
+class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate {
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var innerView: UIView!
@@ -58,6 +58,8 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
     var flag = "none"
     var current = "none"
     var previous = "none"
+    
+    var highlighted = 0
     
     let synth = AVSpeechSynthesizer()
     //var flag = String(innerView.accessibilityLabel!)
@@ -106,9 +108,52 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
             }
         }
         
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        swipeLeft.direction = .left
+        swipeLeft.delegate = self
+        self.view.addGestureRecognizer(swipeLeft)
+        
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        swipeRight.direction = .right
+        swipeRight.delegate = self
+        self.view.addGestureRecognizer(swipeRight)
+        
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+        pan.delegate = self
         innerView.addGestureRecognizer(pan)
         
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer)
+        -> Bool {
+        return true
+    }
+    
+    @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer){
+        let allViews = UIView.getAllSubviews(from: innerView)
+        let count = allViews.count
+        
+        if gesture.direction == .right {
+            //print("Swipe right detected")
+            if highlighted < count - 1{
+                highlighted += 1
+                tts(input: allViews[highlighted].accessibilityIdentifier!.components(separatedBy: "_")[0])
+            }
+            else if highlighted == count - 1 {
+                AudioServicesPlaySystemSound(1112)
+            }
+        }
+        else if gesture.direction == .left {
+            //print("Swipe left detected")
+            if highlighted > 0 {
+                highlighted -= 1
+                tts(input: allViews[highlighted].accessibilityIdentifier!.components(separatedBy: "_")[0])
+            }
+            else if highlighted == 0{
+                AudioServicesPlaySystemSound(1112)
+            }
+        }
     }
 
     @objc func handlePan(_ recognizer: UIPanGestureRecognizer){
