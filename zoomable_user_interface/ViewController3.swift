@@ -120,7 +120,7 @@ class ViewController3: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
                 tts(input: allViews[highlighted].accessibilityIdentifier!.components(separatedBy: "_")[0])
             }
             else if highlighted == count - 1 {
-                AudioServicesPlaySystemSound(1112)
+                AudioServicesPlaySystemSound(1053)
             }
         }
         else if gesture.direction == .left {
@@ -131,7 +131,7 @@ class ViewController3: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
                 tts(input: allViews[highlighted].accessibilityIdentifier!.components(separatedBy: "_")[0])
             }
             else if highlighted == 0{
-                AudioServicesPlaySystemSound(1112)
+                AudioServicesPlaySystemSound(1053)
             }
         }
     }
