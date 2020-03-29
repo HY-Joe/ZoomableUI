@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 import CoreGraphics
 
-class ViewController: UIViewController, UIScrollViewDelegate {
+class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var scrollView: UIScrollView!
     
@@ -30,12 +30,15 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     var current = "none"
     var previous = "none"
     
+    var highlighted = 0
+
     let synth = AVSpeechSynthesizer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         //drawHouse(origin_x: 0, origin_y: 0)
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         
         // two finger double tap
         let tfdoubletap = UITapGestureRecognizer(target: self, action: #selector(twoFingerDoubleTap))
@@ -63,17 +66,60 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         
         scrollView.isScrollEnabled = false
         
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
-        innerView.addGestureRecognizer(pan)
-        
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         innerView.addGestureRecognizer(tap)
         
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        swipeLeft.direction = .left
+        swipeLeft.delegate = self
+        self.view.addGestureRecognizer(swipeLeft)
         
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        swipeRight.direction = .right
+        swipeRight.delegate = self
+        self.view.addGestureRecognizer(swipeRight)
+        
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+        pan.delegate = self
+        innerView.addGestureRecognizer(pan)
+        
+             
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer)
+        -> Bool {
+        return true
+    }
+    
+    @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer){
+        let allViews = UIView.getAllSubviews(from: innerView)
+        let count = allViews.count
+        
+        if gesture.direction == .right {
+            //print("Swipe right detected")
+            if highlighted < count - 1{
+                highlighted += 1
+                tts(input: allViews[highlighted].accessibilityIdentifier!.components(separatedBy: "_")[0])
+            }
+            else if highlighted == count - 1 {
+                AudioServicesPlaySystemSound(1053)
+            }
+        }
+        else if gesture.direction == .left {
+            //print("Swipe left detected")
+            if highlighted > 0 {
+                highlighted -= 1
+                tts(input: allViews[highlighted].accessibilityIdentifier!.components(separatedBy: "_")[0])
+            }
+            else if highlighted == 0{
+                AudioServicesPlaySystemSound(1053)
+            }
+        }
     }
     
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
-        AudioServicesPlaySystemSound(1201);
+        AudioServicesPlaySystemSound(1109);
         
     }
     
@@ -122,28 +168,28 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     }
 
     @objc func handlePan(_ recognizer: UIPanGestureRecognizer){
-        let position = recognizer.location(in: innerView)
+       let position = recognizer.location(in: innerView)
 
-        let allViews = UIView.getAllSubviews(from: innerView)
-       
-        previous = flag
+         let allViews = UIView.getAllSubviews(from: innerView)
         
-        for view in allViews{
-            let origin = view.frame.origin
-            if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
-                
-                if flag != view.accessibilityIdentifier!{
-                    
-                    flag = view.accessibilityIdentifier!
-                }
-            }
-        }
-        if previous != flag{
-            
-            tts(input: String(flag.components(separatedBy: "_")[0]))
-            //print(flag)
-        }
-    
+         previous = flag
+         
+         for view in allViews{
+             let origin = view.frame.origin
+             if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
+                 
+                 if flag != view.accessibilityIdentifier!{
+                     
+                     flag = view.accessibilityIdentifier!
+                 }
+             }
+         }
+         if previous != flag{
+             
+             tts(input: String(flag.components(separatedBy: "_")[0]))
+             //print(flag)
+         }
+
     }
     
     @objc func buttonTap(_ sender: UIButton){
@@ -193,8 +239,8 @@ class ViewController: UIViewController, UIScrollViewDelegate {
 
         let utterance = AVSpeechUtterance(string: input)
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-
-        let synth = AVSpeechSynthesizer()
+        
+        synth.stopSpeaking(at: .immediate)
         synth.speak(utterance)
     }
     

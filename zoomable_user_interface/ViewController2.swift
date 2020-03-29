@@ -39,25 +39,28 @@ extension UIView {
     func get(all types: [UIView.Type]) -> [UIView] { return UIView.getAllSubviews(from: self, types: types) }
 }
 
-class ViewController2: UIViewController, UIScrollViewDelegate {
+class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate {
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var innerView: UIView!
     
-    @IBOutlet weak var background: UIButton!
-    @IBOutlet weak var house: UIButton!
-    @IBOutlet weak var window1: UIButton!
-    @IBOutlet weak var window2: UIButton!
-    @IBOutlet weak var door: UIButton!
-    @IBOutlet weak var flowerpot: UIButton!
-    @IBOutlet weak var petal1: UIButton!
-    @IBOutlet weak var petal2: UIButton!
-    @IBOutlet weak var petal3: UIButton!
-    @IBOutlet weak var petal4: UIButton!
+    @IBOutlet weak var background: UIImageView!
+    @IBOutlet weak var house1: UIImageView!
+    @IBOutlet weak var window1: UIImageView!
+    @IBOutlet weak var window2: UIImageView!
+    @IBOutlet weak var door1: UIImageView!
+    @IBOutlet weak var flowerpot1: UIImageView!
+    @IBOutlet weak var petal1: UIImageView!
+    @IBOutlet weak var petal2: UIImageView!
+    @IBOutlet weak var petal3: UIImageView!
+    @IBOutlet weak var petal4: UIImageView!
+    
     
     var flag = "none"
     var current = "none"
     var previous = "none"
+    
+    var highlighted = 0
     
     let synth = AVSpeechSynthesizer()
     //var flag = String(innerView.accessibilityLabel!)
@@ -85,11 +88,11 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
         scrollView.isScrollEnabled = false
         //scrollView.isUserInteractionEnabled = false
         
-        house.accessibilityIdentifier = "house"
+        house1.accessibilityIdentifier = "house"
         window1.accessibilityIdentifier = "window_1"
         window2.accessibilityIdentifier = "window_2"
-        door.accessibilityIdentifier = "door"
-        flowerpot.accessibilityIdentifier = "flower pot"
+        door1.accessibilityIdentifier = "door"
+        flowerpot1.accessibilityIdentifier = "flower pot"
         background.accessibilityIdentifier = "background"
         petal1.accessibilityIdentifier = "petal_1"
         petal2.accessibilityIdentifier = "petal_2"
@@ -106,9 +109,124 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
             }
         }
         
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        swipeLeft.direction = .left
+        swipeLeft.delegate = self
+        self.view.addGestureRecognizer(swipeLeft)
+        
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        swipeRight.direction = .right
+        swipeRight.delegate = self
+        self.view.addGestureRecognizer(swipeRight)
+        
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+        pan.delegate = self
         innerView.addGestureRecognizer(pan)
         
+        let doubletap = UITapGestureRecognizer(target:self, action: #selector(handleDoubleTap))
+        doubletap.numberOfTapsRequired = 2
+        doubletap.delegate = self
+        innerView.addGestureRecognizer(doubletap)
+
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        tap.require(toFail: doubletap)
+        tap.delegate = self
+        innerView.addGestureRecognizer(tap)
+        
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer)
+        -> Bool {
+        return true
+    }
+    
+    @objc func handleDoubleTap(_ recognizer: UITapGestureRecognizer){
+        
+        let allViews = UIView.getAllSubviews(from: innerView)
+        
+        let scale = allViews[highlighted].frame.width
+
+            if scale != scrollView.zoomScale { //zoom in
+                
+                let point = allViews[highlighted].frame.origin
+                
+                let point_x = point.x + allViews[highlighted].frame.width/2
+                let point_y = point.y + allViews[highlighted].frame.height/2
+        
+                let size = CGSize(width: scale,
+                                  height: scale)
+                let origin = CGPoint(x: point_x - size.width / 2,
+                                     y: point_y - size.height / 2)
+                scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
+                
+            } else if scrollView.zoomScale == allViews[highlighted].frame.width { //zoom out
+                let point = allViews[highlighted].frame.origin
+                
+                let point_x = point.x + allViews[highlighted].frame.width/2
+                let point_y = point.y + allViews[highlighted].frame.height/2
+
+                let scrollSize = scrollView.frame.size
+                let size = CGSize(width: scrollSize.width,
+                                  height: scrollSize.height)
+                let origin = CGPoint(x: point_x - size.width / 2,
+                                     y: point_y - size.height / 2)
+                scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
+           
+            }
+
+    }
+    
+    @objc func handleTap(_ recognizer: UITapGestureRecognizer){
+           
+       let position = recognizer.location(in: innerView)
+
+       let allViews = UIView.getAllSubviews(from: innerView)
+       
+        var i = 0
+       var touched = "background"
+       
+       for view in allViews{
+           
+            let origin = view.frame.origin
+            if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
+               
+               touched = view.accessibilityIdentifier!
+                highlighted = i
+            }
+            i += 1
+        }
+       
+       tts(input: String(touched.components(separatedBy: "_")[0]))
+       
+   }
+    
+    @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer){
+        let allViews = UIView.getAllSubviews(from: innerView)
+        let count = allViews.count
+        
+        if gesture.direction == .right {
+            //print("Swipe right detected")
+            if highlighted < count - 1{
+                highlighted += 1
+
+                tts(input: allViews[highlighted].accessibilityIdentifier!.components(separatedBy: "_")[0])
+            }
+            else if highlighted == count - 1 {
+                AudioServicesPlaySystemSound(1053)
+            }
+        }
+        else if gesture.direction == .left {
+            //print("Swipe left detected")
+            if highlighted > 0 {
+                highlighted -= 1
+
+                tts(input: allViews[highlighted].accessibilityIdentifier!.components(separatedBy: "_")[0])
+            }
+            else if highlighted == 0{
+                AudioServicesPlaySystemSound(1053)
+            }
+        }
     }
 
     @objc func handlePan(_ recognizer: UIPanGestureRecognizer){
@@ -118,26 +236,25 @@ class ViewController2: UIViewController, UIScrollViewDelegate {
        
         previous = flag
         
-        for view in allViews{
-            if let btn = view as? UIButton {
-                let origin = btn.frame.origin
-                if position.x >= origin.x && position.x <= origin.x + btn.frame.width && position.y >= origin.y && position.y <= origin.y + btn.frame.height{
-                    
-                    if flag != String(btn.accessibilityIdentifier!){
-                        
-                        flag = String(btn.accessibilityIdentifier!)
-                    }
-                }
-            }
-        }
-        if previous != flag{
-           
-            let utterance = AVSpeechUtterance(string: flag.components(separatedBy: "_")[0])
-            utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+        var i = 0
 
-            synth.stopSpeaking(at: .immediate)
-            synth.speak(utterance)
-        }
+         for view in allViews{
+             let origin = view.frame.origin
+             if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
+                 
+                 if flag != view.accessibilityIdentifier!{
+                     
+                     flag = view.accessibilityIdentifier!
+                    highlighted = i
+                 }
+             }
+            i += 1
+         }
+         if previous != flag{
+             
+             tts(input: String(flag.components(separatedBy: "_")[0]))
+             //print(flag)
+         }
     
     }
     
