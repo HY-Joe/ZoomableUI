@@ -100,7 +100,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             //print("Swipe right detected")
             if highlighted < count - 1{
                 highlighted += 1
-                tts(input: allViews[highlighted].accessibilityIdentifier!.components(separatedBy: "_")[0])
+                tts(input: allViews[highlighted].accessibilityIdentifier!)
             }
             else if highlighted == count - 1 {
                 AudioServicesPlaySystemSound(1053)
@@ -110,7 +110,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             //print("Swipe left detected")
             if highlighted > 0 {
                 highlighted -= 1
-                tts(input: allViews[highlighted].accessibilityIdentifier!.components(separatedBy: "_")[0])
+                tts(input: allViews[highlighted].accessibilityIdentifier!)
             }
             else if highlighted == 0{
                 AudioServicesPlaySystemSound(1053)
@@ -119,7 +119,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     }
     
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
-        AudioServicesPlaySystemSound(1109);
+        AudioServicesPlaySystemSound(1109)
         
     }
     
@@ -163,7 +163,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
              
          }
         
-        tts(input: String(touched.components(separatedBy: "_")[0]))
+        tts(input: String(touched))
         
     }
 
@@ -186,7 +186,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
          }
          if previous != flag{
              
-             tts(input: String(flag.components(separatedBy: "_")[0]))
+             tts(input: String(flag))
              //print(flag)
          }
 

@@ -147,8 +147,9 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
         
         let scale = allViews[highlighted].frame.width
 
+        if allViews[highlighted].accessibilityIdentifier != "background"{
             if scale != scrollView.zoomScale { //zoom in
-                
+                    
                 let point = allViews[highlighted].frame.origin
                 
                 let point_x = point.x + allViews[highlighted].frame.width/2
@@ -159,7 +160,9 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
                 let origin = CGPoint(x: point_x - size.width / 2,
                                      y: point_y - size.height / 2)
                 scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
-                
+                AudioServicesPlaySystemSound(1109)
+                tts(input: String(allViews[highlighted].accessibilityIdentifier!) + "zoomed")
+                    
             } else if scrollView.zoomScale == allViews[highlighted].frame.width { //zoom out
                 let point = allViews[highlighted].frame.origin
                 
@@ -172,8 +175,10 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
                 let origin = CGPoint(x: point_x - size.width / 2,
                                      y: point_y - size.height / 2)
                 scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
-           
+                AudioServicesPlaySystemSound(1109)
+                tts(input: "zoomed out")
             }
+        }
 
     }
     
@@ -197,7 +202,7 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
             i += 1
         }
        
-       tts(input: String(touched.components(separatedBy: "_")[0]))
+       tts(input: String(touched))
        
    }
     
@@ -210,7 +215,7 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
             if highlighted < count - 1{
                 highlighted += 1
 
-                tts(input: allViews[highlighted].accessibilityIdentifier!.components(separatedBy: "_")[0])
+                tts(input: allViews[highlighted].accessibilityIdentifier!)
             }
             else if highlighted == count - 1 {
                 AudioServicesPlaySystemSound(1053)
@@ -221,7 +226,7 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
             if highlighted > 0 {
                 highlighted -= 1
 
-                tts(input: allViews[highlighted].accessibilityIdentifier!.components(separatedBy: "_")[0])
+                tts(input: allViews[highlighted].accessibilityIdentifier!)
             }
             else if highlighted == 0{
                 AudioServicesPlaySystemSound(1053)
@@ -252,7 +257,7 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
          }
          if previous != flag{
              
-             tts(input: String(flag.components(separatedBy: "_")[0]))
+             tts(input: String(flag))
              //print(flag)
          }
     
@@ -294,7 +299,7 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
     
     @objc func buttonTap(_ sender: UIButton){
       
-        tts(input: sender.accessibilityIdentifier!.components(separatedBy: "_")[0])
+        tts(input: sender.accessibilityIdentifier!)
          
     }
     
@@ -319,6 +324,8 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
         let origin = scrollView.frame.origin
         
         scrollView.zoom(to:CGRect(origin: origin, size: scrollView.frame.size), animated: true)
+        AudioServicesPlaySystemSound(1109)
+        tts(input: "zoomed out")
     }
 
     func tts(input: String){
