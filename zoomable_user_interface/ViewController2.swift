@@ -187,6 +187,7 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
                 btn.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
                 btn.addTarget(self,action: #selector(buttonDoubleTap), for: .touchDownRepeat)
             }
+            view.layer.borderColor = UIColor.black.cgColor
         }
         
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
@@ -212,9 +213,6 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
         tap.require(toFail: doubletap)
         tap.delegate = self
         innerView.addGestureRecognizer(tap)
-        
-        
-        
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
@@ -265,6 +263,7 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
     }
     
     @objc func handleTap(_ recognizer: UITapGestureRecognizer){
+        self.navigationItem.title = "tap"
            
        let position = recognizer.location(in: innerView)
 
@@ -272,19 +271,27 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
        
         var i = 0
        var touched = "background"
+        
+        for view in allViews{
+            view.layer.borderWidth = 0
+        }
        
        for view in allViews{
            
             let origin = view.frame.origin
             if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
+                
+                allViews[highlighted].layer.borderWidth = 0
                
-               touched = view.accessibilityIdentifier!
+                touched = view.accessibilityIdentifier!
+                
                 highlighted = i
             }
             i += 1
         }
        
        tts(input: String(touched))
+        allViews[highlighted].layer.borderWidth = 5
        
    }
     
@@ -292,10 +299,19 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
         let allViews = UIView.getAllSubviews(from: innerView)
         let count = allViews.count
         
+        for view in allViews{
+            view.layer.borderWidth = 0
+        }
+        
         if gesture.direction == .right {
             //print("Swipe right detected")
+            self.navigationItem.title = "swipe right"
             if highlighted < count - 1{
+                allViews[highlighted].layer.borderWidth = 0
+                
                 highlighted += 1
+                
+                allViews[highlighted].layer.borderWidth = 5
 
                 tts(input: allViews[highlighted].accessibilityIdentifier!)
             }
@@ -305,8 +321,13 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
         }
         else if gesture.direction == .left {
             //print("Swipe left detected")
+            self.navigationItem.title = "swipe left"
             if highlighted > 0 {
+                allViews[highlighted].layer.borderWidth = 0
+               
                 highlighted -= 1
+                
+                allViews[highlighted].layer.borderWidth = 5
 
                 tts(input: allViews[highlighted].accessibilityIdentifier!)
             }
@@ -317,6 +338,7 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
     }
 
     @objc func handlePan(_ recognizer: UIPanGestureRecognizer){
+        //self.navigationItem.title = "pan"
         let position = recognizer.location(in: innerView)
 
         let allViews = UIView.getAllSubviews(from: innerView)
@@ -330,17 +352,20 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
              if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
                  
                  if flag != view.accessibilityIdentifier!{
-                     
                      flag = view.accessibilityIdentifier!
                     highlighted = i
                  }
              }
             i += 1
          }
+         
          if previous != flag{
-             
+             for view1 in allViews{
+                        view1.layer.borderWidth = 0
+            }
              tts(input: String(flag))
              //print(flag)
+            allViews[highlighted].layer.borderWidth = 5
          }
     
     }

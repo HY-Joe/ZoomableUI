@@ -175,31 +175,6 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         return true
     }
     
-    @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer){
-        let allViews = UIView.getAllSubviews(from: innerView)
-        let count = allViews.count
-        
-        if gesture.direction == .right {
-            //print("Swipe right detected")
-            if highlighted < count - 1{
-                highlighted += 1
-                tts(input: allViews[highlighted].accessibilityIdentifier!)
-            }
-            else if highlighted == count - 1 {
-                AudioServicesPlaySystemSound(1053)
-            }
-        }
-        else if gesture.direction == .left {
-            //print("Swipe left detected")
-            if highlighted > 0 {
-                highlighted -= 1
-                tts(input: allViews[highlighted].accessibilityIdentifier!)
-            }
-            else if highlighted == 0{
-                AudioServicesPlaySystemSound(1053)
-            }
-        }
-    }
     
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
         AudioServicesPlaySystemSound(1109)
@@ -232,51 +207,112 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     }
     
     @objc func handleTap(_ recognizer: UITapGestureRecognizer){
-        
+         self.navigationItem.title = "tap"
+            
         let position = recognizer.location(in: innerView)
 
         let allViews = UIView.getAllSubviews(from: innerView)
         
+         var i = 0
         var touched = "background"
+         
+         for view in allViews{
+             view.layer.borderWidth = 0
+         }
         
         for view in allViews{
             
              let origin = view.frame.origin
              if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
+                 
+                 allViews[highlighted].layer.borderWidth = 0
                 
-                touched = view.accessibilityIdentifier!
+                 touched = view.accessibilityIdentifier!
+                 
+                 highlighted = i
              }
-             
+             i += 1
          }
         
         tts(input: String(touched))
+         allViews[highlighted].layer.borderWidth = 5
         
     }
+     
+     @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer){
+         let allViews = UIView.getAllSubviews(from: innerView)
+         let count = allViews.count
+         
+         for view in allViews{
+             view.layer.borderWidth = 0
+         }
+         
+         if gesture.direction == .right {
+             //print("Swipe right detected")
+             self.navigationItem.title = "swipe right"
+             if highlighted < count - 1{
+                 allViews[highlighted].layer.borderWidth = 0
+                 
+                 highlighted += 1
+                 
+                 allViews[highlighted].layer.borderWidth = 5
 
-    @objc func handlePan(_ recognizer: UIPanGestureRecognizer){
-       let position = recognizer.location(in: innerView)
+                 tts(input: allViews[highlighted].accessibilityIdentifier!)
+             }
+             else if highlighted == count - 1 {
+                 AudioServicesPlaySystemSound(1053)
+             }
+         }
+         else if gesture.direction == .left {
+             //print("Swipe left detected")
+             self.navigationItem.title = "swipe left"
+             if highlighted > 0 {
+                 allViews[highlighted].layer.borderWidth = 0
+                
+                 highlighted -= 1
+                 
+                 allViews[highlighted].layer.borderWidth = 5
+
+                 tts(input: allViews[highlighted].accessibilityIdentifier!)
+             }
+             else if highlighted == 0{
+                 AudioServicesPlaySystemSound(1053)
+             }
+         }
+     }
+
+     @objc func handlePan(_ recognizer: UIPanGestureRecognizer){
+         //self.navigationItem.title = "pan"
+         let position = recognizer.location(in: innerView)
 
          let allViews = UIView.getAllSubviews(from: innerView)
         
          previous = flag
          
-         for view in allViews{
-             let origin = view.frame.origin
-             if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
-                 
-                 if flag != view.accessibilityIdentifier!{
-                     
-                     flag = view.accessibilityIdentifier!
-                 }
-             }
-         }
-         if previous != flag{
-             
-             tts(input: String(flag))
-             //print(flag)
-         }
+         var i = 0
 
-    }
+          for view in allViews{
+              let origin = view.frame.origin
+              if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
+                  
+                  if flag != view.accessibilityIdentifier!{
+                      flag = view.accessibilityIdentifier!
+                     highlighted = i
+                  }
+              }
+             i += 1
+          }
+          
+          if previous != flag{
+              for view1 in allViews{
+                         view1.layer.borderWidth = 0
+             }
+              tts(input: String(flag))
+              //print(flag)
+             allViews[highlighted].layer.borderWidth = 5
+          }
+     
+     }
     
     @objc func buttonTap(_ sender: UIButton){
         print(sender.tag)
