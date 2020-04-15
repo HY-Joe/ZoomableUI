@@ -13,21 +13,60 @@ import AVFoundation
 
 class ViewController3: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate {
 
-    @IBOutlet weak var rect1: UIButton!
-    
     @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var innerView: UIView!
     
-    @IBOutlet weak var background: UIButton!
-    @IBOutlet weak var house: UIButton!
-    @IBOutlet weak var window1: UIButton!
-    @IBOutlet weak var window2: UIButton!
-    @IBOutlet weak var door: UIButton!
-    @IBOutlet weak var flowerpot: UIButton!
-    @IBOutlet weak var petal1: UIButton!
-    @IBOutlet weak var petal2: UIButton!
-    @IBOutlet weak var petal3: UIButton!
-    @IBOutlet weak var petal4: UIButton!
+    @IBOutlet weak var innerView: UIView!
+    @IBOutlet weak var background: UIImageView!
+    
+    @IBOutlet weak var roof1: UIImageView!
+    @IBOutlet weak var roof2: UIImageView!
+    @IBOutlet weak var roof3: UIImageView!
+    
+    @IBOutlet weak var house1: UIImageView!
+    @IBOutlet weak var house2: UIImageView!
+    @IBOutlet weak var house3: UIImageView!
+    @IBOutlet weak var house4: UIImageView!
+    @IBOutlet weak var house5: UIImageView!
+    
+    @IBOutlet weak var window1: UIImageView!
+    @IBOutlet weak var window2: UIImageView!
+    @IBOutlet weak var window3: UIImageView!
+    @IBOutlet weak var window4: UIImageView!
+    @IBOutlet weak var window5: UIImageView!
+    @IBOutlet weak var window6: UIImageView!
+    @IBOutlet weak var window7: UIImageView!
+    @IBOutlet weak var window8: UIImageView!
+    @IBOutlet weak var window9: UIImageView!
+    @IBOutlet weak var window10: UIImageView!
+    
+    @IBOutlet weak var door1: UIImageView!
+    @IBOutlet weak var door2: UIImageView!
+    @IBOutlet weak var door3: UIImageView!
+    
+    @IBOutlet weak var petal1: UIImageView!
+    @IBOutlet weak var petal2: UIImageView!
+    @IBOutlet weak var petal3: UIImageView!
+    @IBOutlet weak var petal4: UIImageView!
+    @IBOutlet weak var petal5: UIImageView!
+    @IBOutlet weak var petal6: UIImageView!
+    @IBOutlet weak var petal7: UIImageView!
+    @IBOutlet weak var petal8: UIImageView!
+    @IBOutlet weak var petal9: UIImageView!
+    @IBOutlet weak var petal10: UIImageView!
+    @IBOutlet weak var petal11: UIImageView!
+    @IBOutlet weak var petal12: UIImageView!
+    @IBOutlet weak var petal13: UIImageView!
+    @IBOutlet weak var petal14: UIImageView!
+    @IBOutlet weak var petal15: UIImageView!
+    @IBOutlet weak var petal16: UIImageView!
+    @IBOutlet weak var petal17: UIImageView!
+    
+    
+    @IBOutlet weak var flowerpot1: UIImageView!
+    @IBOutlet weak var flowerpot2: UIImageView!
+    @IBOutlet weak var flowerpot3: UIImageView!
+    @IBOutlet weak var flowerpot4: UIImageView!
+    @IBOutlet weak var flowerpot5: UIImageView!
     
     var flag = "none"
     var current = "none"
@@ -56,15 +95,6 @@ class ViewController3: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
         tfdoubletap.require(toFail: doubletap)
         view.addGestureRecognizer(tfdoubletap)
         
-        let allViews = UIView.getAllSubviews(from: innerView)
-        
-        for view in allViews{
-            if let btn = view as? UIButton {
-                btn.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
-            }
-        }
-        
-
         scrollView.alwaysBounceVertical = false
         scrollView.alwaysBounceHorizontal = false
         
@@ -75,32 +105,78 @@ class ViewController3: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
         scrollView.isScrollEnabled = false
         //scrollView.isUserInteractionEnabled = false
         
-        house.accessibilityIdentifier = "house"
-        window1.accessibilityIdentifier = "window_1"
-        window2.accessibilityIdentifier = "window_2"
-        door.accessibilityIdentifier = "door"
-        flowerpot.accessibilityIdentifier = "flower pot"
         background.accessibilityIdentifier = "background"
-        petal1.accessibilityIdentifier = "petal_1"
-        petal2.accessibilityIdentifier = "petal_2"
-        petal3.accessibilityIdentifier = "petal_3"
-        petal4.accessibilityIdentifier = "petal_4"
+        
+        roof1.accessibilityIdentifier = "roof1"
+        roof2.accessibilityIdentifier = "roof2"
+        roof3.accessibilityIdentifier = "roof3"
+        
+        house1.accessibilityIdentifier = "house1"
+        house2.accessibilityIdentifier = "house2"
+        house3.accessibilityIdentifier = "house3"
+        house4.accessibilityIdentifier = "house4"
+        house5.accessibilityIdentifier = "house5"
+        
+        window1.accessibilityIdentifier = "window1"
+        window2.accessibilityIdentifier = "window2"
+        window3.accessibilityIdentifier = "window3"
+        window4.accessibilityIdentifier = "window4"
+        window5.accessibilityIdentifier = "window5"
+        window6.accessibilityIdentifier = "window6"
+        window7.accessibilityIdentifier = "window7"
+        window8.accessibilityIdentifier = "window8"
+        window9.accessibilityIdentifier = "window9"
+        window10.accessibilityIdentifier = "window10"
+        
+        door1.accessibilityIdentifier = "door1"
+        door2.accessibilityIdentifier = "door2"
+        door3.accessibilityIdentifier = "door3"
+        
+        petal1.accessibilityIdentifier = "petal1"
+        petal2.accessibilityIdentifier = "petal2"
+        petal3.accessibilityIdentifier = "petal3"
+        petal4.accessibilityIdentifier = "petal4"
+        petal5.accessibilityIdentifier = "petal5"
+        petal6.accessibilityIdentifier = "petal6"
+        petal7.accessibilityIdentifier = "petal7"
+        petal8.accessibilityIdentifier = "petal8"
+        petal9.accessibilityIdentifier = "petal9"
+        petal10.accessibilityIdentifier = "petal10"
+        petal11.accessibilityIdentifier = "petal11"
+        petal12.accessibilityIdentifier = "petal12"
+        petal13.accessibilityIdentifier = "petal13"
+        petal14.accessibilityIdentifier = "petal14"
+        petal15.accessibilityIdentifier = "petal15"
+        petal16.accessibilityIdentifier = "petal16"
+        petal17.accessibilityIdentifier = "petal17"
+        
+        flowerpot1.accessibilityIdentifier = "flowerpot1"
+        flowerpot2.accessibilityIdentifier = "flowerpot2"
+        flowerpot3.accessibilityIdentifier = "flowerpot3"
+        flowerpot4.accessibilityIdentifier = "flowerpot4"
+        flowerpot5.accessibilityIdentifier = "flowerpot5"
         
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
         swipeLeft.direction = .left
-        swipeLeft.delegate = self
-        self.view.addGestureRecognizer(swipeLeft)
-        
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
-        swipeRight.direction = .right
-        swipeRight.delegate = self
-        self.view.addGestureRecognizer(swipeRight)
-        
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
-        pan.delegate = self
-        innerView.addGestureRecognizer(pan)
+       swipeLeft.delegate = self
+       self.view.addGestureRecognizer(swipeLeft)
+       
+       let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+       swipeRight.direction = .right
+       swipeRight.delegate = self
+       self.view.addGestureRecognizer(swipeRight)
+       
+       let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+       pan.delegate = self
+       innerView.addGestureRecognizer(pan)
+           
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        tap.require(toFail: doubletap)
+        tap.delegate = self
+        innerView.addGestureRecognizer(tap)
         
     }
+    
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
         shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer)
@@ -108,16 +184,58 @@ class ViewController3: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
         return true
     }
     
+   @objc func handleTap(_ recognizer: UITapGestureRecognizer){
+        self.navigationItem.title = "tap"
+           
+       let position = recognizer.location(in: innerView)
+
+       let allViews = UIView.getAllSubviews(from: innerView)
+       
+        var i = 0
+       var touched = "background"
+        
+        for view in allViews{
+            view.layer.borderWidth = 0
+        }
+       
+       for view in allViews{
+           
+            let origin = view.frame.origin
+            if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
+                
+                allViews[highlighted].layer.borderWidth = 0
+               
+                touched = view.accessibilityIdentifier!
+                
+                highlighted = i
+            }
+            i += 1
+        }
+       
+       tts(input: String(touched))
+        allViews[highlighted].layer.borderWidth = 5
+       
+   }
+    
     @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer){
         let allViews = UIView.getAllSubviews(from: innerView)
         let count = allViews.count
         
+        for view in allViews{
+            view.layer.borderWidth = 0
+        }
+        
         if gesture.direction == .right {
             //print("Swipe right detected")
+            self.navigationItem.title = "swipe right"
             if highlighted < count - 1{
+                allViews[highlighted].layer.borderWidth = 0
+                
                 highlighted += 1
+                
+                allViews[highlighted].layer.borderWidth = 5
 
-                tts(input: allViews[highlighted].accessibilityIdentifier!.components(separatedBy: "_")[0])
+                tts(input: allViews[highlighted].accessibilityIdentifier!)
             }
             else if highlighted == count - 1 {
                 AudioServicesPlaySystemSound(1053)
@@ -125,56 +243,55 @@ class ViewController3: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
         }
         else if gesture.direction == .left {
             //print("Swipe left detected")
+            self.navigationItem.title = "swipe left"
             if highlighted > 0 {
+                allViews[highlighted].layer.borderWidth = 0
+               
                 highlighted -= 1
+                
+                allViews[highlighted].layer.borderWidth = 5
 
-                tts(input: allViews[highlighted].accessibilityIdentifier!.components(separatedBy: "_")[0])
+                tts(input: allViews[highlighted].accessibilityIdentifier!)
             }
             else if highlighted == 0{
                 AudioServicesPlaySystemSound(1053)
             }
         }
     }
-    
-    @objc func buttonTap(_ sender: UIButton){
-      
-        let utterance = AVSpeechUtterance(string: sender.accessibilityIdentifier!.components(separatedBy: "_")[0])
-        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-
-        synth.stopSpeaking(at: .immediate)
-        synth.speak(utterance)
-         
-    }
 
     @objc func handlePan(_ recognizer: UIPanGestureRecognizer){
+        //self.navigationItem.title = "pan"
         let position = recognizer.location(in: innerView)
 
         let allViews = UIView.getAllSubviews(from: innerView)
        
         previous = flag
         
-        for view in allViews{
-            if let btn = view as? UIButton {
-                let origin = btn.frame.origin
-                if position.x >= origin.x && position.x <= origin.x + btn.frame.width && position.y >= origin.y && position.y <= origin.y + btn.frame.height{
-                    
-                    if flag != String(btn.accessibilityIdentifier!){
-                        
-                        flag = String(btn.accessibilityIdentifier!)
-                    }
-                }
-            }
-        }
-        if previous != flag{
-           
-            let utterance = AVSpeechUtterance(string: flag.components(separatedBy: "_")[0])
-            utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+        var i = 0
 
-            synth.stopSpeaking(at: .immediate)
-            synth.speak(utterance)
-        }
+         for view in allViews{
+             let origin = view.frame.origin
+             if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
+                 
+                 if flag != view.accessibilityIdentifier!{
+                     flag = view.accessibilityIdentifier!
+                    highlighted = i
+                 }
+             }
+            i += 1
+         }
+         
+         if previous != flag{
+             for view1 in allViews{
+                        view1.layer.borderWidth = 0
+            }
+             tts(input: String(flag))
+             //print(flag)
+            allViews[highlighted].layer.borderWidth = 5
+         }
     
     }
+       
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -190,7 +307,7 @@ class ViewController3: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
         //let scale = scrollView.zoomScale * 2
         
         if scrollView.zoomScale == 1.0 { // zoom in
-            
+            AudioServicesPlaySystemSound(1109)
             tts(input: "200%")
             
             let point = recognizer.location(in: innerView)
@@ -206,7 +323,7 @@ class ViewController3: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
         
         }
         else if scrollView.zoomScale == 2.0{
-            
+            AudioServicesPlaySystemSound(1109)
             tts(input: "400%")
             
             let point = recognizer.location(in: innerView)
@@ -223,7 +340,7 @@ class ViewController3: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
             print(scrollView.zoomScale)
         }
         else if scrollView.zoomScale == 4.0{
-            
+            AudioServicesPlaySystemSound(1109)
             tts(input: "800%")
             
             let point = recognizer.location(in: innerView)
@@ -263,7 +380,7 @@ class ViewController3: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
         
         }
         else if scrollView.zoomScale == 2.0{
-            
+            AudioServicesPlaySystemSound(1109)
             tts(input: "100%")
             
             print("doubleTap zoomout")
@@ -278,7 +395,7 @@ class ViewController3: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
             scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
         }
         else if scrollView.zoomScale == 4.0{
-            
+            AudioServicesPlaySystemSound(1109)
             tts(input: "200%")
             
             let point = recognizer.location(in: innerView)
@@ -293,7 +410,7 @@ class ViewController3: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
             print(scrollView.zoomScale)
         }
         else if scrollView.zoomScale == 8.0 { //zoom out
-            
+            AudioServicesPlaySystemSound(1109)
             tts(input: "400%")
             
             let point = recognizer.location(in: innerView)
@@ -309,10 +426,6 @@ class ViewController3: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
             print("doubleTap zoomin")
             print(scrollView.zoomScale)
         }
-    }
-    
-    @objc func tripleTapped(){
-     
     }
     
     func tts(input: String){
