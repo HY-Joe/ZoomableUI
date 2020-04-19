@@ -67,8 +67,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     @IBOutlet weak var flowerpot4: UIImageView!
     @IBOutlet weak var flowerpot5: UIImageView!
     
+    @IBOutlet weak var test: UIImageView!
     
-
     var flag = "none"
     var current = "none"
     var previous = "none"
@@ -167,6 +167,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         flowerpot4.accessibilityIdentifier = "flowerpot4"
         flowerpot5.accessibilityIdentifier = "flowerpot5"
         
+        test.layer.borderWidth = 10
+        test.layer.borderColor = UIColor.red.cgColor
+        test.accessibilityIdentifier = "test"
+        
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
@@ -192,9 +196,67 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         }
     }
     
+    @objc func hasIntersection(zoomedView: UIScrollView, subView: UIView) -> Bool{
+        
+        var points = [CGPoint]()
+        
+        points.append(subView.frame.origin)
+        points.append(CGPoint(x: subView.frame.origin.x + subView.bounds.size.width, y: subView.frame.origin.y))
+        points.append(CGPoint(x: subView.frame.origin.x, y: subView.frame.origin.y + subView.frame.size.height))
+        points.append(CGPoint(x: subView.frame.origin.x + subView.bounds.size.width, y: subView.frame.origin.y + subView.frame.size.height))
+        
+        //print(points)
+        
+        let origin = zoomedView.contentOffset
+        let size = CGSize(width: innerView.frame.size.width / zoomedView.zoomScale , height: innerView.frame.size.height / zoomedView.zoomScale)
+        
+        let rect = CGRect(origin: origin, size: size)
+        let zoomed = UIView(frame: rect)
+        
+        zoomed.layer.borderWidth = 10
+        zoomed.layer.borderColor = UIColor.red.cgColor
+        
+        for point in points{
+            if zoomed.bounds.contains(point) == true{
+                return true
+            }
+        }
+        return false
+        
+    }
+    
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         let zoomscale = Int(Double(round(1000 * scrollView.zoomScale) / 1000) * 100 / 10) * 10
         tts(input: String(zoomscale) + "%")
+        
+        let origin = scrollView.contentOffset
+        let size = CGSize(width: innerView.frame.size.width / scrollView.zoomScale , height: innerView.frame.size.height / scrollView.zoomScale)
+        
+        print("origin")
+        print(origin)
+        print("size")
+        print(Double(innerView.frame.size.width) / Double(scrollView.zoomScale))
+        
+        print("test")
+       print(test.frame.origin)
+       print(test.bounds.width)
+        
+        print("zoomscale")
+        print(scrollView.zoomScale)
+    
+        let allViews = UIView.getAllSubviews(from: innerView)
+       
+        var currentViews = [UIView]()
+        
+        for view in allViews{
+            
+            if hasIntersection(zoomedView: scrollView, subView: view) == true{
+                currentViews.append(view)
+                //print(view.accessibilityIdentifier!)
+            }
+        }
+        print("----------")
+        
         
     }
     
@@ -240,9 +302,18 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     }
      
      @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer){
-         let allViews = UIView.getAllSubviews(from: innerView)
-         let count = allViews.count
-         
+        let allViews = UIView.getAllSubviews(from: innerView)
+        let count = allViews.count
+        
+        var currentViews = [UIView]()
+        
+        for view in allViews{
+            if hasIntersection(zoomedView: scrollView, subView: view) == true{
+                currentViews.append(view)
+                print(view.accessibilityIdentifier!)
+            }
+        }
+       
          for view in allViews{
              view.layer.borderWidth = 0
          }
