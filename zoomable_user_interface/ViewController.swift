@@ -67,8 +67,6 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     @IBOutlet weak var flowerpot4: UIImageView!
     @IBOutlet weak var flowerpot5: UIImageView!
     
-    @IBOutlet weak var test: UIImageView!
-    
     var flag = "none"
     var current = "none"
     var previous = "none"
@@ -167,9 +165,12 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         flowerpot4.accessibilityIdentifier = "flowerpot4"
         flowerpot5.accessibilityIdentifier = "flowerpot5"
         
-        test.layer.borderWidth = 10
-        test.layer.borderColor = UIColor.red.cgColor
-        test.accessibilityIdentifier = "test"
+        let allViews = UIView.getAllSubviews(from: innerView)
+        
+        for view in allViews{
+            print(view.accessibilityIdentifier!)
+            print(view.frame.origin)
+        }
         
     }
     
@@ -207,17 +208,13 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         //print(points)
         
-        let origin = zoomedView.contentOffset
-        let size = CGSize(width: innerView.frame.size.width / zoomedView.zoomScale , height: innerView.frame.size.height / zoomedView.zoomScale)
+        let origin = CGPoint(x: scrollView.contentOffset.x / scrollView.zoomScale, y: scrollView.contentOffset.y / scrollView.zoomScale)
+        let size = CGSize(width: scrollView.contentSize.width / (scrollView.zoomScale * scrollView.zoomScale) , height: scrollView.contentSize.height / (scrollView.zoomScale * scrollView.zoomScale))
         
         let rect = CGRect(origin: origin, size: size)
-        let zoomed = UIView(frame: rect)
-        
-        zoomed.layer.borderWidth = 10
-        zoomed.layer.borderColor = UIColor.red.cgColor
-        
+       
         for point in points{
-            if zoomed.bounds.contains(point) == true{
+            if rect.contains(point) == true{
                 return true
             }
         }
@@ -229,30 +226,30 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         let zoomscale = Int(Double(round(1000 * scrollView.zoomScale) / 1000) * 100 / 10) * 10
         tts(input: String(zoomscale) + "%")
         
-        let origin = scrollView.contentOffset
-        let size = CGSize(width: innerView.frame.size.width / scrollView.zoomScale , height: innerView.frame.size.height / scrollView.zoomScale)
-        
+        //let origin = CGPoint(x: scrollView.contentOffset.x * (414/589), y: scrollView.contentOffset.y * (808/7992))
+        let origin = CGPoint(x: scrollView.contentOffset.x / scrollView.zoomScale, y: scrollView.contentOffset.y / scrollView.zoomScale)
+        let size = CGSize(width: scrollView.contentSize.width / (scrollView.zoomScale * scrollView.zoomScale) , height: scrollView.contentSize.height / (scrollView.zoomScale * scrollView.zoomScale))
+       
         print("origin")
         print(origin)
         print("size")
-        print(Double(innerView.frame.size.width) / Double(scrollView.zoomScale))
+        print(size)
         
-        print("test")
-       print(test.frame.origin)
-       print(test.bounds.width)
-        
-        print("zoomscale")
+        print("ZOOMSCALE")
         print(scrollView.zoomScale)
-    
-        let allViews = UIView.getAllSubviews(from: innerView)
+        
+        print("contentsize")
+        print(scrollView.contentSize)
        
+        let allViews = UIView.getAllSubviews(from: innerView)
+        
         var currentViews = [UIView]()
         
         for view in allViews{
             
             if hasIntersection(zoomedView: scrollView, subView: view) == true{
                 currentViews.append(view)
-                //print(view.accessibilityIdentifier!)
+                print(view.accessibilityIdentifier!)
             }
         }
         print("----------")

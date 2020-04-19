@@ -203,10 +203,6 @@
                                                 <rect key="frame" x="277" y="605" width="7" height="8"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             </imageView>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JZQ-8o-5xg">
-                                                <rect key="frame" x="0.0" y="0.0" width="203" height="329"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            </imageView>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                     </view>
@@ -263,7 +259,6 @@
                         <outlet property="roof2" destination="QWD-Iq-QOa" id="wLD-Se-5kJ"/>
                         <outlet property="roof3" destination="sMl-wS-oXF" id="h45-5v-faO"/>
                         <outlet property="scrollView" destination="Gc0-Ne-Rb6" id="ZJb-F6-VO5"/>
-                        <outlet property="test" destination="JZQ-8o-5xg" id="eE2-NY-tfU"/>
                         <outlet property="window1" destination="3lH-zm-8R5" id="F0o-du-H7Q"/>
                         <outlet property="window10" destination="C0e-Yi-jpc" id="c3S-4D-pMA"/>
                         <outlet property="window2" destination="IDZ-J9-veW" id="22e-oJ-2HV"/>
