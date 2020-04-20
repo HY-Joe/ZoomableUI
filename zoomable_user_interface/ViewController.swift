@@ -204,24 +204,25 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     
     @objc func hasIntersection(zoomedView: UIScrollView, subView: UIView) -> Bool{
         
+        /*
         var points = [CGPoint]()
         
         points.append(subView.frame.origin)
         points.append(CGPoint(x: subView.frame.origin.x + subView.bounds.size.width, y: subView.frame.origin.y))
         points.append(CGPoint(x: subView.frame.origin.x, y: subView.frame.origin.y + subView.frame.size.height))
         points.append(CGPoint(x: subView.frame.origin.x + subView.bounds.size.width, y: subView.frame.origin.y + subView.frame.size.height))
-        
+        */
         //print(points)
+        
+        let subRect = CGRect(origin: subView.frame.origin, size: subView.bounds.size)
         
         let origin = CGPoint(x: scrollView.contentOffset.x / scrollView.zoomScale, y: scrollView.contentOffset.y / scrollView.zoomScale)
         let size = CGSize(width: scrollView.contentSize.width / (scrollView.zoomScale * scrollView.zoomScale) , height: scrollView.contentSize.height / (scrollView.zoomScale * scrollView.zoomScale))
         
         let rect = CGRect(origin: origin, size: size)
        
-        for point in points{
-            if rect.contains(point) == true{
-                return true
-            }
+        if rect.intersects(subRect) == true{
+            return true
         }
         return false
         
@@ -237,14 +238,14 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         currentIndexes.removeAll()
         
         for view in allViews{
-            if hasIntersection(zoomedView: scrollView, subView: view) == true{
+            if hasIntersection(zoomedView: scrollView, subView: view) == true && view.accessibilityIdentifier! != "background" {
                 currentViews.append(view)
                 print(view.accessibilityIdentifier!)
             }
         }
+        print("__________________")
         
         for view in currentViews {
-            print(view.accessibilityIdentifier!)
            for i in 0...allViews.count - 1 {
                if view.accessibilityIdentifier! == allViews[i].accessibilityIdentifier!{
                    currentIndexes.append(i)
