@@ -71,7 +71,12 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     var current = "none"
     var previous = "none"
     
+    var currentViews = [UIView]()
+    
+    var currentIndexes = [Int]()
+    
     var highlighted = 0
+    var currentIndex = 0
 
     let synth = AVSpeechSynthesizer()
     
@@ -113,6 +118,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         pan.delegate = self
         innerView.addGestureRecognizer(pan)
         
+        tap.require(toFail: swipeLeft)
+        tap.require(toFail: swipeRight)
         
         background.accessibilityIdentifier = "background"
         
@@ -167,10 +174,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         let allViews = UIView.getAllSubviews(from: innerView)
         
-        for view in allViews{
-            print(view.accessibilityIdentifier!)
-            print(view.frame.origin)
-        }
+        currentViews = allViews
+        
         
     }
     
@@ -226,35 +231,35 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         let zoomscale = Int(Double(round(1000 * scrollView.zoomScale) / 1000) * 100 / 10) * 10
         tts(input: String(zoomscale) + "%")
         
-        //let origin = CGPoint(x: scrollView.contentOffset.x * (414/589), y: scrollView.contentOffset.y * (808/7992))
-        let origin = CGPoint(x: scrollView.contentOffset.x / scrollView.zoomScale, y: scrollView.contentOffset.y / scrollView.zoomScale)
-        let size = CGSize(width: scrollView.contentSize.width / (scrollView.zoomScale * scrollView.zoomScale) , height: scrollView.contentSize.height / (scrollView.zoomScale * scrollView.zoomScale))
-       
-        print("origin")
-        print(origin)
-        print("size")
-        print(size)
-        
-        print("ZOOMSCALE")
-        print(scrollView.zoomScale)
-        
-        print("contentsize")
-        print(scrollView.contentSize)
-       
         let allViews = UIView.getAllSubviews(from: innerView)
         
-        var currentViews = [UIView]()
+        currentViews.removeAll()
+        currentIndexes.removeAll()
         
         for view in allViews{
-            
             if hasIntersection(zoomedView: scrollView, subView: view) == true{
                 currentViews.append(view)
                 print(view.accessibilityIdentifier!)
             }
         }
-        print("----------")
         
+        for view in currentViews {
+            print(view.accessibilityIdentifier!)
+           for i in 0...allViews.count - 1 {
+               if view.accessibilityIdentifier! == allViews[i].accessibilityIdentifier!{
+                   currentIndexes.append(i)
+               }
+           }
+        }
         
+        highlighted = currentIndexes[0]
+        currentIndex = 0
+        
+        for view in allViews{
+             view.layer.borderWidth = 0
+         }
+        
+        print(currentIndexes.last!)
     }
     
     @objc func twoFingerDoubleTap() {
@@ -300,53 +305,47 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
      
      @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer){
         let allViews = UIView.getAllSubviews(from: innerView)
+        
         let count = allViews.count
         
-        var currentViews = [UIView]()
-        
-        for view in allViews{
-            if hasIntersection(zoomedView: scrollView, subView: view) == true{
-                currentViews.append(view)
-                print(view.accessibilityIdentifier!)
+        if gesture.direction == .right {
+            //print("Swipe right detected")
+            self.navigationItem.title = "swipe right"
+            if highlighted < currentIndexes.last! {
+                allViews[highlighted].layer.borderWidth = 0
+                
+                currentIndex += 1
+                highlighted = currentIndexes[currentIndex]
+                
+                allViews[highlighted].layer.borderWidth = 5
+
+                tts(input: allViews[highlighted].accessibilityIdentifier!)
+            }
+            else if highlighted == currentIndexes.last! {
+                AudioServicesPlaySystemSound(1053)
             }
         }
-       
-         for view in allViews{
-             view.layer.borderWidth = 0
-         }
-         
-         if gesture.direction == .right {
-             //print("Swipe right detected")
-             self.navigationItem.title = "swipe right"
-             if highlighted < count - 1{
-                 allViews[highlighted].layer.borderWidth = 0
-                 
-                 highlighted += 1
-                 
-                 allViews[highlighted].layer.borderWidth = 5
-
-                 tts(input: allViews[highlighted].accessibilityIdentifier!)
-             }
-             else if highlighted == count - 1 {
-                 AudioServicesPlaySystemSound(1053)
-             }
-         }
-         else if gesture.direction == .left {
-             //print("Swipe left detected")
-             self.navigationItem.title = "swipe left"
-             if highlighted > 0 {
-                 allViews[highlighted].layer.borderWidth = 0
+        else if gesture.direction == .left {
+            //print("Swipe left detected")
+            self.navigationItem.title = "swipe left"
+            if highlighted > currentIndexes.first! {
+                allViews[highlighted].layer.borderWidth = 0
+               
+                currentIndex -= 1
+                highlighted = currentIndexes[currentIndex]
                 
-                 highlighted -= 1
-                 
-                 allViews[highlighted].layer.borderWidth = 5
+                allViews[highlighted].layer.borderWidth = 5
 
-                 tts(input: allViews[highlighted].accessibilityIdentifier!)
-             }
-             else if highlighted == 0{
-                 AudioServicesPlaySystemSound(1053)
-             }
-         }
+                allViews[highlighted].layer.borderWidth = 5
+
+                tts(input: allViews[highlighted].accessibilityIdentifier!)
+            }
+            else if highlighted == currentIndexes.first! {
+                AudioServicesPlaySystemSound(1053)
+            }
+        }
+        
+     
      }
 
      @objc func handlePan(_ recognizer: UIPanGestureRecognizer){
