@@ -101,7 +101,12 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
     var current = "none"
     var previous = "none"
     
+    var currentViews = [UIView]()
+    
+    var currentIndexes = [Int]()
+    
     var highlighted = 0
+    var currentIndex = 0
     
     let synth = AVSpeechSynthesizer()
     //var flag = String(innerView.accessibilityLabel!)
@@ -259,6 +264,33 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
                 tts(input: "zoomed out")
             }
         }
+        
+        //get currentViews
+       currentViews.removeAll()
+       currentIndexes.removeAll()
+       
+       for view in allViews{
+           if hasIntersection(zoomedView: scrollView, subView: view) == true {
+               currentViews.append(view)
+               print(view.accessibilityIdentifier!)
+           }
+       }
+       print("__________________")
+       
+       for view in currentViews {
+          for i in 0...allViews.count - 1 {
+              if view.accessibilityIdentifier! == allViews[i].accessibilityIdentifier!{
+                  currentIndexes.append(i)
+              }
+          }
+       }
+       
+       highlighted = currentIndexes[0]
+       currentIndex = 0
+       
+       for view in allViews{
+            view.layer.borderWidth = 0
+        }
 
     }
     
@@ -295,47 +327,81 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
        
    }
     
-    @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer){
-        let allViews = UIView.getAllSubviews(from: innerView)
-        let count = allViews.count
+    @objc func hasIntersection(zoomedView: UIScrollView, subView: UIView) -> Bool{
         
-        for view in allViews{
-            view.layer.borderWidth = 0
+        let subRect = CGRect(origin: subView.frame.origin, size: subView.bounds.size)
+        
+        let origin = CGPoint(x: scrollView.contentOffset.x / scrollView.zoomScale, y: scrollView.contentOffset.y / scrollView.zoomScale)
+        let size = CGSize(width: scrollView.contentSize.width / (scrollView.zoomScale * scrollView.zoomScale) , height: scrollView.contentSize.height / (scrollView.zoomScale * scrollView.zoomScale))
+        
+        let rect = CGRect(origin: origin, size: size)
+       
+        if rect.intersects(subRect) == true{
+            return true
+        }
+        return false
+        
+    }
+    
+    
+    @objc func getNextIndex(highlighted: Int, currentIndexes: [Int], mode: String) -> Int {
+        
+        for i in 0...currentIndexes.count - 1 {
+            if currentIndexes[i] == highlighted {
+                //print(highlighted)
+                if mode == "right" {
+                    return currentIndexes[i+1]
+                }
+                else if mode == "left" {
+                    return currentIndexes[i-1]
+                }
+            }
         }
         
+        return 0
+    }
+     
+     @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer){
+        let allViews = UIView.getAllSubviews(from: innerView)
+       
         if gesture.direction == .right {
             //print("Swipe right detected")
             self.navigationItem.title = "swipe right"
-            if highlighted < count - 1{
+            if highlighted < currentIndexes.last! {
                 allViews[highlighted].layer.borderWidth = 0
                 
-                highlighted += 1
+               print(currentIndexes)
+                print(highlighted)
+                
+                highlighted = getNextIndex(highlighted: highlighted, currentIndexes: currentIndexes, mode: "right")
                 
                 allViews[highlighted].layer.borderWidth = 5
 
                 tts(input: allViews[highlighted].accessibilityIdentifier!)
             }
-            else if highlighted == count - 1 {
+            else if highlighted == currentIndexes.last! {
                 AudioServicesPlaySystemSound(1053)
             }
         }
         else if gesture.direction == .left {
             //print("Swipe left detected")
             self.navigationItem.title = "swipe left"
-            if highlighted > 0 {
+            if highlighted > currentIndexes.first! {
                 allViews[highlighted].layer.borderWidth = 0
                
-                highlighted -= 1
+                highlighted = getNextIndex(highlighted: highlighted, currentIndexes: currentIndexes, mode: "left")
                 
                 allViews[highlighted].layer.borderWidth = 5
 
                 tts(input: allViews[highlighted].accessibilityIdentifier!)
             }
-            else if highlighted == 0{
+            else if highlighted == currentIndexes.first! {
                 AudioServicesPlaySystemSound(1053)
             }
         }
-    }
+        
+     
+     }
 
     @objc func handlePan(_ recognizer: UIPanGestureRecognizer){
         //self.navigationItem.title = "pan"
