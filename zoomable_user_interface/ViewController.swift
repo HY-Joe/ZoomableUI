@@ -202,32 +202,6 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         }
     }
     
-    @objc func hasIntersection(zoomedView: UIScrollView, subView: UIView) -> Bool{
-        
-        /*
-        var points = [CGPoint]()
-        
-        points.append(subView.frame.origin)
-        points.append(CGPoint(x: subView.frame.origin.x + subView.bounds.size.width, y: subView.frame.origin.y))
-        points.append(CGPoint(x: subView.frame.origin.x, y: subView.frame.origin.y + subView.frame.size.height))
-        points.append(CGPoint(x: subView.frame.origin.x + subView.bounds.size.width, y: subView.frame.origin.y + subView.frame.size.height))
-        */
-        //print(points)
-        
-        let subRect = CGRect(origin: subView.frame.origin, size: subView.bounds.size)
-        
-        let origin = CGPoint(x: scrollView.contentOffset.x / scrollView.zoomScale, y: scrollView.contentOffset.y / scrollView.zoomScale)
-        let size = CGSize(width: scrollView.contentSize.width / (scrollView.zoomScale * scrollView.zoomScale) , height: scrollView.contentSize.height / (scrollView.zoomScale * scrollView.zoomScale))
-        
-        let rect = CGRect(origin: origin, size: size)
-       
-        if rect.intersects(subRect) == true{
-            return true
-        }
-        return false
-        
-    }
-    
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         let zoomscale = Int(Double(round(1000 * scrollView.zoomScale) / 1000) * 100 / 10) * 10
         tts(input: String(zoomscale) + "%")
@@ -238,7 +212,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         currentIndexes.removeAll()
         
         for view in allViews{
-            if hasIntersection(zoomedView: scrollView, subView: view) == true && view.accessibilityIdentifier! != "background" {
+            if hasIntersection(zoomedView: scrollView, subView: view) == true {
                 currentViews.append(view)
                 print(view.accessibilityIdentifier!)
             }
@@ -259,8 +233,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         for view in allViews{
              view.layer.borderWidth = 0
          }
-        
-        print(currentIndexes.last!)
+  
     }
     
     @objc func twoFingerDoubleTap() {
@@ -303,20 +276,54 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
          allViews[highlighted].layer.borderWidth = 5
         
     }
+    
+    @objc func hasIntersection(zoomedView: UIScrollView, subView: UIView) -> Bool{
+        
+        let subRect = CGRect(origin: subView.frame.origin, size: subView.bounds.size)
+        
+        let origin = CGPoint(x: scrollView.contentOffset.x / scrollView.zoomScale, y: scrollView.contentOffset.y / scrollView.zoomScale)
+        let size = CGSize(width: scrollView.contentSize.width / (scrollView.zoomScale * scrollView.zoomScale) , height: scrollView.contentSize.height / (scrollView.zoomScale * scrollView.zoomScale))
+        
+        let rect = CGRect(origin: origin, size: size)
+       
+        if rect.intersects(subRect) == true{
+            return true
+        }
+        return false
+        
+    }
+    
+    
+    @objc func getNextIndex(highlighted: Int, currentIndexes: [Int], mode: String) -> Int {
+        
+        for i in 0...currentIndexes.count - 1 {
+            if currentIndexes[i] == highlighted {
+                //print(highlighted)
+                if mode == "right" {
+                    return currentIndexes[i+1]
+                }
+                else if mode == "left" {
+                    return currentIndexes[i-1]
+                }
+            }
+        }
+        
+        return 0
+    }
      
      @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer){
         let allViews = UIView.getAllSubviews(from: innerView)
-        
-        let count = allViews.count
-        
+       
         if gesture.direction == .right {
             //print("Swipe right detected")
             self.navigationItem.title = "swipe right"
             if highlighted < currentIndexes.last! {
                 allViews[highlighted].layer.borderWidth = 0
                 
-                currentIndex += 1
-                highlighted = currentIndexes[currentIndex]
+               print(currentIndexes)
+                print(highlighted)
+                
+                highlighted = getNextIndex(highlighted: highlighted, currentIndexes: currentIndexes, mode: "right")
                 
                 allViews[highlighted].layer.borderWidth = 5
 
@@ -332,11 +339,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             if highlighted > currentIndexes.first! {
                 allViews[highlighted].layer.borderWidth = 0
                
-                currentIndex -= 1
-                highlighted = currentIndexes[currentIndex]
+                highlighted = getNextIndex(highlighted: highlighted, currentIndexes: currentIndexes, mode: "left")
                 
-                allViews[highlighted].layer.borderWidth = 5
-
                 allViews[highlighted].layer.borderWidth = 5
 
                 tts(input: allViews[highlighted].accessibilityIdentifier!)
