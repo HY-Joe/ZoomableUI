@@ -75,8 +75,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     
     var currentIndexes = [Int]()
     
-    var highlighted = 0
-    var currentIndex = 0
+    var highlighted = 1
+    var currentIndex = 1
 
     let synth = AVSpeechSynthesizer()
     
@@ -179,7 +179,6 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         currentViews = allViews
         
-        
         for view in currentViews {
            for i in 0...allViews.count - 1 {
                if view.accessibilityIdentifier! == allViews[i].accessibilityIdentifier!{
@@ -187,6 +186,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                }
            }
         }
+        
+        allViews[highlighted].layer.borderWidth = 5
     
     }
     
@@ -265,20 +266,22 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     }
     
     @objc func handleTap(_ recognizer: UITapGestureRecognizer){
-         self.navigationItem.title = "tap"
+        self.navigationItem.title = "tap"
             
         let position = recognizer.location(in: innerView)
 
         let allViews = UIView.getAllSubviews(from: innerView)
         
-         var i = 0
+         var i = -1
         var touched = "background"
+        var touchedIndex = -1
          
          for view in allViews{
              view.layer.borderWidth = 0
          }
         
         for view in allViews {
+            i += 1
             
             let origin = view.frame.origin
             if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
@@ -287,16 +290,17 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                
                 touched = view.accessibilityIdentifier!
                 
-                highlighted = i
+                touchedIndex = i
             }
-            i += 1
             
          }
         
-        if touched == "background"{
+        if touched == "background" {
+            
             tts(input: String(allViews[highlighted].accessibilityIdentifier!))
         }
         else{
+            highlighted = touchedIndex
             tts(input: String(touched))
         }
         

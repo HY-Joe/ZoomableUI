@@ -309,21 +309,23 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
     }
     
     @objc func handleTap(_ recognizer: UITapGestureRecognizer){
-        self.navigationItem.title = "tap"
-           
-       let position = recognizer.location(in: innerView)
+       self.navigationItem.title = "tap"
+            
+        let position = recognizer.location(in: innerView)
 
-       let allViews = UIView.getAllSubviews(from: innerView)
-       
-        var i = 0
-       var touched = "background"
+        let allViews = UIView.getAllSubviews(from: innerView)
         
-        for view in allViews{
-            view.layer.borderWidth = 0
-        }
-       
-       for view in allViews{
-           
+         var i = -1
+        var touched = "background"
+        var touchedIndex = -1
+         
+         for view in allViews{
+             view.layer.borderWidth = 0
+         }
+        
+        for view in allViews {
+            i += 1
+            
             let origin = view.frame.origin
             if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
                 
@@ -331,14 +333,22 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
                
                 touched = view.accessibilityIdentifier!
                 
-                highlighted = i
+                touchedIndex = i
             }
-            i += 1
+            
+         }
+        
+        if touched == "background" {
+            
+            tts(input: String(allViews[highlighted].accessibilityIdentifier!))
         }
-       
-       tts(input: String(touched))
+        else{
+            highlighted = touchedIndex
+            tts(input: String(touched))
+        }
+        
         allViews[highlighted].layer.borderWidth = 5
-       
+        
    }
     
     @objc func hasIntersection(zoomedView: UIScrollView, subView: UIView) -> Bool{
