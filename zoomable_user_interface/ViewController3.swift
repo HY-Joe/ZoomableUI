@@ -174,12 +174,27 @@ class ViewController3: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
        let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
        pan.delegate = self
        innerView.addGestureRecognizer(pan)
+        
+        pan.require(toFail: swipeLeft)
+        pan.require(toFail: swipeRight)
            
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         tap.require(toFail: doubletap)
         tap.delegate = self
         innerView.addGestureRecognizer(tap)
         
+        let allViews = UIView.getAllSubviews(from: innerView)
+        
+        currentViews = allViews
+        
+        for view in currentViews {
+           for i in 0...allViews.count - 1 {
+               if view.accessibilityIdentifier! == allViews[i].accessibilityIdentifier!{
+                   currentIndexes.append(i)
+               }
+           }
+        }
+    
     }
     
     

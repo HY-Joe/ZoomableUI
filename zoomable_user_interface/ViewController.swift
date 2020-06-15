@@ -121,6 +121,9 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         tap.require(toFail: swipeLeft)
         tap.require(toFail: swipeRight)
         
+        pan.require(toFail: swipeLeft)
+        pan.require(toFail: swipeRight)
+        
         background.accessibilityIdentifier = "background"
         
         roof1.accessibilityIdentifier = "roof1"
@@ -177,6 +180,14 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         currentViews = allViews
         
         
+        for view in currentViews {
+           for i in 0...allViews.count - 1 {
+               if view.accessibilityIdentifier! == allViews[i].accessibilityIdentifier!{
+                   currentIndexes.append(i)
+               }
+           }
+        }
+    
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
@@ -212,7 +223,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         currentIndexes.removeAll()
         
         for view in allViews{
-            if hasIntersection(zoomedView: scrollView, subView: view) == true {
+            if hasIntersection(zoomedView: scrollView, subView: view) {
                 currentViews.append(view)
                 print(view.accessibilityIdentifier!)
             }
@@ -227,12 +238,21 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
            }
         }
         
-        highlighted = currentIndexes[0]
-        currentIndex = 0
+        if currentIndexes[0] == 0 {
+            highlighted = currentIndexes[1]
+            currentIndex = 1
+        }
+        else {
+            highlighted = currentIndexes[0]
+            currentIndex = 0
+        }
+        
         
         for view in allViews{
-             view.layer.borderWidth = 0
-         }
+            view.layer.borderWidth = 0
+            print(view.accessibilityIdentifier!)
+        }
+        
   
     }
     
@@ -258,22 +278,29 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
              view.layer.borderWidth = 0
          }
         
-        for view in allViews{
+        for view in allViews {
             
-             let origin = view.frame.origin
-             if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
-                 
-                 allViews[highlighted].layer.borderWidth = 0
+            let origin = view.frame.origin
+            if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
                 
-                 touched = view.accessibilityIdentifier!
-                 
-                 highlighted = i
-             }
-             i += 1
+                allViews[highlighted].layer.borderWidth = 0
+               
+                touched = view.accessibilityIdentifier!
+                
+                highlighted = i
+            }
+            i += 1
+            
          }
         
-        tts(input: String(touched))
-         allViews[highlighted].layer.borderWidth = 5
+        if touched == "background"{
+            tts(input: String(allViews[highlighted].accessibilityIdentifier!))
+        }
+        else{
+            tts(input: String(touched))
+        }
+        
+        allViews[highlighted].layer.borderWidth = 5
         
     }
     
@@ -313,6 +340,9 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
      
      @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer){
         let allViews = UIView.getAllSubviews(from: innerView)
+        
+        print(highlighted)
+        print(currentIndexes)
        
         if gesture.direction == .right {
             //print("Swipe right detected")

@@ -186,7 +186,7 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
         flowerpot5.accessibilityIdentifier = "flowerpot5"
         
         let allViews = UIView.getAllSubviews(from: innerView)
-        
+     
         for view in allViews{
             if let btn = view as? UIButton {
                 btn.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
@@ -209,6 +209,9 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
         pan.delegate = self
         innerView.addGestureRecognizer(pan)
         
+        pan.require(toFail: swipeLeft)
+        pan.require(toFail: swipeRight)
+        
         let doubletap = UITapGestureRecognizer(target:self, action: #selector(handleDoubleTap))
         doubletap.numberOfTapsRequired = 2
         doubletap.delegate = self
@@ -218,6 +221,17 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
         tap.require(toFail: doubletap)
         tap.delegate = self
         innerView.addGestureRecognizer(tap)
+    
+        currentViews = allViews
+        
+        for view in currentViews {
+           for i in 0...allViews.count - 1 {
+               if view.accessibilityIdentifier! == allViews[i].accessibilityIdentifier!{
+                   currentIndexes.append(i)
+               }
+           }
+        }
+    
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
