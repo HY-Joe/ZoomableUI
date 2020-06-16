@@ -248,12 +248,11 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             currentIndex = 0
         }
         
-        
         for view in allViews{
             view.layer.borderWidth = 0
-            print(view.accessibilityIdentifier!)
         }
         
+        allViews[highlighted].layer.borderWidth = 5
   
     }
     
@@ -347,6 +346,13 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         print(highlighted)
         print(currentIndexes)
+        
+        if currentIndexes[0] == 0 {
+            currentIndexes.remove(at: 0)
+        }
+        if highlighted == 0 {
+            highlighted = currentIndexes[0]
+        }
        
         if gesture.direction == .right {
             //print("Swipe right detected")
@@ -410,12 +416,18 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
           }
           
           if previous != flag{
-              for view1 in allViews{
-                         view1.layer.borderWidth = 0
-             }
-              tts(input: String(flag))
-              //print(flag)
-             allViews[highlighted].layer.borderWidth = 5
+            for view in allViews{
+                view.layer.borderWidth = 0
+            }
+            
+            if flag != "background"{
+                tts(input: String(flag))
+                
+                allViews[highlighted].layer.borderWidth = 5
+            }
+            else{
+                AudioServicesPlaySystemSound(1052)
+            }
           }
      
      }
@@ -464,9 +476,11 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     }
     
     func tts(input: String){
-
+        
         let utterance = AVSpeechUtterance(string: input)
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+        
+        AudioServicesPlaySystemSound(1105)
         
         synth.stopSpeaking(at: .immediate)
         synth.speak(utterance)

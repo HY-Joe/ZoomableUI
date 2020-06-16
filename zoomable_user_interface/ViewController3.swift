@@ -556,6 +556,8 @@ class ViewController3: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
         let utterance = AVSpeechUtterance(string: input)
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
 
+        AudioServicesPlaySystemSound(1105)
+        
         synth.stopSpeaking(at: .immediate)
         synth.speak(utterance)
     }
