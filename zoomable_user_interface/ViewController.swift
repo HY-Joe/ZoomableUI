@@ -296,7 +296,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         if touched == "background" {
             
-            tts(input: String(allViews[highlighted].accessibilityIdentifier!))
+            AudioServicesPlaySystemSound(1255)
         }
         else{
             highlighted = touchedIndex
@@ -426,7 +426,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 allViews[highlighted].layer.borderWidth = 5
             }
             else{
-                AudioServicesPlaySystemSound(1052)
+                AudioServicesPlaySystemSound(1255)
             }
           }
      
