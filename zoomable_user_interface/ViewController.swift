@@ -75,8 +75,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     
     var currentIndexes = [Int]()
     
-    var highlighted = 0
-    var currentIndex = 0
+    var highlighted = 1
+    var currentIndex = 1
 
     let synth = AVSpeechSynthesizer()
     
@@ -120,6 +120,9 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         tap.require(toFail: swipeLeft)
         tap.require(toFail: swipeRight)
+        
+        pan.require(toFail: swipeLeft)
+        pan.require(toFail: swipeRight)
         
         background.accessibilityIdentifier = "background"
         
@@ -176,7 +179,16 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         currentViews = allViews
         
+        for view in currentViews {
+           for i in 0...allViews.count - 1 {
+               if view.accessibilityIdentifier! == allViews[i].accessibilityIdentifier!{
+                   currentIndexes.append(i)
+               }
+           }
+        }
         
+        allViews[highlighted].layer.borderWidth = 5
+    
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
@@ -212,7 +224,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         currentIndexes.removeAll()
         
         for view in allViews{
-            if hasIntersection(zoomedView: scrollView, subView: view) == true {
+            if hasIntersection(zoomedView: scrollView, subView: view) {
                 currentViews.append(view)
                 print(view.accessibilityIdentifier!)
             }
@@ -227,12 +239,20 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
            }
         }
         
-        highlighted = currentIndexes[0]
-        currentIndex = 0
+        if currentIndexes[0] == 0 {
+            highlighted = currentIndexes[1]
+            currentIndex = 1
+        }
+        else {
+            highlighted = currentIndexes[0]
+            currentIndex = 0
+        }
         
         for view in allViews{
-             view.layer.borderWidth = 0
-         }
+            view.layer.borderWidth = 0
+        }
+        
+        allViews[highlighted].layer.borderWidth = 5
   
     }
     
@@ -245,35 +265,45 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     }
     
     @objc func handleTap(_ recognizer: UITapGestureRecognizer){
-         self.navigationItem.title = "tap"
+        self.navigationItem.title = "tap"
             
         let position = recognizer.location(in: innerView)
 
         let allViews = UIView.getAllSubviews(from: innerView)
         
-         var i = 0
+         var i = -1
         var touched = "background"
+        var touchedIndex = -1
          
          for view in allViews{
              view.layer.borderWidth = 0
          }
         
-        for view in allViews{
+        for view in allViews {
+            i += 1
             
-             let origin = view.frame.origin
-             if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
-                 
-                 allViews[highlighted].layer.borderWidth = 0
+            let origin = view.frame.origin
+            if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
                 
-                 touched = view.accessibilityIdentifier!
-                 
-                 highlighted = i
-             }
-             i += 1
+                allViews[highlighted].layer.borderWidth = 0
+               
+                touched = view.accessibilityIdentifier!
+                
+                touchedIndex = i
+            }
+            
          }
         
-        tts(input: String(touched))
-         allViews[highlighted].layer.borderWidth = 5
+        if touched == "background" {
+            
+            AudioServicesPlaySystemSound(1255)
+        }
+        else{
+            highlighted = touchedIndex
+            tts(input: String(touched))
+        }
+        
+        allViews[highlighted].layer.borderWidth = 5
         
     }
     
@@ -313,6 +343,16 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
      
      @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer){
         let allViews = UIView.getAllSubviews(from: innerView)
+        
+        print(highlighted)
+        print(currentIndexes)
+        
+        if currentIndexes[0] == 0 {
+            currentIndexes.remove(at: 0)
+        }
+        if highlighted == 0 {
+            highlighted = currentIndexes[0]
+        }
        
         if gesture.direction == .right {
             //print("Swipe right detected")
@@ -376,12 +416,18 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
           }
           
           if previous != flag{
-              for view1 in allViews{
-                         view1.layer.borderWidth = 0
-             }
-              tts(input: String(flag))
-              //print(flag)
-             allViews[highlighted].layer.borderWidth = 5
+            for view in allViews{
+                view.layer.borderWidth = 0
+            }
+            
+            if flag != "background"{
+                tts(input: String(flag))
+                
+                allViews[highlighted].layer.borderWidth = 5
+            }
+            else{
+                AudioServicesPlaySystemSound(1255)
+            }
           }
      
      }
@@ -430,9 +476,11 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     }
     
     func tts(input: String){
-
+        
         let utterance = AVSpeechUtterance(string: input)
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+        
+        AudioServicesPlaySystemSound(1105)
         
         synth.stopSpeaking(at: .immediate)
         synth.speak(utterance)

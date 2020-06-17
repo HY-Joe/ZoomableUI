@@ -186,7 +186,7 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
         flowerpot5.accessibilityIdentifier = "flowerpot5"
         
         let allViews = UIView.getAllSubviews(from: innerView)
-        
+     
         for view in allViews{
             if let btn = view as? UIButton {
                 btn.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
@@ -209,6 +209,9 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
         pan.delegate = self
         innerView.addGestureRecognizer(pan)
         
+        pan.require(toFail: swipeLeft)
+        pan.require(toFail: swipeRight)
+        
         let doubletap = UITapGestureRecognizer(target:self, action: #selector(handleDoubleTap))
         doubletap.numberOfTapsRequired = 2
         doubletap.delegate = self
@@ -218,6 +221,17 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
         tap.require(toFail: doubletap)
         tap.delegate = self
         innerView.addGestureRecognizer(tap)
+    
+        currentViews = allViews
+        
+        for view in currentViews {
+           for i in 0...allViews.count - 1 {
+               if view.accessibilityIdentifier! == allViews[i].accessibilityIdentifier!{
+                   currentIndexes.append(i)
+               }
+           }
+        }
+    
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
@@ -294,38 +308,48 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
 
     }
     
-    @objc func handleTap(_ recognizer: UITapGestureRecognizer){
-        self.navigationItem.title = "tap"
-           
-       let position = recognizer.location(in: innerView)
-
-       let allViews = UIView.getAllSubviews(from: innerView)
-       
-        var i = 0
-       var touched = "background"
-        
-        for view in allViews{
-            view.layer.borderWidth = 0
-        }
-       
-       for view in allViews{
-           
-            let origin = view.frame.origin
-            if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
-                
-                allViews[highlighted].layer.borderWidth = 0
+     @objc func handleTap(_ recognizer: UITapGestureRecognizer){
+           self.navigationItem.title = "tap"
                
-                touched = view.accessibilityIdentifier!
-                
-                highlighted = i
+           let position = recognizer.location(in: innerView)
+
+           let allViews = UIView.getAllSubviews(from: innerView)
+           
+            var i = -1
+           var touched = "background"
+           var touchedIndex = -1
+            
+            for view in allViews{
+                view.layer.borderWidth = 0
             }
-            i += 1
-        }
-       
-       tts(input: String(touched))
-        allViews[highlighted].layer.borderWidth = 5
-       
-   }
+           
+           for view in allViews {
+               i += 1
+               
+               let origin = view.frame.origin
+               if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
+                   
+                   allViews[highlighted].layer.borderWidth = 0
+                  
+                   touched = view.accessibilityIdentifier!
+                   
+                   touchedIndex = i
+               }
+               
+            }
+           
+           if touched == "background" {
+               
+               AudioServicesPlaySystemSound(1255)
+           }
+           else{
+               highlighted = touchedIndex
+               tts(input: String(touched))
+           }
+           
+           allViews[highlighted].layer.borderWidth = 5
+           
+       }
     
     @objc func hasIntersection(zoomedView: UIScrollView, subView: UIView) -> Bool{
         
@@ -363,6 +387,16 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
      
      @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer){
         let allViews = UIView.getAllSubviews(from: innerView)
+        
+        print(highlighted)
+        print(currentIndexes)
+        
+        if currentIndexes[0] == 0 {
+            currentIndexes.remove(at: 0)
+        }
+        if highlighted == 0 {
+            highlighted = currentIndexes[0]
+        }
        
         if gesture.direction == .right {
             //print("Swipe right detected")
@@ -426,12 +460,18 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
          }
          
          if previous != flag{
-             for view1 in allViews{
-                        view1.layer.borderWidth = 0
-            }
-             tts(input: String(flag))
-             //print(flag)
-            allViews[highlighted].layer.borderWidth = 5
+           for view in allViews{
+               view.layer.borderWidth = 0
+           }
+           
+           if flag != "background"{
+               tts(input: String(flag))
+               
+               allViews[highlighted].layer.borderWidth = 5
+           }
+           else{
+               AudioServicesPlaySystemSound(1255)
+           }
          }
     
     }
@@ -506,6 +546,8 @@ class ViewController2: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
         let utterance = AVSpeechUtterance(string: input)
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
 
+        AudioServicesPlaySystemSound(1105)
+        
         synth.stopSpeaking(at: .immediate)
         synth.speak(utterance)
     }
