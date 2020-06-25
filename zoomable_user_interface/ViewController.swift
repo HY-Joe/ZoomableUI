@@ -10,6 +10,34 @@ import UIKit
 import AVFoundation
 import CoreGraphics
 
+extension UIView {
+
+    class func getAllSubviews<T: UIView>(from parenView: UIView) -> [T] {
+        return parenView.subviews.flatMap { subView -> [T] in
+            var result = getAllSubviews(from: subView) as [T]
+            if let view = subView as? T { result.append(view) }
+            return result
+        }
+    }
+
+    class func getAllSubviews(from parenView: UIView, types: [UIView.Type]) -> [UIView] {
+        return parenView.subviews.flatMap { subView -> [UIView] in
+            var result = getAllSubviews(from: subView) as [UIView]
+            for type in types {
+                if subView.classForCoder == type {
+                    result.append(subView)
+                    return result
+                }
+            }
+            return result
+        }
+    }
+
+    func getAllSubviews<T: UIView>() -> [T] { return UIView.getAllSubviews(from: self) as [T] }
+    func get<T: UIView>(all type: T.Type) -> [T] { return UIView.getAllSubviews(from: self) as [T] }
+    func get(all types: [UIView.Type]) -> [UIView] { return UIView.getAllSubviews(from: self, types: types) }
+}
+
 class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var scrollView: UIScrollView!
@@ -77,6 +105,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     
     var highlighted = 1
     var currentIndex = 1
+    
+    var selectedMenu = ""
 
     let synth = AVSpeechSynthesizer()
     
@@ -86,44 +116,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         //drawHouse(origin_x: 0, origin_y: 0)
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         
-        // two finger double tap
-        let tfdoubletap = UITapGestureRecognizer(target: self, action: #selector(twoFingerDoubleTap))
-        tfdoubletap.numberOfTapsRequired = 2
-        tfdoubletap.numberOfTouchesRequired = 2
-        innerView.addGestureRecognizer(tfdoubletap)
-        
-        scrollView.alwaysBounceVertical = false
-        scrollView.alwaysBounceHorizontal = false
-        
-        scrollView.minimumZoomScale = 1.0
-        scrollView.maximumZoomScale = scrollView.frame.width / petal1.frame.width
-        scrollView.delegate = self
-        
-        scrollView.isScrollEnabled = false
-        
-        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-        innerView.addGestureRecognizer(tap)
-        
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
-        swipeLeft.direction = .left
-        swipeLeft.delegate = self
-        self.view.addGestureRecognizer(swipeLeft)
-        
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
-        swipeRight.direction = .right
-        swipeRight.delegate = self
-        self.view.addGestureRecognizer(swipeRight)
-        
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
-        pan.delegate = self
-        innerView.addGestureRecognizer(pan)
-        
-        tap.require(toFail: swipeLeft)
-        tap.require(toFail: swipeRight)
-        
-        pan.require(toFail: swipeLeft)
-        pan.require(toFail: swipeRight)
-        
+        // outlet
         background.accessibilityIdentifier = "background"
         
         roof1.accessibilityIdentifier = "roof1"
@@ -175,6 +168,50 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         flowerpot4.accessibilityIdentifier = "flowerpot4"
         flowerpot5.accessibilityIdentifier = "flowerpot5"
         
+        let doubletap = UITapGestureRecognizer(target: self, action: #selector(doubleTap))
+        doubletap.numberOfTapsRequired = 2
+        doubletap.numberOfTouchesRequired = 1
+        doubletap.require(toFail: doubletap)
+        view.addGestureRecognizer(doubletap)
+        
+        // two finger double tap
+        let tfdoubletap = UITapGestureRecognizer(target: self, action: #selector(twoFingerDoubleTap))
+        tfdoubletap.numberOfTapsRequired = 2
+        tfdoubletap.numberOfTouchesRequired = 2
+        innerView.addGestureRecognizer(tfdoubletap)
+        
+        scrollView.alwaysBounceVertical = false
+        scrollView.alwaysBounceHorizontal = false
+        
+        scrollView.minimumZoomScale = 1.0
+        scrollView.maximumZoomScale = scrollView.frame.width / petal1.frame.width
+        scrollView.delegate = self
+        
+        scrollView.isScrollEnabled = false
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        innerView.addGestureRecognizer(tap)
+        
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        swipeLeft.direction = .left
+        swipeLeft.delegate = self
+        self.view.addGestureRecognizer(swipeLeft)
+        
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        swipeRight.direction = .right
+        swipeRight.delegate = self
+        self.view.addGestureRecognizer(swipeRight)
+        
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+        pan.delegate = self
+        innerView.addGestureRecognizer(pan)
+        
+        tap.require(toFail: swipeLeft)
+        tap.require(toFail: swipeRight)
+        
+        pan.require(toFail: swipeLeft)
+        pan.require(toFail: swipeRight)
+        
         let allViews = UIView.getAllSubviews(from: innerView)
         
         currentViews = allViews
@@ -188,7 +225,9 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         }
         
         allViews[highlighted].layer.borderWidth = 5
-    
+        
+        print(mode)
+        print(PID)
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
@@ -199,12 +238,15 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     
     
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
-        AudioServicesPlaySystemSound(1109)
+        
+        if mode == "pinch"{
+            AudioServicesPlaySystemSound(1109)
+        }
         
     }
     
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-        tts(input: "decelerating")
+        //tts(input: "decelerating")
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
@@ -215,53 +257,297 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     }
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        let zoomscale = Int(Double(round(1000 * scrollView.zoomScale) / 1000) * 100 / 10) * 10
-        tts(input: String(zoomscale) + "%")
         
-        let allViews = UIView.getAllSubviews(from: innerView)
-        
-        currentViews.removeAll()
-        currentIndexes.removeAll()
-        
-        for view in allViews{
-            if hasIntersection(zoomedView: scrollView, subView: view) {
-                currentViews.append(view)
-                print(view.accessibilityIdentifier!)
+        if mode == "pinch" {
+            let zoomscale = Int(Double(round(1000 * scrollView.zoomScale) / 1000) * 100 / 10) * 10
+            tts(input: String(zoomscale) + "%")
+            
+            let allViews = UIView.getAllSubviews(from: innerView)
+            
+            currentViews.removeAll()
+            currentIndexes.removeAll()
+            
+            for view in allViews{
+                if hasIntersection(zoomedView: scrollView, subView: view) {
+                    currentViews.append(view)
+                    print(view.accessibilityIdentifier!)
+                }
             }
-        }
-        print("__________________")
-        
-        for view in currentViews {
-           for i in 0...allViews.count - 1 {
-               if view.accessibilityIdentifier! == allViews[i].accessibilityIdentifier!{
-                   currentIndexes.append(i)
+            print("__________________")
+            
+            for view in currentViews {
+               for i in 0...allViews.count - 1 {
+                   if view.accessibilityIdentifier! == allViews[i].accessibilityIdentifier!{
+                       currentIndexes.append(i)
+                   }
                }
-           }
+            }
+            
+            if currentIndexes[0] == 0 {
+                highlighted = currentIndexes[1]
+                currentIndex = 1
+            }
+            else {
+                highlighted = currentIndexes[0]
+                currentIndex = 0
+            }
+            
+            for view in allViews{
+                view.layer.borderWidth = 0
+            }
+            
+            allViews[highlighted].layer.borderWidth = 5
+            
+            print(selectedMenu)
         }
         
-        if currentIndexes[0] == 0 {
-            highlighted = currentIndexes[1]
-            currentIndex = 1
-        }
-        else {
-            highlighted = currentIndexes[0]
-            currentIndex = 0
-        }
-        
-        for view in allViews{
-            view.layer.borderWidth = 0
-        }
-        
-        allViews[highlighted].layer.borderWidth = 5
-  
     }
     
-    @objc func twoFingerDoubleTap() {
-        let origin = scrollView.frame.origin
+    @objc func doubleTap(_ recognizer: UITapGestureRecognizer) {
         
-        scrollView.zoom(to:CGRect(origin: origin, size: scrollView.frame.size), animated: true)
-        AudioServicesPlaySystemSound(1109)
-        tts(input: "zoomed out")
+        if mode == "functional" {
+            let allViews = UIView.getAllSubviews(from: innerView)
+             
+             let scale = allViews[highlighted].frame.width
+
+             if allViews[highlighted].accessibilityIdentifier != "background"{
+                 if scale != scrollView.zoomScale { //zoom in
+                         
+                     let point = allViews[highlighted].frame.origin
+                     
+                     let point_x = point.x + allViews[highlighted].frame.width/2
+                     let point_y = point.y + allViews[highlighted].frame.height/2
+             
+                     let size = CGSize(width: scale,
+                                       height: scale)
+                     let origin = CGPoint(x: point_x - size.width / 2,
+                                          y: point_y - size.height / 2)
+                     scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
+                     AudioServicesPlaySystemSound(1109)
+                     tts(input: String(allViews[highlighted].accessibilityIdentifier!) + "zoomed")
+                         
+                 } else if scrollView.zoomScale == allViews[highlighted].frame.width { //zoom out
+                     let point = allViews[highlighted].frame.origin
+                     
+                     let point_x = point.x + allViews[highlighted].frame.width/2
+                     let point_y = point.y + allViews[highlighted].frame.height/2
+
+                     let scrollSize = scrollView.frame.size
+                     let size = CGSize(width: scrollSize.width,
+                                       height: scrollSize.height)
+                     let origin = CGPoint(x: point_x - size.width / 2,
+                                          y: point_y - size.height / 2)
+                     scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
+                     AudioServicesPlaySystemSound(1109)
+                     tts(input: "zoomed out")
+                 }
+             }
+             
+             //get currentViews
+            currentViews.removeAll()
+            currentIndexes.removeAll()
+            
+            for view in allViews{
+                if hasIntersection(zoomedView: scrollView, subView: view) == true {
+                    currentViews.append(view)
+                    print(view.accessibilityIdentifier!)
+                }
+            }
+            print("__________________")
+            
+            for view in currentViews {
+               for i in 0...allViews.count - 1 {
+                   if view.accessibilityIdentifier! == allViews[i].accessibilityIdentifier!{
+                       currentIndexes.append(i)
+                   }
+               }
+            }
+            
+            highlighted = currentIndexes[0]
+            currentIndex = 0
+            
+            for view in allViews{
+                 view.layer.borderWidth = 0
+             }
+
+        }
+        
+        else if mode == "fixed" {
+            //let scale = scrollView.zoomScale * 2
+            
+            if scrollView.zoomScale == 1.0 { // zoom in
+                AudioServicesPlaySystemSound(1109)
+                tts(input: "200%")
+                
+                let point = recognizer.location(in: innerView)
+                print(point)
+                let scrollSize = scrollView.frame.size
+                let size = CGSize(width: scrollSize.width / 2,
+                                  height: scrollSize.height / 2)
+                let origin = CGPoint(x: point.x - size.width / 2,
+                                     y: point.y - size.height / 2)
+                scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
+                print("doubleTap zoomin")
+                print(scrollView.zoomScale)
+            
+            }
+            else if scrollView.zoomScale == 2.0{
+                AudioServicesPlaySystemSound(1109)
+                tts(input: "400%")
+                
+                let point = recognizer.location(in: innerView)
+                print(point)
+                let scrollSize = scrollView.frame.size
+                print("frame size")
+                print(scrollView.frame.size)
+                let size = CGSize(width: scrollSize.width / 4,
+                                  height: scrollSize.height / 4)
+                let origin = CGPoint(x: point.x - size.width / 2,
+                                     y: point.y - size.height / 2)
+                scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
+                print("doubleTap zoomin")
+                print(scrollView.zoomScale)
+            }
+            else if scrollView.zoomScale == 4.0{
+                AudioServicesPlaySystemSound(1109)
+                tts(input: "800%")
+                
+                let point = recognizer.location(in: innerView)
+
+                let scrollSize = scrollView.frame.size
+                print("frame size")
+                print(scrollView.frame.size)
+                let size = CGSize(width: scrollSize.width / 8,
+                                  height: scrollSize.height / 8)
+                let origin = CGPoint(x: point.x - size.width / 2,
+                                     y: point.y - size.height / 2)
+                scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
+                print("doubleTap zoomin")
+                print(scrollView.zoomScale)
+            }
+            
+            //get currentViews
+            let allViews = UIView.getAllSubviews(from: innerView)
+            
+            currentViews.removeAll()
+            currentIndexes.removeAll()
+            
+            for view in allViews{
+                if hasIntersection(zoomedView: scrollView, subView: view) == true {
+                    currentViews.append(view)
+                    print(view.accessibilityIdentifier!)
+                }
+            }
+            print("__________________")
+            
+            for view in currentViews {
+               for i in 0...allViews.count - 1 {
+                   if view.accessibilityIdentifier! == allViews[i].accessibilityIdentifier!{
+                       currentIndexes.append(i)
+                   }
+               }
+            }
+            
+            highlighted = currentIndexes[0]
+            currentIndex = 0
+            
+            for view in allViews{
+                 view.layer.borderWidth = 0
+             }
+        }
+      
+       }
+    
+    @objc func twoFingerDoubleTap(_ recognizer: UITapGestureRecognizer) {
+        if mode == "pinch" || mode == "functional" {
+            let origin = scrollView.frame.origin
+            
+            scrollView.zoom(to:CGRect(origin: origin, size: scrollView.frame.size), animated: true)
+            AudioServicesPlaySystemSound(1109)
+            tts(input: "zoomed out")
+        }
+        
+        else if mode == "fixed" {
+            if scrollView.zoomScale == 1.0 { // zoom in
+            
+            }
+            else if scrollView.zoomScale == 2.0{
+                AudioServicesPlaySystemSound(1109)
+                tts(input: "100%")
+                
+                print("doubleTap zoomout")
+                print(scrollView.zoomScale)
+                let point = recognizer.location(in: innerView)
+
+                let scrollSize = UIScreen.main.bounds.size
+                let size = CGSize(width: scrollSize.width,
+                                  height: scrollSize.height)
+                let origin = CGPoint(x: point.x - size.width / 2,
+                                     y: point.y - size.height / 2)
+                scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
+            }
+            else if scrollView.zoomScale == 4.0{
+                AudioServicesPlaySystemSound(1109)
+                tts(input: "200%")
+                
+                let point = recognizer.location(in: innerView)
+                print(point)
+                let scrollSize = scrollView.frame.size
+                let size = CGSize(width: scrollSize.width / 2,
+                                  height: scrollSize.height / 2)
+                let origin = CGPoint(x: point.x - size.width / 2,
+                                     y: point.y - size.height / 2)
+                scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
+                print("doubleTap zoomin")
+                print(scrollView.zoomScale)
+            }
+            else if scrollView.zoomScale == 8.0 { //zoom out
+                AudioServicesPlaySystemSound(1109)
+                tts(input: "400%")
+                
+                let point = recognizer.location(in: innerView)
+                print(point)
+                let scrollSize = scrollView.frame.size
+                print("frame size")
+                print(scrollView.frame.size)
+                let size = CGSize(width: scrollSize.width / 4,
+                                  height: scrollSize.height / 4)
+                let origin = CGPoint(x: point.x - size.width / 2,
+                                     y: point.y - size.height / 2)
+                scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
+                print("doubleTap zoomin")
+                print(scrollView.zoomScale)
+            }
+            
+            //get currentViews
+            let allViews = UIView.getAllSubviews(from: innerView)
+            
+            currentViews.removeAll()
+            currentIndexes.removeAll()
+            
+            for view in allViews{
+                if hasIntersection(zoomedView: scrollView, subView: view) == true {
+                    currentViews.append(view)
+                    print(view.accessibilityIdentifier!)
+                }
+            }
+            print("__________________")
+            
+            for view in currentViews {
+               for i in 0...allViews.count - 1 {
+                   if view.accessibilityIdentifier! == allViews[i].accessibilityIdentifier!{
+                       currentIndexes.append(i)
+                   }
+               }
+            }
+            
+            highlighted = currentIndexes[0]
+            currentIndex = 0
+            
+            for view in allViews{
+                 view.layer.borderWidth = 0
+             }
+        }
     }
     
     @objc func handleTap(_ recognizer: UITapGestureRecognizer){
@@ -305,40 +591,6 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         allViews[highlighted].layer.borderWidth = 5
         
-    }
-    
-    @objc func hasIntersection(zoomedView: UIScrollView, subView: UIView) -> Bool{
-        
-        let subRect = CGRect(origin: subView.frame.origin, size: subView.bounds.size)
-        
-        let origin = CGPoint(x: scrollView.contentOffset.x / scrollView.zoomScale, y: scrollView.contentOffset.y / scrollView.zoomScale)
-        let size = CGSize(width: scrollView.contentSize.width / (scrollView.zoomScale * scrollView.zoomScale) , height: scrollView.contentSize.height / (scrollView.zoomScale * scrollView.zoomScale))
-        
-        let rect = CGRect(origin: origin, size: size)
-       
-        if rect.intersects(subRect) == true{
-            return true
-        }
-        return false
-        
-    }
-    
-    
-    @objc func getNextIndex(highlighted: Int, currentIndexes: [Int], mode: String) -> Int {
-        
-        for i in 0...currentIndexes.count - 1 {
-            if currentIndexes[i] == highlighted {
-                //print(highlighted)
-                if mode == "right" {
-                    return currentIndexes[i+1]
-                }
-                else if mode == "left" {
-                    return currentIndexes[i-1]
-                }
-            }
-        }
-        
-        return 0
     }
      
      @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer){
@@ -399,6 +651,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
 
          let allViews = UIView.getAllSubviews(from: innerView)
         
+        self.navigationItem.title = "pan"
+    
          previous = flag
          
          var i = 0
@@ -484,6 +738,40 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         synth.stopSpeaking(at: .immediate)
         synth.speak(utterance)
+    }
+    
+    @objc func hasIntersection(zoomedView: UIScrollView, subView: UIView) -> Bool{
+        
+        let subRect = CGRect(origin: subView.frame.origin, size: subView.bounds.size)
+        
+        let origin = CGPoint(x: scrollView.contentOffset.x / scrollView.zoomScale, y: scrollView.contentOffset.y / scrollView.zoomScale)
+        let size = CGSize(width: scrollView.contentSize.width / (scrollView.zoomScale * scrollView.zoomScale) , height: scrollView.contentSize.height / (scrollView.zoomScale * scrollView.zoomScale))
+        
+        let rect = CGRect(origin: origin, size: size)
+       
+        if rect.intersects(subRect) == true{
+            return true
+        }
+        return false
+        
+    }
+    
+    
+    @objc func getNextIndex(highlighted: Int, currentIndexes: [Int], mode: String) -> Int {
+        
+        for i in 0...currentIndexes.count - 1 {
+            if currentIndexes[i] == highlighted {
+                //print(highlighted)
+                if mode == "right" {
+                    return currentIndexes[i+1]
+                }
+                else if mode == "left" {
+                    return currentIndexes[i-1]
+                }
+            }
+        }
+        
+        return 0
     }
     
     
