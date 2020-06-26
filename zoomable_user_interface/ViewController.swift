@@ -110,6 +110,9 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
 
     let synth = AVSpeechSynthesizer()
     
+    // for fixed zoom level
+    var zoomLevel = 1
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -228,6 +231,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         print(mode)
         print(PID)
+        
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
@@ -375,9 +379,11 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         else if mode == "fixed" {
             //let scale = scrollView.zoomScale * 2
             
-            if scrollView.zoomScale == 1.0 { // zoom in
+            if zoomLevel == 1 { // zoom in
                 AudioServicesPlaySystemSound(1109)
                 tts(input: "200%")
+                
+                zoomLevel = 2
                 
                 let point = recognizer.location(in: innerView)
                 print(point)
@@ -391,9 +397,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 print(scrollView.zoomScale)
             
             }
-            else if scrollView.zoomScale == 2.0{
+            else if zoomLevel == 2 {
                 AudioServicesPlaySystemSound(1109)
                 tts(input: "400%")
+                zoomLevel = 4
                 
                 let point = recognizer.location(in: innerView)
                 print(point)
@@ -408,9 +415,11 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 print("doubleTap zoomin")
                 print(scrollView.zoomScale)
             }
-            else if scrollView.zoomScale == 4.0{
+            else if zoomLevel == 4 {
                 AudioServicesPlaySystemSound(1109)
                 tts(input: "800%")
+                
+                zoomLevel = 8
                 
                 let point = recognizer.location(in: innerView)
 
@@ -471,9 +480,11 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             if scrollView.zoomScale == 1.0 { // zoom in
             
             }
-            else if scrollView.zoomScale == 2.0{
+            else if zoomLevel == 2 {
                 AudioServicesPlaySystemSound(1109)
                 tts(input: "100%")
+                
+                zoomLevel = 1
                 
                 print("doubleTap zoomout")
                 print(scrollView.zoomScale)
@@ -486,9 +497,11 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                                      y: point.y - size.height / 2)
                 scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
             }
-            else if scrollView.zoomScale == 4.0{
+            else if zoomLevel == 4 {
                 AudioServicesPlaySystemSound(1109)
                 tts(input: "200%")
+                
+                zoomLevel = 2
                 
                 let point = recognizer.location(in: innerView)
                 print(point)
@@ -501,9 +514,11 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 print("doubleTap zoomin")
                 print(scrollView.zoomScale)
             }
-            else if scrollView.zoomScale == 8.0 { //zoom out
+            else if zoomLevel == 8 { //zoom out
                 AudioServicesPlaySystemSound(1109)
                 tts(input: "400%")
+                
+                zoomLevel = 4
                 
                 let point = recognizer.location(in: innerView)
                 print(point)
