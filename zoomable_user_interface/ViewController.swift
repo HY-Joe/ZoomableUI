@@ -38,6 +38,30 @@ extension UIView {
     func get(all types: [UIView.Type]) -> [UIView] { return UIView.getAllSubviews(from: self, types: types) }
 }
 
+extension String {
+    func appendLine(to url: URL) throws {
+        try self.appending("\n").append(to: url)
+    }
+    func append(to url: URL) throws {
+        let data = self.data(using: String.Encoding.utf8)
+        try data?.append(to: url)
+    }
+}
+
+extension Data {
+    func append(to url: URL) throws {
+        if let fileHandle = try? FileHandle(forWritingTo: url) {
+            defer {
+                fileHandle.closeFile()
+            }
+            fileHandle.seekToEndOfFile()
+            fileHandle.write(self)
+        } else {
+            try write(to: url)
+        }
+    }
+}
+
 class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var scrollView: UIScrollView!
@@ -788,6 +812,46 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         return 0
     }
+    
+    func createCSV(from recArray:[Dictionary<String, AnyObject>]) {
+           var csvString = "\("Employee ID"),\("Employee Name")\n\n"
+           for dct in recArray {
+               csvString = csvString.appending("\(String(describing: dct["EmpID"]!)) ,\(String(describing: dct["EmpName"]!))\n")
+           }
+           
+           let fileManager = FileManager.default
+           do {
+               let path = try fileManager.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+               let fileURL = path.appendingPathComponent("CSVRec.csv")
+               try csvString.write(to: fileURL, atomically: true, encoding: .utf8)
+           } catch {
+               print("error creating file")
+           }
+
+    }
+    
+    @objc func writeLog(logString: String){
+      
+        let fileManager = FileManager.default
+                
+        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+
+        let fileURL = documentsURL.appendingPathComponent("log.csv")
+        
+        var fileText = try? String(contentsOf: fileURL, encoding: .utf8)
+        
+        let indexString = "PID, mode, timestamp, gesture, zoomScale, x, y, highlightedObject, currentViews(index)"
+        
+        if fileText == nil { // if the file does not exist
+            fileText = indexString
+        }
+    
+        let myTextString = NSString(string: fileText! + "\n" + logString)
+
+        try? myTextString.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8.rawValue)
+        
+    }
+    
     
     
 }
