@@ -221,16 +221,19 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
         swipeLeft.direction = .left
+        //swipeLeft.numberOfTouchesRequired = 2
         swipeLeft.delegate = self
         self.view.addGestureRecognizer(swipeLeft)
         
         let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
         swipeRight.direction = .right
+        //swipeRight.numberOfTouchesRequired = 2
         swipeRight.delegate = self
         self.view.addGestureRecognizer(swipeRight)
         
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         pan.delegate = self
+        pan.maximumNumberOfTouches = 1
         innerView.addGestureRecognizer(pan)
         
         tap.require(toFail: swipeLeft)
@@ -240,6 +243,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         pan.require(toFail: swipeRight)
         
         let allViews = UIView.getAllSubviews(from: innerView)
+        
+        //scrollView.panGestureRecognizer.minimumNumberOfTouches = 3
         
         currentViews = allViews
         
@@ -256,20 +261,25 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         print(mode)
         print(PID)
         
+        if mode == "pinch"{
+            print("mode yes")
+        }
+        
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
         shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer)
         -> Bool {
-        return true
+            
+            return true
     }
     
-    
-    func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
+    func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?, _ gestureRecognizer: UIGestureRecognizer) {
         
         if mode == "pinch"{
             AudioServicesPlaySystemSound(1109)
         }
+        
         
     }
     
@@ -280,7 +290,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         if scrollView.zoomScale == scrollView.minimumZoomScale
         {
-            print("zoomed out")
+            //print("zoomed out")
         }
     }
     
@@ -298,10 +308,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             for view in allViews{
                 if hasIntersection(zoomedView: scrollView, subView: view) {
                     currentViews.append(view)
-                    print(view.accessibilityIdentifier!)
+                    //print(view.accessibilityIdentifier!)
                 }
             }
-            print("__________________")
+            //print("__________________")
             
             for view in currentViews {
                for i in 0...allViews.count - 1 {
@@ -326,12 +336,12 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             
             allViews[highlighted].layer.borderWidth = 5
             
-            print(selectedMenu)
+            //print(selectedMenu)
         }
         
     }
     
-    @objc func doubleTap(_ recognizer: UITapGestureRecognizer) {
+    @objc func doubleTap(_ gestureRecognizer: UITapGestureRecognizer) {
         
         if mode == "functional" {
             let allViews = UIView.getAllSubviews(from: innerView)
@@ -378,10 +388,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             for view in allViews{
                 if hasIntersection(zoomedView: scrollView, subView: view) == true {
                     currentViews.append(view)
-                    print(view.accessibilityIdentifier!)
+                    //print(view.accessibilityIdentifier!)
                 }
             }
-            print("__________________")
+            //print("__________________")
             
             for view in currentViews {
                for i in 0...allViews.count - 1 {
@@ -409,16 +419,16 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 
                 zoomLevel = 2
                 
-                let point = recognizer.location(in: innerView)
-                print(point)
+                let point = gestureRecognizer.location(in: innerView)
+                //print(point)
                 let scrollSize = scrollView.frame.size
                 let size = CGSize(width: scrollSize.width / 2,
                                   height: scrollSize.height / 2)
                 let origin = CGPoint(x: point.x - size.width / 2,
                                      y: point.y - size.height / 2)
                 scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
-                print("doubleTap zoomin")
-                print(scrollView.zoomScale)
+                //print("doubleTap zoomin")
+                //print(scrollView.zoomScale)
             
             }
             else if zoomLevel == 2 {
@@ -426,18 +436,18 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 tts(input: "400%")
                 zoomLevel = 4
                 
-                let point = recognizer.location(in: innerView)
-                print(point)
+                let point = gestureRecognizer.location(in: innerView)
+                //print(point)
                 let scrollSize = scrollView.frame.size
-                print("frame size")
-                print(scrollView.frame.size)
+                //print("frame size")
+                //print(scrollView.frame.size)
                 let size = CGSize(width: scrollSize.width / 4,
                                   height: scrollSize.height / 4)
                 let origin = CGPoint(x: point.x - size.width / 2,
                                      y: point.y - size.height / 2)
                 scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
-                print("doubleTap zoomin")
-                print(scrollView.zoomScale)
+                //print("doubleTap zoomin")
+                //print(scrollView.zoomScale)
             }
             else if zoomLevel == 4 {
                 AudioServicesPlaySystemSound(1109)
@@ -445,18 +455,18 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 
                 zoomLevel = 8
                 
-                let point = recognizer.location(in: innerView)
+                let point = gestureRecognizer.location(in: innerView)
 
                 let scrollSize = scrollView.frame.size
-                print("frame size")
-                print(scrollView.frame.size)
+                //print("frame size")
+                //print(scrollView.frame.size)
                 let size = CGSize(width: scrollSize.width / 8,
                                   height: scrollSize.height / 8)
                 let origin = CGPoint(x: point.x - size.width / 2,
                                      y: point.y - size.height / 2)
                 scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
-                print("doubleTap zoomin")
-                print(scrollView.zoomScale)
+                //print("doubleTap zoomin")
+                //print(scrollView.zoomScale)
             }
             
             //get currentViews
@@ -468,10 +478,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             for view in allViews{
                 if hasIntersection(zoomedView: scrollView, subView: view) == true {
                     currentViews.append(view)
-                    print(view.accessibilityIdentifier!)
+                    //print(view.accessibilityIdentifier!)
                 }
             }
-            print("__________________")
+            //print("__________________")
             
             for view in currentViews {
                for i in 0...allViews.count - 1 {
@@ -491,7 +501,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
       
        }
     
-    @objc func twoFingerDoubleTap(_ recognizer: UITapGestureRecognizer) {
+    @objc func twoFingerDoubleTap(_ gestureRecognizer: UITapGestureRecognizer) {
         if mode == "pinch" || mode == "functional" {
             let origin = scrollView.frame.origin
             
@@ -512,7 +522,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 
                 print("doubleTap zoomout")
                 print(scrollView.zoomScale)
-                let point = recognizer.location(in: innerView)
+                let point = gestureRecognizer.location(in: innerView)
 
                 let scrollSize = UIScreen.main.bounds.size
                 let size = CGSize(width: scrollSize.width,
@@ -527,7 +537,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 
                 zoomLevel = 2
                 
-                let point = recognizer.location(in: innerView)
+                let point = gestureRecognizer.location(in: innerView)
                 print(point)
                 let scrollSize = scrollView.frame.size
                 let size = CGSize(width: scrollSize.width / 2,
@@ -544,7 +554,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 
                 zoomLevel = 4
                 
-                let point = recognizer.location(in: innerView)
+                let point = gestureRecognizer.location(in: innerView)
                 print(point)
                 let scrollSize = scrollView.frame.size
                 print("frame size")
@@ -567,10 +577,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             for view in allViews{
                 if hasIntersection(zoomedView: scrollView, subView: view) == true {
                     currentViews.append(view)
-                    print(view.accessibilityIdentifier!)
+                    //print(view.accessibilityIdentifier!)
                 }
             }
-            print("__________________")
+            //print("__________________")
             
             for view in currentViews {
                for i in 0...allViews.count - 1 {
@@ -589,10 +599,15 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         }
     }
     
-    @objc func handleTap(_ recognizer: UITapGestureRecognizer){
+    @objc func handleTap(_ gestureRecognizer: UITapGestureRecognizer){
+        
+        print(gestureRecognizer)
+        print(gestureRecognizer.location(in: innerView))
+        print(gestureRecognizer.state.rawValue)
+        
         self.navigationItem.title = "tap"
             
-        let position = recognizer.location(in: innerView)
+        let position = gestureRecognizer.location(in: innerView)
 
         let allViews = UIView.getAllSubviews(from: innerView)
         
@@ -635,8 +650,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
      @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer){
         let allViews = UIView.getAllSubviews(from: innerView)
         
-        print(highlighted)
-        print(currentIndexes)
+        //print(highlighted)
+        //print(currentIndexes)
         
         if currentIndexes[0] == 0 {
             currentIndexes.remove(at: 0)
@@ -651,8 +666,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             if highlighted < currentIndexes.last! {
                 allViews[highlighted].layer.borderWidth = 0
                 
-               print(currentIndexes)
-                print(highlighted)
+               //print(currentIndexes)
+                //print(highlighted)
                 
                 highlighted = getNextIndex(highlighted: highlighted, currentIndexes: currentIndexes, mode: "right")
                 
@@ -684,9 +699,9 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
      
      }
 
-     @objc func handlePan(_ recognizer: UIPanGestureRecognizer){
+     @objc func handlePan(_ gestureRecognizer: UIPanGestureRecognizer){
          //self.navigationItem.title = "pan"
-         let position = recognizer.location(in: innerView)
+         let position = gestureRecognizer.location(in: innerView)
 
          let allViews = UIView.getAllSubviews(from: innerView)
         
@@ -728,7 +743,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     @objc func buttonTap(_ sender: UIButton){
         print(sender.tag)
         let scale = min(scrollView.zoomScale * 2, scrollView.maximumZoomScale)
-
+        
         if scale != scrollView.zoomScale { // zoom in
             
             let point = sender.frame.origin
@@ -840,7 +855,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         var fileText = try? String(contentsOf: fileURL, encoding: .utf8)
         
-        let indexString = "PID, mode, timestamp, gesture, zoomScale, x, y, highlightedObject, currentViews(index)"
+        let indexString = "PID, mode, timestamp, gesture, state, zoomScale, x, y, highlightedObject, currentViews(index)"
         
         if fileText == nil { // if the file does not exist
             fileText = indexString
