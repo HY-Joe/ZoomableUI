@@ -52,6 +52,8 @@ class FirstViewController: UIViewController, UIScrollViewDelegate, UITextFieldDe
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        PIDTextField.text = "test"
+        
     }
     
 }

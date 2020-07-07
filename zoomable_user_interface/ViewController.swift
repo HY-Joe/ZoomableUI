@@ -598,7 +598,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
              }
         }
         
-        writeLog(PID: PID, mode: mode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "2-finger double tap", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentViews)")
+        writeLog(PID: PID, mode: mode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "2-finger double tap", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
     }
     
     @objc func handleTap(_ gestureRecognizer: UITapGestureRecognizer){
@@ -676,6 +676,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             else if highlighted == currentIndexes.last! {
                 AudioServicesPlaySystemSound(1053)
             }
+            
+            writeLog(PID: PID, mode: mode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "swipe right", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
         }
         else if gestureRecognizer.direction == .left {
             //print("Swipe left detected")
@@ -692,9 +694,14 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             else if highlighted == currentIndexes.first! {
                 AudioServicesPlaySystemSound(1053)
             }
+            
+            writeLog(PID: PID, mode: mode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "swipe left", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
         }
         
-        writeLog(PID: PID, mode: mode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "tap", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentViews)")
+        if gestureRecognizer.state == .ended {
+            print("swipe has ended")
+            return
+        }
      
      }
 
@@ -723,6 +730,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
           }
           
           if previous != flag{
+            
             for view in allViews{
                 view.layer.borderWidth = 0
             }
@@ -841,14 +849,33 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         var fileText = try? String(contentsOf: fileURL, encoding: .utf8)
         
-        let indexString = "PID, mode, timestamp, state, gesture, zoomScale, location_x, location_y, highlightedObject, currentViews(index)"
+        var zoomMode = ""
+        
+        switch mode {
+        
+        case "pinch":
+            zoomMode = "pinch-to-zoom"
+        case "functional":
+            zoomMode = "functional zoom"
+        case "fixed":
+            zoomMode = "fixed zoom"
+        default:
+            zoomMode = ""
+        
+        }
+        
+        let indexString = "PID, mode, gesture, state, timestamp, zoomScale, scrollView_offset_x, scrollView_offset_y, scrollView_contentSize_width, scrollView_contentSize_height, location_x, location_y, highlightedObject, currentViews(index)"
         
         let logString = PID
-            + ", " + mode
-            + ", " + timestamp
-            + ", " + getState(rawValue: state)
+            + ", " + zoomMode
             + ", " + gesture
+            + ", " + getState(rawValue: state)
+            + ", " + timestamp
             + ", " +  "\(zoomScale)"
+            + ", " +  "\(scrollView.contentOffset.x/scrollView.zoomScale)"
+            + ", " +  "\(scrollView.contentOffset.y/scrollView.zoomScale)"
+            + ", " +  "\(scrollView.contentSize.width / (scrollView.zoomScale * scrollView.zoomScale))"
+            + ", " +  "\(scrollView.contentSize.height / (scrollView.zoomScale * scrollView.zoomScale))"
             + ", " +  "\(location.x)"
             + ", " +  "\(location.y)"
             + ", " + getObjectName(index: highlightedObject)
