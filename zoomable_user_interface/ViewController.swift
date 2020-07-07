@@ -195,12 +195,6 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         flowerpot4.accessibilityIdentifier = "flowerpot4"
         flowerpot5.accessibilityIdentifier = "flowerpot5"
         
-        let doubletap = UITapGestureRecognizer(target: self, action: #selector(doubleTap))
-        doubletap.numberOfTapsRequired = 2
-        doubletap.numberOfTouchesRequired = 1
-        doubletap.require(toFail: doubletap)
-        view.addGestureRecognizer(doubletap)
-        
         // two finger double tap
         let tfdoubletap = UITapGestureRecognizer(target: self, action: #selector(twoFingerDoubleTap))
         tfdoubletap.numberOfTapsRequired = 2
@@ -216,24 +210,27 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         scrollView.isScrollEnabled = false
         
+        let doubletap = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap))
+        doubletap.numberOfTapsRequired = 2
+        doubletap.numberOfTouchesRequired = 1
+        view.addGestureRecognizer(doubletap)
+        
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        tap.require(toFail: doubletap)
         innerView.addGestureRecognizer(tap)
         
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
         swipeLeft.direction = .left
-        //swipeLeft.numberOfTouchesRequired = 2
         swipeLeft.delegate = self
         self.view.addGestureRecognizer(swipeLeft)
         
         let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
         swipeRight.direction = .right
-        //swipeRight.numberOfTouchesRequired = 2
         swipeRight.delegate = self
         self.view.addGestureRecognizer(swipeRight)
         
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         pan.delegate = self
-        pan.maximumNumberOfTouches = 1
         innerView.addGestureRecognizer(pan)
         
         tap.require(toFail: swipeLeft)
@@ -243,8 +240,6 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         pan.require(toFail: swipeRight)
         
         let allViews = UIView.getAllSubviews(from: innerView)
-        
-        //scrollView.panGestureRecognizer.minimumNumberOfTouches = 3
         
         currentViews = allViews
         
@@ -261,10 +256,6 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         print(mode)
         print(PID)
         
-        if mode == "pinch"{
-            print("mode yes")
-        }
-        
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
@@ -274,10 +265,13 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             return true
     }
     
-    func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?, _ gestureRecognizer: UIGestureRecognizer) {
+    func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
         
-        if mode == "pinch"{
+        if mode == "pinch" {
+        
             AudioServicesPlaySystemSound(1109)
+            
+            // writeLog(PID: PID, mode: mode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "pinch", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentViews)")
         }
         
         
@@ -297,6 +291,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         
         if mode == "pinch" {
+            
             let zoomscale = Int(Double(round(1000 * scrollView.zoomScale) / 1000) * 100 / 10) * 10
             tts(input: String(zoomscale) + "%")
             
@@ -335,18 +330,20 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             }
             
             allViews[highlighted].layer.borderWidth = 5
+            //(PID: String, mode: String, timestamp: String, state: Int, gesture: String, zoomScale: CGFloat, location: CGPoint, highlightedObject: Int, currentViews: String)
+          
             
-            //print(selectedMenu)
         }
+    
         
     }
     
-    @objc func doubleTap(_ gestureRecognizer: UITapGestureRecognizer) {
+    @objc func handleDoubleTap(_ gestureRecognizer: UITapGestureRecognizer) {
         
         if mode == "functional" {
             let allViews = UIView.getAllSubviews(from: innerView)
              
-             let scale = allViews[highlighted].frame.width
+            let scale = allViews[highlighted].frame.width + CGFloat(60)
 
              if allViews[highlighted].accessibilityIdentifier != "background"{
                  if scale != scrollView.zoomScale { //zoom in
@@ -361,8 +358,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                      let origin = CGPoint(x: point_x - size.width / 2,
                                           y: point_y - size.height / 2)
                      scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
-                     AudioServicesPlaySystemSound(1109)
-                     tts(input: String(allViews[highlighted].accessibilityIdentifier!) + "zoomed")
+                    
+                    AudioServicesPlaySystemSound(1109)
+                     
+                    tts(input: String(allViews[highlighted].accessibilityIdentifier!) + "zoomed")
                          
                  } else if scrollView.zoomScale == allViews[highlighted].frame.width { //zoom out
                      let point = allViews[highlighted].frame.origin
@@ -407,7 +406,6 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             for view in allViews{
                  view.layer.borderWidth = 0
              }
-
         }
         
         else if mode == "fixed" {
@@ -498,7 +496,9 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                  view.layer.borderWidth = 0
              }
         }
-      
+        
+        writeLog(PID: PID, mode: mode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "double tap", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
+    
        }
     
     @objc func twoFingerDoubleTap(_ gestureRecognizer: UITapGestureRecognizer) {
@@ -597,13 +597,11 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                  view.layer.borderWidth = 0
              }
         }
+        
+        writeLog(PID: PID, mode: mode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "2-finger double tap", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentViews)")
     }
     
     @objc func handleTap(_ gestureRecognizer: UITapGestureRecognizer){
-        
-        print(gestureRecognizer)
-        print(gestureRecognizer.location(in: innerView))
-        print(gestureRecognizer.state.rawValue)
         
         self.navigationItem.title = "tap"
             
@@ -636,7 +634,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         if touched == "background" {
             
-            AudioServicesPlaySystemSound(1255)
+            //AudioServicesPlaySystemSound(1255)
         }
         else{
             highlighted = touchedIndex
@@ -647,7 +645,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
     }
      
-     @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer){
+     @objc func handleSwipe(_ gestureRecognizer: UISwipeGestureRecognizer){
         let allViews = UIView.getAllSubviews(from: innerView)
         
         //print(highlighted)
@@ -660,7 +658,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             highlighted = currentIndexes[0]
         }
        
-        if gesture.direction == .right {
+        if gestureRecognizer.direction == .right {
             //print("Swipe right detected")
             self.navigationItem.title = "swipe right"
             if highlighted < currentIndexes.last! {
@@ -679,7 +677,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 AudioServicesPlaySystemSound(1053)
             }
         }
-        else if gesture.direction == .left {
+        else if gestureRecognizer.direction == .left {
             //print("Swipe left detected")
             self.navigationItem.title = "swipe left"
             if highlighted > currentIndexes.first! {
@@ -696,6 +694,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             }
         }
         
+        writeLog(PID: PID, mode: mode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "tap", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentViews)")
      
      }
 
@@ -710,7 +709,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
          previous = flag
          
          var i = 0
-
+        
           for view in allViews{
               let origin = view.frame.origin
               if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
@@ -734,12 +733,15 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 allViews[highlighted].layer.borderWidth = 5
             }
             else{
-                AudioServicesPlaySystemSound(1255)
+                //AudioServicesPlaySystemSound(1255)
             }
           }
+        
+        writeLog(PID: PID, mode: mode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "pan", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
      
      }
     
+    /*
     @objc func buttonTap(_ sender: UIButton){
         print(sender.tag)
         let scale = min(scrollView.zoomScale * 2, scrollView.maximumZoomScale)
@@ -772,6 +774,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
         }
     }
+    */
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -828,24 +831,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         return 0
     }
     
-    func createCSV(from recArray:[Dictionary<String, AnyObject>]) {
-           var csvString = "\("Employee ID"),\("Employee Name")\n\n"
-           for dct in recArray {
-               csvString = csvString.appending("\(String(describing: dct["EmpID"]!)) ,\(String(describing: dct["EmpName"]!))\n")
-           }
-           
-           let fileManager = FileManager.default
-           do {
-               let path = try fileManager.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
-               let fileURL = path.appendingPathComponent("CSVRec.csv")
-               try csvString.write(to: fileURL, atomically: true, encoding: .utf8)
-           } catch {
-               print("error creating file")
-           }
-
-    }
-    
-    @objc func writeLog(logString: String){
+    @objc func writeLog(PID: String, mode: String, timestamp: String, state: Int, gesture: String, zoomScale: CGFloat, location: CGPoint, highlightedObject: Int, currentViews: String){
       
         let fileManager = FileManager.default
                 
@@ -855,7 +841,20 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         var fileText = try? String(contentsOf: fileURL, encoding: .utf8)
         
-        let indexString = "PID, mode, timestamp, gesture, state, zoomScale, x, y, highlightedObject, currentViews(index)"
+        let indexString = "PID, mode, timestamp, state, gesture, zoomScale, location_x, location_y, highlightedObject, currentViews(index)"
+        
+        let logString = PID
+            + ", " + mode
+            + ", " + timestamp
+            + ", " + getState(rawValue: state)
+            + ", " + gesture
+            + ", " +  "\(zoomScale)"
+            + ", " +  "\(location.x)"
+            + ", " +  "\(location.y)"
+            + ", " + getObjectName(index: highlightedObject)
+            + ", " + currentViews.replacingOccurrences(of: ",", with: ";")
+        
+        print(logString)
         
         if fileText == nil { // if the file does not exist
             fileText = indexString
@@ -867,6 +866,43 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
     }
     
+    @objc func getState(rawValue: Int) -> String {
+        
+        switch rawValue{
+        
+        case 0:
+            return "possible"
+        case 1:
+            return "began"
+        case 2:
+            return "changed"
+        case 3:
+            return "ended"
+        case 4:
+            return "canceled"
+        case 5:
+            return "failed"
+        default:
+            return "none"
+        
+        }
+    }
+    
+    @objc func getObjectName(index: Int) -> String {
+        
+        let allViews = UIView.getAllSubviews(from: innerView)
+        
+        var i = 0
+        
+        for view in allViews {
+            if i == index {
+                return view.accessibilityIdentifier!
+            }
+            i += 1
+        }
+        
+        return "null"
+    }
     
     
 }

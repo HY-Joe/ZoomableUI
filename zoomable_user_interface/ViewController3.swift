@@ -87,7 +87,7 @@ class ViewController3: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         
         
-        let doubletap = UITapGestureRecognizer(target: self, action: #selector(doubleTap))
+        let doubletap = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap))
         doubletap.numberOfTapsRequired = 2
         doubletap.numberOfTouchesRequired = 1
         doubletap.require(toFail: doubletap)
@@ -383,7 +383,7 @@ class ViewController3: UIViewController, UIScrollViewDelegate, UIGestureRecogniz
         return self.innerView
     }
     
-    @objc func doubleTap(_ recognizer: UITapGestureRecognizer) {
+    @objc func handleDoubleTap(_ recognizer: UITapGestureRecognizer) {
         //let scale = scrollView.zoomScale * 2
         
         if scrollView.zoomScale == 1.0 { // zoom in

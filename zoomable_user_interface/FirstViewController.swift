@@ -36,14 +36,17 @@ class FirstViewController: UIViewController, UIScrollViewDelegate, UITextFieldDe
     
     @IBAction func pinch(_ sender: UIButton) {
         mode = "pinch"
+        PID = PIDTextField.text!
     }
     
     @IBAction func functional(_ sender: UIButton) {
         mode = "functional"
+        PID = PIDTextField.text!
     }
     
     @IBAction func fixed(_ sender: UIButton) {
         mode = "fixed"
+        PID = PIDTextField.text!
     }
     
     override func viewDidLoad() {
