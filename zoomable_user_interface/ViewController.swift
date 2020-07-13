@@ -137,6 +137,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     // for fixed zoom level
     var zoomLevel = 1
     
+    var rotateMode = 0 // 0: touch-to-explore, 1: panning
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -233,6 +235,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         pan.delegate = self
         innerView.addGestureRecognizer(pan)
         
+        let rotate = UIRotationGestureRecognizer(target: self, action: #selector(handleRotation))
+        rotate.delegate = self
+        innerView.addGestureRecognizer(rotate)
+        
         tap.require(toFail: swipeLeft)
         tap.require(toFail: swipeRight)
         
@@ -256,6 +262,24 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         print(mode)
         print(PID)
         
+    }
+    
+    @objc func handleRotation(_ gestureRecognizer: UIRotationGestureRecognizer) {
+            
+        gestureRecognizer.rotation = 0
+        
+        if gestureRecognizer.state == .ended {
+            if rotateMode == 0 {
+                rotateMode = 1
+                tts(input: "panning mode")
+                scrollView.isScrollEnabled = true
+            }
+            else {
+                rotateMode = 0
+                tts(input: "touch to explore mode")
+                scrollView.isScrollEnabled = false
+            }
+        }
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
@@ -654,6 +678,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         if currentIndexes[0] == 0 {
             currentIndexes.remove(at: 0)
         }
+        
         if highlighted == 0 {
             highlighted = currentIndexes[0]
         }
