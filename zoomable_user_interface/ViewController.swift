@@ -257,6 +257,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
            }
         }
         
+        for view in allViews {
+            view.isAccessibilityElement = true
+        }
+        
         allViews[highlighted].layer.borderWidth = 5
         
         print(mode)
@@ -729,13 +733,24 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         }
      
      }
+    
+    func delay(delay:Double, closure:()->()) {
+
+        //dispatch_after(dispatch_time(dispatch_time_t(DISPATCH_TIME_NOW), Int64(delay * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), closure)
+
+    }
 
      @objc func handlePan(_ gestureRecognizer: UIPanGestureRecognizer){
         
-        let velocity = gestureRecognizer.velocity(in: innerView)
+        let origin = CGPoint(x: scrollView.contentOffset.x / scrollView.zoomScale, y: scrollView.contentOffset.y / scrollView.zoomScale)
+        let size = CGSize(width: scrollView.contentSize.width / (scrollView.zoomScale * scrollView.zoomScale) , height: scrollView.contentSize.height / (scrollView.zoomScale * scrollView.zoomScale))
         
-        var speed = sqrt(pow(Double(velocity.x), 2) + pow(Double(velocity.y), 2))
+        let rect = CGRect(origin: origin, size: size)
         
+        let velocity = gestureRecognizer.velocity(in: UIView(frame: rect))
+        
+        let speed = sqrt(pow(Double(velocity.x), 2) + pow(Double(velocity.y), 2))
+    
         var direction = ""
         
         if abs(velocity.x) > abs(velocity.y) {
@@ -746,72 +761,121 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             else {
                 direction = "right"
             }
-
-        }
-
-        if speed > 900 && gestureRecognizer.state == .ended {
-            if direction == "left" {
-                print("swipe left")
-            }
-            else if direction == "right" {
-                print("swipe right")
-            }
             
         }
         
-        /*
-        if rotateMode == 0 { // touch-to-explore
-            
-            let position = gestureRecognizer.location(in: innerView)
+        print(getState(rawValue: gestureRecognizer.state.rawValue))
+        print(speed)
+        print("-")
+
+        if speed > 600 && gestureRecognizer.state == .ended { // swipe
             
             let allViews = UIView.getAllSubviews(from: innerView)
             
-            self.navigationItem.title = "pan"
+            if currentIndexes[0] == 0 {
+                currentIndexes.remove(at: 0)
+            }
             
-            previous = flag
+            if highlighted == 0 {
+                highlighted = currentIndexes[0]
+            }
             
-            var i = 0
-            
-            for view in allViews{
+            if direction == "right" {
+               
+                self.navigationItem.title = "swipe right"
                 
-                let origin = view.frame.origin
-                
-                if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
+                if highlighted < currentIndexes.last! {
+                    allViews[highlighted].layer.borderWidth = 0
                     
-                    if flag != view.accessibilityIdentifier!{
-                        flag = view.accessibilityIdentifier!
-                        highlighted = i
-                    }
+                   //print(currentIndexes)
+                    //print(highlighted)
                     
+                    highlighted = getNextIndex(highlighted: highlighted, currentIndexes: currentIndexes, mode: "right")
+                    
+                    allViews[highlighted].layer.borderWidth = 5
+
+                    tts(input: allViews[highlighted].accessibilityIdentifier!)
+                }
+                else if highlighted == currentIndexes.last! {
+                    AudioServicesPlaySystemSound(1053)
                 }
                 
-                i += 1
-                
+                writeLog(PID: PID, mode: mode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "swipe right", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
             }
+            else if direction == "left" {
               
-          if previous != flag{
-            
-            for view in allViews{
-                view.layer.borderWidth = 0
-            }
-            
-            if flag != "background"{
-                tts(input: String(flag))
+                self.navigationItem.title = "swipe left"
                 
-                allViews[highlighted].layer.borderWidth = 5
+                if highlighted > currentIndexes.first! {
+                    allViews[highlighted].layer.borderWidth = 0
+                   
+                    highlighted = getNextIndex(highlighted: highlighted, currentIndexes: currentIndexes, mode: "left")
+                    
+                    allViews[highlighted].layer.borderWidth = 5
+
+                    tts(input: allViews[highlighted].accessibilityIdentifier!)
+                }
+                else if highlighted == currentIndexes.first! {
+                    AudioServicesPlaySystemSound(1053)
+                }
+                
+                writeLog(PID: PID, mode: mode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "swipe left", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
             }
-            else{
-                //AudioServicesPlaySystemSound(1255)
-            }
-          }
             
-            writeLog(PID: PID, mode: mode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "pan", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
+        }
+            
+        else if speed < 200 { // pan
+            if rotateMode == 0 { // touch-to-explore
+                
+                let position = gestureRecognizer.location(in: innerView)
+                
+                let allViews = UIView.getAllSubviews(from: innerView)
+                
+                self.navigationItem.title = "pan"
+                
+                previous = flag
+                
+                var i = 0
+                
+                for view in allViews{
+                    
+                    let origin = view.frame.origin
+                    
+                    if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
+                        
+                        if flag != view.accessibilityIdentifier!{
+                            flag = view.accessibilityIdentifier!
+                            highlighted = i
+                        }
+                        
+                    }
+                    
+                    i += 1
+                    
+                }
+                  
+              if previous != flag{
+                
+                for view in allViews{
+                    view.layer.borderWidth = 0
+                }
+                
+                if flag != "background"{
+                    tts(input: String(flag))
+                    
+                    allViews[highlighted].layer.borderWidth = 5
+                }
+                else{
+                    //AudioServicesPlaySystemSound(1255)
+                }
+              }
+                
+                writeLog(PID: PID, mode: mode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "pan", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
+            
+            }
+            
+        }
         
-        }
-        else if rotateMode == 1 { // panning
-            
-        }
- */
      
      }
     
@@ -947,7 +1011,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             + ", " + getObjectName(index: highlightedObject)
             + ", " + currentViews.replacingOccurrences(of: ",", with: ";")
         
-        print(logString)
+        //print(logString)
         
         if fileText == nil { // if the file does not exist
             fileText = indexString
