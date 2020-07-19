@@ -140,6 +140,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     var rotateMode = 0 // 0: touch-to-explore, 1: panning
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         //drawHouse(origin_x: 0, origin_y: 0)
@@ -265,6 +266,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         print(mode)
         print(PID)
+        
         
     }
     
