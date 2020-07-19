@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		76645A5E24C31E92001390F0 /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76645A5D24C31E91001390F0 /* Option.swift */; };
 		766F45DC240D749F002679B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766F45DB240D749F002679B8 /* AppDelegate.swift */; };
 		766F45DE240D749F002679B8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766F45DD240D749F002679B8 /* ViewController.swift */; };
 		766F45E1240D749F002679B8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 766F45DF240D749F002679B8 /* Main.storyboard */; };
@@ -38,6 +39,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		76645A5D24C31E91001390F0 /* Option.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Option.swift; sourceTree = "<group>"; };
 		766F45D8240D749F002679B8 /* zoomable_user_interface.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = zoomable_user_interface.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		766F45DB240D749F002679B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		766F45DD240D749F002679B8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 				76E13EE32420F754004D87CB /* FirstViewController.swift */,
 				76E13EE52420FB9A004D87CB /* ViewController2.swift */,
 				76E13EE72420FBA8004D87CB /* ViewController3.swift */,
+				76645A5D24C31E91001390F0 /* Option.swift */,
 			);
 			path = zoomable_user_interface;
 			sourceTree = "<group>";
@@ -270,6 +273,7 @@
 			files = (
 				76E13EE62420FB9A004D87CB /* ViewController2.swift in Sources */,
 				76E13EE22420F477004D87CB /* MainNavigationController.swift in Sources */,
+				76645A5E24C31E92001390F0 /* Option.swift in Sources */,
 				76E13EE82420FBA8004D87CB /* ViewController3.swift in Sources */,
 				766F45DE240D749F002679B8 /* ViewController.swift in Sources */,
 				766F45DC240D749F002679B8 /* AppDelegate.swift in Sources */,
