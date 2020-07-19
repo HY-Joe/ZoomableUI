@@ -12,33 +12,19 @@ import UIKit
 class Option: UITableViewController {
     
     let userDefaults = UserDefaults.standard
+    let userDefaults2 = UserDefaults.standard
     
     @IBOutlet weak var option1: UISwitch!
     @IBOutlet weak var option2: UISwitch!
-    
-    static var objHi: Bool = false
-    static var centerZoom: Bool = false
-    
-    @objc func switchStateDidChange1(_ sender:UISwitch!)
-    {
-        if (sender?.isOn == true){
-            Option.objHi = true
-        }
-        else {
-            Option.objHi = false
-        }
+       
+    @IBAction func switchAction(_ sender: UISwitch) {
+        userDefaults.set(sender.isOn, forKey: "mySwitchValue")
     }
     
-    @objc func switchStateDidChange2(_ sender:UISwitch!)
-    {
-        if (sender?.isOn == true){
-            Option.centerZoom = true
-        }
-        else {
-            Option.centerZoom = false
-        }
+    @IBAction func switchAction2(_ sender: UISwitch) {
+        userDefaults2.set(sender.isOn, forKey: "mySwitchValue2")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -46,7 +32,8 @@ class Option: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
     
-        option1?.addTarget(self, action: #selector(switchStateDidChange1(_:)), for: .touchUpInside)
-        option2?.addTarget(self, action: #selector(switchStateDidChange2(_:)), for: .touchUpInside)
+        option1.isOn = userDefaults.bool(forKey: "mySwitchValue")
+        option2.isOn = userDefaults2.bool(forKey: "mySwitchValue2")
+        
     }
 }
