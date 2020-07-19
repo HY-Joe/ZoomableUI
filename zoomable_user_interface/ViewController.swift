@@ -198,6 +198,11 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         flowerpot4.accessibilityIdentifier = "flowerpot4"
         flowerpot5.accessibilityIdentifier = "flowerpot5"
         
+        // object hierarchy mode
+        if objHi == true {
+            
+        }
+        
         // two finger double tap
         let tfdoubletap = UITapGestureRecognizer(target: self, action: #selector(twoFingerDoubleTap))
         tfdoubletap.numberOfTapsRequired = 2
@@ -439,8 +444,9 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         }
         
         else if mode == "fixed" {
-            //let scale = scrollView.zoomScale * 2
-            
+            if centerZoom == false {
+                
+            }
             if zoomLevel == 1 { // zoom in
                 AudioServicesPlaySystemSound(1109)
                 tts(input: "200%")
@@ -527,7 +533,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
              }
         }
         
-        writeLog(PID: PID, mode: mode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "double tap", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
+        writeLog(PID: PID, mode: mode, objHi: objHi, centerZoom: centerZoom, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "double tap", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
     
        }
     
@@ -628,7 +634,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
              }
         }
         
-        writeLog(PID: PID, mode: mode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "2-finger double tap", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
+        writeLog(PID: PID, mode: mode, objHi: objHi, centerZoom: centerZoom, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "2-finger double tap", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
     }
     
     @objc func handleTap(_ gestureRecognizer: UITapGestureRecognizer){
@@ -708,7 +714,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 AudioServicesPlaySystemSound(1053)
             }
             
-            writeLog(PID: PID, mode: mode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "swipe right", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
+            writeLog(PID: PID, mode: mode, objHi: objHi, centerZoom: centerZoom, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "swipe right", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
         }
         else if gestureRecognizer.direction == .left {
             //print("Swipe left detected")
@@ -726,7 +732,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 AudioServicesPlaySystemSound(1053)
             }
             
-            writeLog(PID: PID, mode: mode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "swipe left", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
+            writeLog(PID: PID, mode: mode, objHi: objHi, centerZoom: centerZoom, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "swipe left", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
         }
         
         if gestureRecognizer.state == .ended {
@@ -802,7 +808,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                     AudioServicesPlaySystemSound(1053)
                 }
                 
-                writeLog(PID: PID, mode: mode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "swipe right", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
+                writeLog(PID: PID, mode: mode, objHi: objHi, centerZoom: centerZoom, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "swipe right", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
             }
             else if direction == "left" {
               
@@ -821,7 +827,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                     AudioServicesPlaySystemSound(1053)
                 }
                 
-                writeLog(PID: PID, mode: mode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "swipe left", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
+                writeLog(PID: PID, mode: mode, objHi: objHi, centerZoom: centerZoom, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "swipe left", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
             }
             
         }
@@ -872,7 +878,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 }
               }
                 
-                writeLog(PID: PID, mode: mode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "pan", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
+                writeLog(PID: PID, mode: mode, objHi: objHi, centerZoom: centerZoom, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "pan", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
             
             }
             
@@ -971,7 +977,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         return 0
     }
     
-    @objc func writeLog(PID: String, mode: String, timestamp: String, state: Int, gesture: String, zoomScale: CGFloat, location: CGPoint, highlightedObject: Int, currentViews: String){
+    @objc func writeLog(PID: String, mode: String, objHi: Bool, centerZoom: Bool, timestamp: String, state: Int, gesture: String, zoomScale: CGFloat, location: CGPoint, highlightedObject: Int, currentViews: String){
       
         let fileManager = FileManager.default
                 
@@ -996,10 +1002,12 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         }
         
-        let indexString = "PID, mode, gesture, state, timestamp, zoomScale, scrollView_offset_x, scrollView_offset_y, scrollView_contentSize_width, scrollView_contentSize_height, location_x, location_y, highlightedObject, currentViews(index)"
+        let indexString = "PID, mode, objHi, centerZoom, gesture, state, timestamp, zoomScale, scrollView_offset_x, scrollView_offset_y, scrollView_contentSize_width, scrollView_contentSize_height, location_x, location_y, highlightedObject, currentViews(index)"
         
         let logString = PID
             + ", " + zoomMode
+            + ", " + String(objHi)
+            + ", " + String(centerZoom)
             + ", " + gesture
             + ", " + getState(rawValue: state)
             + ", " + timestamp
