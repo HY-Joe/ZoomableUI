@@ -375,8 +375,9 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     
     @objc func handleDoubleTap(_ gestureRecognizer: UITapGestureRecognizer) {
         
+        let allViews = UIView.getAllSubviews(from: innerView)
+        
         if mode == "functional" {
-            let allViews = UIView.getAllSubviews(from: innerView)
              
             let scale = allViews[highlighted].frame.width + CGFloat(60)
 
@@ -444,25 +445,22 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         }
         
         else if mode == "fixed" {
-            if centerZoom == false {
-                
-            }
+            
             if zoomLevel == 1 { // zoom in
                 AudioServicesPlaySystemSound(1109)
                 tts(input: "200%")
                 
                 zoomLevel = 2
-                
-                let point = gestureRecognizer.location(in: innerView)
-                //print(point)
+
+                let point = centerZoom == true ?  CGPoint(x: allViews[highlighted].frame.origin.x + allViews[highlighted].frame.height / 2, y: allViews[highlighted].frame.origin.y + allViews[highlighted].frame.width / 2)  : gestureRecognizer.location(in: innerView)
+
                 let scrollSize = scrollView.frame.size
                 let size = CGSize(width: scrollSize.width / 2,
                                   height: scrollSize.height / 2)
                 let origin = CGPoint(x: point.x - size.width / 2,
                                      y: point.y - size.height / 2)
                 scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
-                //print("doubleTap zoomin")
-                //print(scrollView.zoomScale)
+       
             
             }
             else if zoomLevel == 2 {
@@ -470,18 +468,16 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 tts(input: "400%")
                 zoomLevel = 4
                 
-                let point = gestureRecognizer.location(in: innerView)
-                //print(point)
+                let point = centerZoom == true ?  CGPoint(x: allViews[highlighted].frame.origin.x + allViews[highlighted].frame.height / 2, y: allViews[highlighted].frame.origin.y + allViews[highlighted].frame.width / 2)  : gestureRecognizer.location(in: innerView)
+               
                 let scrollSize = scrollView.frame.size
-                //print("frame size")
-                //print(scrollView.frame.size)
+             
                 let size = CGSize(width: scrollSize.width / 4,
                                   height: scrollSize.height / 4)
                 let origin = CGPoint(x: point.x - size.width / 2,
                                      y: point.y - size.height / 2)
                 scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
-                //print("doubleTap zoomin")
-                //print(scrollView.zoomScale)
+              
             }
             else if zoomLevel == 4 {
                 AudioServicesPlaySystemSound(1109)
@@ -489,18 +485,16 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 
                 zoomLevel = 8
                 
-                let point = gestureRecognizer.location(in: innerView)
+                let point = centerZoom == true ?  CGPoint(x: allViews[highlighted].frame.origin.x + allViews[highlighted].frame.height / 2, y: allViews[highlighted].frame.origin.y + allViews[highlighted].frame.width / 2)  : gestureRecognizer.location(in: innerView)
 
                 let scrollSize = scrollView.frame.size
-                //print("frame size")
-                //print(scrollView.frame.size)
+            
                 let size = CGSize(width: scrollSize.width / 8,
                                   height: scrollSize.height / 8)
                 let origin = CGPoint(x: point.x - size.width / 2,
                                      y: point.y - size.height / 2)
                 scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
-                //print("doubleTap zoomin")
-                //print(scrollView.zoomScale)
+        
             }
             
             //get currentViews
@@ -531,10 +525,13 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             for view in allViews{
                  view.layer.borderWidth = 0
              }
+            
         }
         
-        writeLog(PID: PID, mode: mode, objHi: objHi, centerZoom: centerZoom, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "double tap", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
     
+        writeLog(PID: PID, mode: mode, objHi: objHi, centerZoom: centerZoom, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "double tap", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
+        
+        
        }
     
     @objc func twoFingerDoubleTap(_ gestureRecognizer: UITapGestureRecognizer) {
@@ -556,8 +553,6 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 
                 zoomLevel = 1
                 
-                print("doubleTap zoomout")
-                print(scrollView.zoomScale)
                 let point = gestureRecognizer.location(in: innerView)
 
                 let scrollSize = UIScreen.main.bounds.size
@@ -581,8 +576,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 let origin = CGPoint(x: point.x - size.width / 2,
                                      y: point.y - size.height / 2)
                 scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
-                print("doubleTap zoomin")
-                print(scrollView.zoomScale)
+
             }
             else if zoomLevel == 8 { //zoom out
                 AudioServicesPlaySystemSound(1109)
@@ -593,15 +587,13 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 let point = gestureRecognizer.location(in: innerView)
                 print(point)
                 let scrollSize = scrollView.frame.size
-                print("frame size")
-                print(scrollView.frame.size)
+             
                 let size = CGSize(width: scrollSize.width / 4,
                                   height: scrollSize.height / 4)
                 let origin = CGPoint(x: point.x - size.width / 2,
                                      y: point.y - size.height / 2)
                 scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
-                print("doubleTap zoomin")
-                print(scrollView.zoomScale)
+               
             }
             
             //get currentViews
