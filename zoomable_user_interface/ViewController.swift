@@ -446,8 +446,11 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         else if mode == "fixed" {
             
+            print(highlighted)
+            print(centerZoom)
+            
             if zoomLevel == 1 { // zoom in
-                AudioServicesPlaySystemSound(1109)
+                //AudioServicesPlaySystemSound(1109)
                 tts(input: "200%")
                 
                 zoomLevel = 2
@@ -460,11 +463,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 let origin = CGPoint(x: point.x - size.width / 2,
                                      y: point.y - size.height / 2)
                 scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
-       
             
             }
             else if zoomLevel == 2 {
-                AudioServicesPlaySystemSound(1109)
+                //AudioServicesPlaySystemSound(1109)
                 tts(input: "400%")
                 zoomLevel = 4
                 
@@ -480,7 +482,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
               
             }
             else if zoomLevel == 4 {
-                AudioServicesPlaySystemSound(1109)
+                //AudioServicesPlaySystemSound(1109)
                 tts(input: "800%")
                 
                 zoomLevel = 8

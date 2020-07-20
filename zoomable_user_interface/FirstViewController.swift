@@ -14,6 +14,9 @@ import CoreGraphics
 var mode = ""
 var PID = ""
 
+var objHi = false
+var centerZoom = false
+
 class FirstViewController: UIViewController, UIScrollViewDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var PIDTextField: UITextField! {
@@ -54,6 +57,17 @@ class FirstViewController: UIViewController, UIScrollViewDelegate, UITextFieldDe
         
         PIDTextField.text = "test"
         
+        objHi = UserDefaults.standard.bool(forKey: "mySwitchValue")
+        centerZoom = UserDefaults.standard.bool(forKey: "mySwitchValue2")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        objHi = UserDefaults.standard.bool(forKey: "mySwitchValue")
+        centerZoom = UserDefaults.standard.bool(forKey: "mySwitchValue2")
+        
+        print(objHi)
+        print(centerZoom)
     }
     
 }
