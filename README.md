@@ -39,4 +39,8 @@ Tap on the screen to highlight a certain object and hear what it is.
 ------------
 ## Special Options
 
-### 
+### Object Hierarchy Mode
+You can access additional groups that are including individual objects
+
+### Object Center Point Zooming Mode
+For Pinch-to-Zoom and Fixed Zoom, you can zoom on a center of the highlighted object.
