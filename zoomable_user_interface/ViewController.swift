@@ -15,7 +15,16 @@ extension UIView {
     class func getAllSubviews<T: UIView>(from parenView: UIView) -> [T] {
         return parenView.subviews.flatMap { subView -> [T] in
             var result = getAllSubviews(from: subView) as [T]
-            if let view = subView as? T { result.append(view) }
+            if let view = subView as? T {
+                if objHi == true {
+                    result.append(view)
+                }
+                else if objHi == false {
+                    if !view.accessibilityIdentifier!.contains("and") {
+                        result.append(view)
+                    }
+                }
+            }
             return result
         }
     }
@@ -119,6 +128,12 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     @IBOutlet weak var flowerpot4: UIImageView!
     @IBOutlet weak var flowerpot5: UIImageView!
     
+    @IBOutlet weak var group1: UIImageView!
+    @IBOutlet weak var group2: UIImageView!
+    @IBOutlet weak var group3: UIImageView!
+    @IBOutlet weak var group4: UIImageView!
+    @IBOutlet weak var group5: UIImageView!
+    
     var flag = "none"
     var current = "none"
     var previous = "none"
@@ -198,10 +213,11 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         flowerpot4.accessibilityIdentifier = "flowerpot4"
         flowerpot5.accessibilityIdentifier = "flowerpot5"
         
-        // object hierarchy mode
-        if objHi == true {
-            
-        }
+        group1.accessibilityIdentifier = "house and flower1"
+        group2.accessibilityIdentifier = "house and flower2"
+        group3.accessibilityIdentifier = "house and flower3"
+        group4.accessibilityIdentifier = "house and flower4"
+        group5.accessibilityIdentifier = "house and flower5"
         
         // two finger double tap
         let tfdoubletap = UITapGestureRecognizer(target: self, action: #selector(twoFingerDoubleTap))
@@ -302,11 +318,17 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
         
-        if mode == "pinch" {
+        if mode == "pinch" && centerZoom == true {
         
-            AudioServicesPlaySystemSound(1109)
+            //AudioServicesPlaySystemSound(1109)
             
-            // writeLog(PID: PID, mode: mode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "pinch", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentViews)")
+            let allViews = UIView.getAllSubviews(from: innerView)
+            
+            //scrollView.contentOffset = CGPoint(x: allViews[highlighted].frame.origin.x + allViews[highlighted].frame.width / 2, y: allViews[highlighted].frame.origin.y + allViews[highlighted].frame.height / 2)
+            
+            print(highlighted)
+            
+            scrollView.zoom(to: CGRect(origin: CGPoint(x:10,y:10), size: CGSize(width:100, height: 100)), animated: true)
         }
         
         
@@ -317,9 +339,11 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        if scrollView.zoomScale == scrollView.minimumZoomScale
-        {
-            //print("zoomed out")
+        if centerZoom == true {
+            
+            //let allViews = UIView.getAllSubviews(from: innerView)
+            
+            //scrollView.contentOffset = CGPoint(x: allViews[highlighted].frame.origin.x + allViews[highlighted].frame.width / 2, y: allViews[highlighted].frame.origin.y + allViews[highlighted].frame.height / 2)
         }
     }
     

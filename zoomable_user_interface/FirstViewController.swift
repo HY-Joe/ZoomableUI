@@ -66,8 +66,6 @@ class FirstViewController: UIViewController, UIScrollViewDelegate, UITextFieldDe
         objHi = UserDefaults.standard.bool(forKey: "mySwitchValue")
         centerZoom = UserDefaults.standard.bool(forKey: "mySwitchValue2")
         
-        print(objHi)
-        print(centerZoom)
     }
     
 }
