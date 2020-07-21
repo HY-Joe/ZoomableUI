@@ -8,10 +8,10 @@ How to Use
 ### 1. Rotation
 Use rotation gesture with two fingers. You can change a mode between touch-to-explore and panning.
 
-#### 1. Touch-to-Explore
-  As you navigate on a screen using one finger, the app reads a name of the object that you are touching.
-#### 2. Panning
-  You can move or scroll a screen using one finger.
+>#### 1. Touch-to-Explore
+>  As you navigate on a screen using one finger, the app reads a name of the object that you are touching.
+>#### 2. Panning
+> You can move or scroll a screen using one finger.
 
 ### 2. Swipe
 Use swipe right/left to explore a list of objects that are on the screen.
