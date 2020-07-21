@@ -6,4 +6,4 @@ How to Use
 
 1. 3 Zoom Techniques
 
-1) 
+  1. Pinch-to-Zoom
