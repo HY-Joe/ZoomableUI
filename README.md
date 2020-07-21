@@ -1,6 +1,7 @@
 Zoomable User Interface
 ===================
 How to Use
+-------------
 
 
 ## Default Gestures
@@ -19,12 +20,18 @@ Tap on the screen to highlight a certain object and hear what it is.
 
 
 ### Pinch-to-Zoom
-------------
-Uses pinch gesture to zoom 
+1. Pinch gesture: zoom a certain area on the screen.
+2. Two-finger double tap: return to a state without zoom.
 
 ### Functional Zoom
+1. One-finger double tap: zoom a highlighted object to fit to the screen.
+2. Two-finger double tap: return to a state without zoom.
+
+### Fixed Zoom
+1. One-finger double tap: zoom in on a touched point (for 2x, 4x, 8x).
+2. Two-finger double tap: zoom out on a touched point backward (for 4x, 2x, 1x).
+
 ------------
+## Special Options
 
-###
-
-
+### 
