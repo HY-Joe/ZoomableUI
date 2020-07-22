@@ -493,6 +493,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 tts(input: "400%")
                 zoomLevel = 4
                 
+                
                 let point = centerZoom == true ?  CGPoint(x: allViews[highlighted].frame.origin.x + allViews[highlighted].frame.height / 2, y: allViews[highlighted].frame.origin.y + allViews[highlighted].frame.width / 2)  : gestureRecognizer.location(in: innerView)
                
                 let scrollSize = scrollView.frame.size
