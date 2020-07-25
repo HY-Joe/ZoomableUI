@@ -16,12 +16,14 @@ extension UIView {
         return parenView.subviews.flatMap { subView -> [T] in
             var result = getAllSubviews(from: subView) as [T]
             if let view = subView as? T {
-                if objHi == true {
-                    result.append(view)
-                }
-                else if objHi == false {
-                    if !view.accessibilityIdentifier!.contains("and") {
+                if view.accessibilityIdentifier! != "background" {
+                    if objHi == true {
                         result.append(view)
+                    }
+                    else if objHi == false {
+                        if !view.accessibilityIdentifier!.contains("and") {
+                            result.append(view)
+                        }
                     }
                 }
             }
@@ -142,8 +144,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     
     var currentIndexes = [Int]()
     
-    var highlighted = 1
-    var currentIndex = 1
+    var highlighted = 0
+    var currentIndex = 0
     
     var selectedMenu = ""
 
@@ -242,35 +244,15 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         tap.require(toFail: doubletap)
         innerView.addGestureRecognizer(tap)
-        /*
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
-        swipeLeft.direction = .left
-        swipeLeft.delegate = self
-        self.view.addGestureRecognizer(swipeLeft)
-        
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
-        swipeRight.direction = .right
-        swipeRight.delegate = self
-        self.view.addGestureRecognizer(swipeRight)
-        */
+   
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         pan.delegate = self
         innerView.addGestureRecognizer(pan)
-        /*
-        let pinch = UIPinchGestureRecognizer(target:self, action: #selector(handlePinch))
-        pinch.delegate = self
-        innerView.addGestureRecognizer(pan)
-        */
+      
         let rotate = UIRotationGestureRecognizer(target: self, action: #selector(handleRotation))
         rotate.delegate = self
         innerView.addGestureRecognizer(rotate)
-        /*
-        tap.require(toFail: swipeLeft)
-        tap.require(toFail: swipeRight)
-        
-        pan.require(toFail: swipeLeft)
-        pan.require(toFail: swipeRight)
-        */
+     
         let allViews = UIView.getAllSubviews(from: innerView)
         
         currentViews = allViews
@@ -361,10 +343,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             for view in allViews{
                 if hasIntersection(zoomedView: scrollView, subView: view) {
                     currentViews.append(view)
-                    //print(view.accessibilityIdentifier!)
+                    print(view.accessibilityIdentifier!)
                 }
             }
-            //print("__________________")
+            print("__________________")
             
             for view in currentViews {
                for i in 0...allViews.count - 1 {
@@ -374,6 +356,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                }
             }
             
+            /*
             if currentIndexes[0] == 0 {
                 highlighted = currentIndexes[1]
                 currentIndex = 1
@@ -382,7 +365,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 highlighted = currentIndexes[0]
                 currentIndex = 0
             }
-            
+            */
             for view in allViews{
                 view.layer.borderWidth = 0
             }
@@ -701,17 +684,6 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
      @objc func handleSwipe(_ gestureRecognizer: UISwipeGestureRecognizer){
         let allViews = UIView.getAllSubviews(from: innerView)
         
-        //print(highlighted)
-        //print(currentIndexes)
-        
-        if currentIndexes[0] == 0 {
-            currentIndexes.remove(at: 0)
-        }
-        
-        if highlighted == 0 {
-            highlighted = currentIndexes[0]
-        }
-       
         if gestureRecognizer.direction == .right {
             //print("Swipe right detected")
             self.navigationItem.title = "swipe right"
@@ -788,22 +760,14 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             }
             
         }
-        
+        /*
         print(getState(rawValue: gestureRecognizer.state.rawValue))
         print(speed)
         print("-")
-
+        */
         if speed > 600 && gestureRecognizer.state == .ended { // swipe
             
             let allViews = UIView.getAllSubviews(from: innerView)
-            
-            if currentIndexes[0] == 0 {
-                currentIndexes.remove(at: 0)
-            }
-            
-            if highlighted == 0 {
-                highlighted = currentIndexes[0]
-            }
             
             if direction == "right" {
                
@@ -816,6 +780,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                     //print(highlighted)
                     
                     highlighted = getNextIndex(highlighted: highlighted, currentIndexes: currentIndexes, mode: "right")
+                    
+                    for view in allViews{
+                        view.layer.borderWidth = 0
+                    }
                     
                     allViews[highlighted].layer.borderWidth = 5
 
@@ -835,6 +803,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                     allViews[highlighted].layer.borderWidth = 0
                    
                     highlighted = getNextIndex(highlighted: highlighted, currentIndexes: currentIndexes, mode: "left")
+                    
+                    for view in allViews{
+                        view.layer.borderWidth = 0
+                    }
                     
                     allViews[highlighted].layer.borderWidth = 5
 
@@ -903,41 +875,6 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
      
      }
-    
-    /*
-    @objc func buttonTap(_ sender: UIButton){
-        print(sender.tag)
-        let scale = min(scrollView.zoomScale * 2, scrollView.maximumZoomScale)
-        
-        if scale != scrollView.zoomScale { // zoom in
-            
-            let point = sender.frame.origin
-            
-            let point_x = point.x + sender.frame.width/2
-            let point_y = point.y + sender.frame.height/2
-        
-            let scrollSize = scrollView.frame.size
-            let size = CGSize(width: scrollSize.width / scrollView.maximumZoomScale,
-                              height: scrollSize.height / scrollView.maximumZoomScale)
-            let origin = CGPoint(x: point_x - size.width / 2,
-                                 y: point_y - size.height / 2)
-            scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
-            print(scrollView.zoomScale)
-        } else if scrollView.zoomScale == 2.0 { //zoom out
-            let point = sender.frame.origin
-            
-            let point_x = point.x + sender.frame.width/2
-            let point_y = point.y + sender.frame.height/2
-
-            let scrollSize = scrollView.frame.size
-            let size = CGSize(width: scrollSize.width,
-                              height: scrollSize.height)
-            let origin = CGPoint(x: point_x - size.width / 2,
-                                 y: point_y - size.height / 2)
-            scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
-        }
-    }
-    */
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
