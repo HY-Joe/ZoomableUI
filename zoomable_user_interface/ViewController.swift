@@ -366,6 +366,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 currentIndex = 0
             }
             */
+            
+            highlighted = currentIndexes[0]
+            currentIndex = 0
+            
             for view in allViews{
                 view.layer.borderWidth = 0
             }
@@ -452,8 +456,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         else if mode == "fixed" {
             
-            print(highlighted)
-            print(centerZoom)
+            //print(highlighted)
+            //print(centerZoom)
             
             if zoomLevel == 1 { // zoom in
                 //AudioServicesPlaySystemSound(1109)
@@ -527,12 +531,16 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                }
             }
             
-            highlighted = currentIndexes[0]
-            currentIndex = 0
-            
-            for view in allViews{
-                 view.layer.borderWidth = 0
-             }
+            if !currentIndexes.contains(highlighted) && currentIndexes.count != 0 {
+                highlighted = currentIndexes[0]
+                currentIndex = 0
+                
+                for view in allViews{
+                    view.layer.borderWidth = 0
+                }
+                
+                allViews[highlighted].layer.borderWidth = 5
+            }
             
         }
         
@@ -773,7 +781,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                
                 self.navigationItem.title = "swipe right"
                 
-                if highlighted < currentIndexes.last! {
+                if currentIndexes.count == 0 {
+                    AudioServicesPlaySystemSound(1053)
+                }
+                else if highlighted < currentIndexes.last! {
                     allViews[highlighted].layer.borderWidth = 0
                     
                    //print(currentIndexes)
@@ -799,7 +810,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
               
                 self.navigationItem.title = "swipe left"
                 
-                if highlighted > currentIndexes.first! {
+                if currentIndexes.count == 0 {
+                    AudioServicesPlaySystemSound(1053)
+                }
+                else if highlighted > currentIndexes.first! {
                     allViews[highlighted].layer.borderWidth = 0
                    
                     highlighted = getNextIndex(highlighted: highlighted, currentIndexes: currentIndexes, mode: "left")
