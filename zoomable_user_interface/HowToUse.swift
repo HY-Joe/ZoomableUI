@@ -8,8 +8,11 @@
 
 import Foundation
 import UIKit
+import WebKit
 
 class HowToUse: UIViewController {
+    
+    @IBOutlet weak var webView: WKWebView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
