@@ -446,12 +446,16 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                }
             }
             
-            highlighted = currentIndexes[0]
-            currentIndex = 0
-            
-            for view in allViews{
-                 view.layer.borderWidth = 0
-             }
+            if !currentIndexes.contains(highlighted) && currentIndexes.count != 0 {
+                highlighted = currentIndexes[0]
+                currentIndex = 0
+                
+                for view in allViews{
+                    view.layer.borderWidth = 0
+                }
+                
+                allViews[highlighted].layer.borderWidth = 5
+            }
         }
         
         else if mode == "fixed" {
@@ -634,12 +638,16 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                }
             }
             
-            highlighted = currentIndexes[0]
-            currentIndex = 0
-            
-            for view in allViews{
-                 view.layer.borderWidth = 0
-             }
+            if !currentIndexes.contains(highlighted) && currentIndexes.count != 0 {
+                highlighted = currentIndexes[0]
+                currentIndex = 0
+                
+                for view in allViews{
+                    view.layer.borderWidth = 0
+                }
+                
+                allViews[highlighted].layer.borderWidth = 5
+            }
         }
         
         writeLog(PID: PID, mode: mode, objHi: objHi, centerZoom: centerZoom, rotateMode: rotateMode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "2-finger double tap", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
