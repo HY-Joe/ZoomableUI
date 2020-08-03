@@ -163,6 +163,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         //drawHouse(origin_x: 0, origin_y: 0)
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         
+        let allViews = UIView.getAllSubviews(from: innerView)
+        
+        currentViews = allViews
+        
         // outlet
         background.accessibilityIdentifier = "background"
         
@@ -252,11 +256,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         let rotate = UIRotationGestureRecognizer(target: self, action: #selector(handleRotation))
         rotate.delegate = self
         innerView.addGestureRecognizer(rotate)
-     
-        let allViews = UIView.getAllSubviews(from: innerView)
-        
-        currentViews = allViews
-        
+    
         for view in currentViews {
            for i in 0...allViews.count - 1 {
                if view.accessibilityIdentifier! == allViews[i].accessibilityIdentifier!{
@@ -265,9 +265,35 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
            }
         }
         
+        /*
+        var i = 0
+        
         for view in allViews {
             view.isAccessibilityElement = true
+            
+            let fileManager = FileManager.default
+                    
+            let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+
+            let fileURL = documentsURL.appendingPathComponent("annotations.csv")
+            
+            var fileText = try? String(contentsOf: fileURL, encoding: .utf8)
+            
+            let indexString = "index, object_name, origin_x, origin_y, width, height"
+            
+            let logString = String(i) + ", " + view.accessibilityIdentifier! + ", " + "\(view.frame.origin.x)" + ", " + "\(view.frame.origin.y)" + ", " + "\(view.frame.width)" + ", " + "\(view.frame.height)"
+                
+            if fileText == nil { // if the file does not exist
+                fileText = indexString
+            }
+        
+            let myTextString = NSString(string: fileText! + "\n" + logString)
+
+            try? myTextString.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8.rawValue)
+            
+            i += 1
         }
+        */
         
         allViews[highlighted].layer.borderWidth = 5
         
@@ -459,9 +485,6 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         }
         
         else if mode == "fixed" {
-            
-            //print(highlighted)
-            //print(centerZoom)
             
             if zoomLevel == 1 { // zoom in
                 //AudioServicesPlaySystemSound(1109)
@@ -928,7 +951,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         let rect = CGRect(origin: origin, size: size)
        
-        if rect.intersects(subRect) == true{
+        if rect.intersects(subRect) == true {
             return true
         }
         return false
