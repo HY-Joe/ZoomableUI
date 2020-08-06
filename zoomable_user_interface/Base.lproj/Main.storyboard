@@ -236,7 +236,6 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="5Aa-ZA-QWP" appends="YES" id="ZeP-NG-s2Y"/>
-                            <outletCollection property="gestureRecognizers" destination="pV6-0N-haJ" appends="YES" id="ufM-IP-cbj"/>
                             <outletCollection property="gestureRecognizers" destination="gWp-LX-TVL" appends="YES" id="5Ax-fb-OTI"/>
                             <outletCollection property="gestureRecognizers" destination="dAR-e1-81z" appends="YES" id="RU4-qY-umw"/>
                         </connections>
@@ -298,11 +297,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <panGestureRecognizer cancelsTouchesInView="NO" minimumNumberOfTouches="1" id="5Aa-ZA-QWP"/>
-                <pinchGestureRecognizer id="pV6-0N-haJ">
-                    <connections>
-                        <action selector="handlePinch:" destination="BYZ-38-t0r" id="7lJ-Dc-X1s"/>
-                    </connections>
-                </pinchGestureRecognizer>
+                <pinchGestureRecognizer id="pV6-0N-haJ"/>
                 <tapGestureRecognizer id="gWp-LX-TVL"/>
                 <swipeGestureRecognizer direction="right" id="dAR-e1-81z">
                     <connections>

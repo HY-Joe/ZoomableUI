@@ -265,12 +265,13 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         pan.delegate = self
         innerView.addGestureRecognizer(pan)
         
+        /*
         let twofingerpan = UIPanGestureRecognizer(target: self, action: #selector(handleTwoFingerPan))
         twofingerpan.delegate = self
         twofingerpan.minimumNumberOfTouches = 2
         twofingerpan.maximumNumberOfTouches = 2
         innerView.addGestureRecognizer(twofingerpan)
-      
+      */
         let rotate = UIRotationGestureRecognizer(target: self, action: #selector(handleRotation))
         rotate.delegate = self
         innerView.addGestureRecognizer(rotate)
@@ -318,16 +319,159 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         */
         
         allViews[highlighted].layer.borderWidth = 5
-        
-        print(mode)
-        print(PID)
 
     }
     
     @objc func handleTwoFingerPan(_ gestureRecognizer: UIPanGestureRecognizer) {
-        scrollView.isScrollEnabled = false
-        print("two finger panning")
-        scrollView.isScrollEnabled = true
+        //scrollView.isScrollEnabled = false
+        //print("two finger panning")
+        //scrollView.isScrollEnabled = true
+        if gestureRecognizer.numberOfTouches == 2 {
+           //scrollView.isScrollEnabled = true
+
+        }
+        else if gestureRecognizer.numberOfTouches == 1 {
+            //scrollView.isScrollEnabled = false
+            let origin = CGPoint(x: scrollView.contentOffset.x / scrollView.zoomScale, y: scrollView.contentOffset.y / scrollView.zoomScale)
+            let size = CGSize(width: scrollView.contentSize.width / (scrollView.zoomScale * scrollView.zoomScale) , height: scrollView.contentSize.height / (scrollView.zoomScale * scrollView.zoomScale))
+            
+            let rect = CGRect(origin: origin, size: size)
+            
+            let velocity = gestureRecognizer.velocity(in: UIView(frame: rect))
+            
+            let speed = sqrt(pow(Double(velocity.x), 2) + pow(Double(velocity.y), 2))
+        
+            var direction = ""
+            
+            if abs(velocity.x) > abs(velocity.y) {
+
+                if velocity.x < 0 {
+                    direction = "left"
+                }
+                else {
+                    direction = "right"
+                }
+                
+            }
+            /*
+            print(getState(rawValue: gestureRecognizer.state.rawValue))
+            print(speed)
+            print("-")
+            */
+            if speed > 600 && gestureRecognizer.state == .ended { // swipe
+                
+                let allViews = UIView.getAllSubviews(from: innerView)
+                
+                if direction == "right" {
+                   
+                    self.navigationItem.title = "swipe right"
+                    
+                    if currentIndexes.count == 0 {
+                        AudioServicesPlaySystemSound(1053)
+                    }
+                    else if highlighted < currentIndexes.last! {
+                        allViews[highlighted].layer.borderWidth = 0
+                        
+                       //print(currentIndexes)
+                        //print(highlighted)
+                        
+                        highlighted = getNextIndex(highlighted: highlighted, currentIndexes: currentIndexes, mode: "right")
+                        
+                        for view in allViews{
+                            view.layer.borderWidth = 0
+                        }
+                        
+                        allViews[highlighted].layer.borderWidth = 5
+
+                        tts(input: allViews[highlighted].accessibilityIdentifier!)
+                    }
+                    else if highlighted == currentIndexes.last! {
+                        AudioServicesPlaySystemSound(1053)
+                    }
+                    
+                    writeLog(PID: PID, mode: mode, objHi: objHi, centerZoom: centerZoom, rotateMode: rotateMode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "swipe right", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
+                }
+                else if direction == "left" {
+                  
+                    self.navigationItem.title = "swipe left"
+                    
+                    if currentIndexes.count == 0 {
+                        AudioServicesPlaySystemSound(1053)
+                    }
+                    else if highlighted > currentIndexes.first! {
+                        allViews[highlighted].layer.borderWidth = 0
+                       
+                        highlighted = getNextIndex(highlighted: highlighted, currentIndexes: currentIndexes, mode: "left")
+                        
+                        for view in allViews{
+                            view.layer.borderWidth = 0
+                        }
+                        
+                        allViews[highlighted].layer.borderWidth = 5
+
+                        tts(input: allViews[highlighted].accessibilityIdentifier!)
+                    }
+                    else if highlighted == currentIndexes.first! {
+                        AudioServicesPlaySystemSound(1053)
+                    }
+                    
+                    writeLog(PID: PID, mode: mode, objHi: objHi, centerZoom: centerZoom, rotateMode: rotateMode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "swipe left", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
+                }
+                
+            }
+                
+            else if speed < 200 { // pan
+                if rotateMode == 0 { // touch-to-explore
+                    
+                    let position = gestureRecognizer.location(in: innerView)
+                    
+                    let allViews = UIView.getAllSubviews(from: innerView)
+                    
+                    self.navigationItem.title = "pan"
+                    
+                    previous = flag
+                    
+                    var i = 0
+                    
+                    for view in allViews{
+                        
+                        let origin = view.frame.origin
+                        
+                        if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
+                            
+                            if flag != view.accessibilityIdentifier!{
+                                flag = view.accessibilityIdentifier!
+                                highlighted = i
+                            }
+                            
+                        }
+                        
+                        i += 1
+                        
+                    }
+                      
+                  if previous != flag{
+                    
+                    for view in allViews{
+                        view.layer.borderWidth = 0
+                    }
+                    
+                    if flag != "background"{
+                        tts(input: String(flag))
+                        
+                        allViews[highlighted].layer.borderWidth = 5
+                    }
+                    else{
+                        //AudioServicesPlaySystemSound(1255)
+                    }
+                  }
+                    
+                    writeLog(PID: PID, mode: mode, objHi: objHi, centerZoom: centerZoom, rotateMode: rotateMode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "pan", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
+                
+                }
+                
+            }
+        }
     }
     
     @objc func getDirection(targetPoint: CGPoint) {
@@ -377,19 +521,20 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     }
     
     @objc func handleRotation(_ gestureRecognizer: UIRotationGestureRecognizer) {
-            
-        gestureRecognizer.rotation = 0
         
-        if gestureRecognizer.state == .ended {
+        if gestureRecognizer.state == .ended && gestureRecognizer.rotation > 0.4 {
             
             if rotateMode == 0 {
                 rotateMode = 1
                 tts(input: "panning mode")
+                scrollView.pinchGestureRecognizer?.isEnabled = false
+                // disable pan(swipe)
                 scrollView.isScrollEnabled = true
             }
             else {
                 rotateMode = 0
-                tts(input: "touch to explore mode")
+                tts(input: "zooming mode")
+                scrollView.pinchGestureRecognizer?.isEnabled = true
                 scrollView.isScrollEnabled = false
             }
         }
@@ -461,8 +606,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                     //print(view.accessibilityIdentifier!)
                 }
             }
-            print("__________________")
-            
+
             for view in currentViews {
                for i in 0...allViews.count - 1 {
                    if view.accessibilityIdentifier! == allViews[i].accessibilityIdentifier!{
@@ -867,96 +1011,93 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
 
      @objc func handlePan(_ gestureRecognizer: UIPanGestureRecognizer){
         
-        let origin = CGPoint(x: scrollView.contentOffset.x / scrollView.zoomScale, y: scrollView.contentOffset.y / scrollView.zoomScale)
-        let size = CGSize(width: scrollView.contentSize.width / (scrollView.zoomScale * scrollView.zoomScale) , height: scrollView.contentSize.height / (scrollView.zoomScale * scrollView.zoomScale))
+        if gestureRecognizer.numberOfTouches == 1 {
+            
+            let origin = CGPoint(x: scrollView.contentOffset.x / scrollView.zoomScale, y: scrollView.contentOffset.y / scrollView.zoomScale)
+            let size = CGSize(width: scrollView.contentSize.width / (scrollView.zoomScale * scrollView.zoomScale) , height: scrollView.contentSize.height / (scrollView.zoomScale * scrollView.zoomScale))
+            
+            let rect = CGRect(origin: origin, size: size)
+            
+            let velocity = gestureRecognizer.velocity(in: UIView(frame: rect))
+            
+            let speed = sqrt(pow(Double(velocity.x), 2) + pow(Double(velocity.y), 2))
         
-        let rect = CGRect(origin: origin, size: size)
-        
-        let velocity = gestureRecognizer.velocity(in: UIView(frame: rect))
-        
-        let speed = sqrt(pow(Double(velocity.x), 2) + pow(Double(velocity.y), 2))
-    
-        var direction = ""
-        
-        if abs(velocity.x) > abs(velocity.y) {
+            var direction = ""
+            
+            if abs(velocity.x) > abs(velocity.y) {
 
-            if velocity.x < 0 {
-                direction = "left"
-            }
-            else {
-                direction = "right"
-            }
-            
-        }
-        /*
-        print(getState(rawValue: gestureRecognizer.state.rawValue))
-        print(speed)
-        print("-")
-        */
-        if speed > 600 && gestureRecognizer.state == .ended { // swipe
-            
-            let allViews = UIView.getAllSubviews(from: innerView)
-            
-            if direction == "right" {
-               
-                self.navigationItem.title = "swipe right"
-                
-                if currentIndexes.count == 0 {
-                    AudioServicesPlaySystemSound(1053)
+                if velocity.x < 0 {
+                    direction = "left"
                 }
-                else if highlighted < currentIndexes.last! {
-                    allViews[highlighted].layer.borderWidth = 0
-                    
-                   //print(currentIndexes)
-                    //print(highlighted)
-                    
-                    highlighted = getNextIndex(highlighted: highlighted, currentIndexes: currentIndexes, mode: "right")
-                    
-                    for view in allViews{
-                        view.layer.borderWidth = 0
-                    }
-                    
-                    allViews[highlighted].layer.borderWidth = 5
-
-                    tts(input: allViews[highlighted].accessibilityIdentifier!)
-                }
-                else if highlighted == currentIndexes.last! {
-                    AudioServicesPlaySystemSound(1053)
+                else {
+                    direction = "right"
                 }
                 
-                writeLog(PID: PID, mode: mode, objHi: objHi, centerZoom: centerZoom, rotateMode: rotateMode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "swipe right", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
             }
-            else if direction == "left" {
-              
-                self.navigationItem.title = "swipe left"
+            
+            if speed > 600 && gestureRecognizer.state == .ended { // swipe
                 
-                if currentIndexes.count == 0 {
-                    AudioServicesPlaySystemSound(1053)
-                }
-                else if highlighted > currentIndexes.first! {
-                    allViews[highlighted].layer.borderWidth = 0
+                let allViews = UIView.getAllSubviews(from: innerView)
+                
+                if direction == "right" {
                    
-                    highlighted = getNextIndex(highlighted: highlighted, currentIndexes: currentIndexes, mode: "left")
+                    self.navigationItem.title = "swipe right"
                     
-                    for view in allViews{
-                        view.layer.borderWidth = 0
+                    if currentIndexes.count == 0 {
+                        AudioServicesPlaySystemSound(1053)
+                    }
+                    else if highlighted < currentIndexes.last! {
+                        allViews[highlighted].layer.borderWidth = 0
+                        
+                       //print(currentIndexes)
+                        //print(highlighted)
+                        
+                        highlighted = getNextIndex(highlighted: highlighted, currentIndexes: currentIndexes, mode: "right")
+                        
+                        for view in allViews{
+                            view.layer.borderWidth = 0
+                        }
+                        
+                        allViews[highlighted].layer.borderWidth = 5
+
+                        tts(input: allViews[highlighted].accessibilityIdentifier!)
+                    }
+                    else if highlighted == currentIndexes.last! {
+                        AudioServicesPlaySystemSound(1053)
                     }
                     
-                    allViews[highlighted].layer.borderWidth = 5
-
-                    tts(input: allViews[highlighted].accessibilityIdentifier!)
+                    writeLog(PID: PID, mode: mode, objHi: objHi, centerZoom: centerZoom, rotateMode: rotateMode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "swipe right", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
                 }
-                else if highlighted == currentIndexes.first! {
-                    AudioServicesPlaySystemSound(1053)
+                else if direction == "left" {
+                  
+                    self.navigationItem.title = "swipe left"
+                    
+                    if currentIndexes.count == 0 {
+                        AudioServicesPlaySystemSound(1053)
+                    }
+                    else if highlighted > currentIndexes.first! {
+                        allViews[highlighted].layer.borderWidth = 0
+                       
+                        highlighted = getNextIndex(highlighted: highlighted, currentIndexes: currentIndexes, mode: "left")
+                        
+                        for view in allViews{
+                            view.layer.borderWidth = 0
+                        }
+                        
+                        allViews[highlighted].layer.borderWidth = 5
+
+                        tts(input: allViews[highlighted].accessibilityIdentifier!)
+                    }
+                    else if highlighted == currentIndexes.first! {
+                        AudioServicesPlaySystemSound(1053)
+                    }
+                    
+                    writeLog(PID: PID, mode: mode, objHi: objHi, centerZoom: centerZoom, rotateMode: rotateMode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "swipe left", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
                 }
                 
-                writeLog(PID: PID, mode: mode, objHi: objHi, centerZoom: centerZoom, rotateMode: rotateMode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "swipe left", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
             }
-            
-        }
-            
-        else if speed < 200 { // pan
-            if rotateMode == 0 { // touch-to-explore
+                
+            else if speed < 200 { // pan
                 
                 let position = gestureRecognizer.location(in: innerView)
                 
@@ -1004,10 +1145,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 writeLog(PID: PID, mode: mode, objHi: objHi, centerZoom: centerZoom, rotateMode: rotateMode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "pan", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
             
             }
-            
+                
         }
-        
-     
      }
     
     override func didReceiveMemoryWarning() {
