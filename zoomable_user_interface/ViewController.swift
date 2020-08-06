@@ -162,11 +162,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         // Do any additional setup after loading the view, typically from a nib.
         //drawHouse(origin_x: 0, origin_y: 0)
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
-        
-        let allViews = UIView.getAllSubviews(from: innerView)
-        
-        currentViews = allViews
-        
+                
         // outlet
         background.accessibilityIdentifier = "background"
         
@@ -225,17 +221,33 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         group4.accessibilityIdentifier = "house and flower4"
         group5.accessibilityIdentifier = "house and flower5"
         
+        // two finger triple tap (zoom reset to default)
+        let tftripletap = UITapGestureRecognizer(target: self, action: #selector(twoFingerTripleTap))
+        tftripletap.numberOfTapsRequired = 3
+        tftripletap.numberOfTouchesRequired = 2
+        innerView.addGestureRecognizer(tftripletap)
+    
+        /*
         // two finger double tap
         let tfdoubletap = UITapGestureRecognizer(target: self, action: #selector(twoFingerDoubleTap))
         tfdoubletap.numberOfTapsRequired = 2
         tfdoubletap.numberOfTouchesRequired = 2
+        tfdoubletap.require(toFail: tftripletap)
         innerView.addGestureRecognizer(tfdoubletap)
+        */
+        
+        // three finger double tap
+        let threefingertap = UITapGestureRecognizer(target: self, action: #selector(handleThreeFingerTap))
+        threefingertap.numberOfTapsRequired = 2
+        threefingertap.numberOfTouchesRequired = 3
+        innerView.addGestureRecognizer(threefingertap)
         
         scrollView.alwaysBounceVertical = false
         scrollView.alwaysBounceHorizontal = false
         
         scrollView.minimumZoomScale = 1.0
-        scrollView.maximumZoomScale = scrollView.frame.width / petal1.frame.width
+        //scrollView.maximumZoomScale = scrollView.frame.width / petal1.frame.width
+        scrollView.maximumZoomScale = 28.0
         scrollView.delegate = self
         
         scrollView.isScrollEnabled = false
@@ -252,10 +264,20 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         pan.delegate = self
         innerView.addGestureRecognizer(pan)
+        
+        let twofingerpan = UIPanGestureRecognizer(target: self, action: #selector(handleTwoFingerPan))
+        twofingerpan.delegate = self
+        twofingerpan.minimumNumberOfTouches = 2
+        twofingerpan.maximumNumberOfTouches = 2
+        innerView.addGestureRecognizer(twofingerpan)
       
         let rotate = UIRotationGestureRecognizer(target: self, action: #selector(handleRotation))
         rotate.delegate = self
         innerView.addGestureRecognizer(rotate)
+        
+        let allViews = UIView.getAllSubviews(from: innerView)
+            
+        currentViews = allViews
     
         for view in currentViews {
            for i in 0...allViews.count - 1 {
@@ -299,8 +321,59 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         print(mode)
         print(PID)
+
+    }
+    
+    @objc func handleTwoFingerPan(_ gestureRecognizer: UIPanGestureRecognizer) {
+        scrollView.isScrollEnabled = false
+        print("two finger panning")
+        scrollView.isScrollEnabled = true
+    }
+    
+    @objc func getDirection(targetPoint: CGPoint) {
+        // scrollView center point(absolute)
+        let centerPoint = CGPoint(x: scrollView.frame.origin.x + scrollView.frame.width / 2, y: scrollView.frame.origin.y + scrollView.frame.height / 2)
         
+        let defaultPoint = CGPoint(x: scrollView.frame.origin.x + scrollView.frame.width / 2, y: scrollView.frame.origin.y)
         
+        let vector1 = CGVector(dx: defaultPoint.x - centerPoint.x, dy: defaultPoint.y - centerPoint.y)
+        let vector2 = CGVector(dx: targetPoint.x - centerPoint.x, dy: targetPoint.y - centerPoint.y)
+        
+        let angle = atan2(vector2.dy, vector2.dx) - atan2(vector1.dy, vector1.dx)
+        
+        var degree = angle * CGFloat(180.0 / .pi)
+        
+        if degree < 0 { degree += 360.0 }
+        
+        if degree > 0 && degree <= 30 {
+            
+        }
+        
+        print(degree)
+        
+    }
+    
+    @objc func handleThreeFingerTap(_ gestureRecognizer:
+        UITapGestureRecognizer) {
+        scrollView.zoom(to: CGRect(x: 0.0, y: 0.0, width: scrollView.frame.width, height: scrollView.frame.height), animated: true)
+    }
+    
+    @objc func twoFingerTripleTap(_ gestureRecognizer: UITapGestureRecognizer) {
+        tts(input: "reset zoom to default")
+        
+        let allViews = UIView.getAllSubviews(from: innerView)
+        
+        let point = allViews[highlighted].frame.origin
+        
+        let point_x = point.x + allViews[highlighted].frame.width/2
+        let point_y = point.y + allViews[highlighted].frame.height/2
+
+        let scrollSize = scrollView.frame.size
+        let size = CGSize(width: scrollSize.width,
+                          height: scrollSize.height)
+        let origin = CGPoint(x: point_x - size.width / 2,
+                             y: point_y - size.height / 2)
+        scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
     }
     
     @objc func handleRotation(_ gestureRecognizer: UIRotationGestureRecognizer) {
@@ -308,6 +381,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         gestureRecognizer.rotation = 0
         
         if gestureRecognizer.state == .ended {
+            
             if rotateMode == 0 {
                 rotateMode = 1
                 tts(input: "panning mode")
@@ -347,10 +421,25 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         if centerZoom == true {
+                
+            let allViews = UIView.getAllSubviews(from: innerView)
             
-            //let allViews = UIView.getAllSubviews(from: innerView)
+            //scrollView.contentInset = CGPoint(x: allViews[highlighted].frame.origin.x + allViews[highlighted].frame.width / 2, y: allViews[highlighted].frame.origin.y + allViews[highlighted].frame.height / 2)
             
-            //scrollView.contentOffset = CGPoint(x: allViews[highlighted].frame.origin.x + allViews[highlighted].frame.width / 2, y: allViews[highlighted].frame.origin.y + allViews[highlighted].frame.height / 2)
+            //innerView.center = CGPoint(x: allViews[highlighted].frame.origin.x + allViews[highlighted].frame.width / 2, y: allViews[highlighted].frame.origin.y + allViews[highlighted].frame.height / 2)
+            
+            let point = allViews[highlighted].frame.origin
+            
+            let point_x = point.x + allViews[highlighted].frame.width/2
+            let point_y = point.y + allViews[highlighted].frame.height/2
+    
+            let size = CGSize(width: scrollView.frame.width / scrollView.zoomScale,
+                              height: scrollView.frame.height / scrollView.zoomScale)
+            let origin = CGPoint(x: point_x - scrollView.frame.width / scrollView.zoomScale,
+                                 y: point_y - scrollView.frame.height / scrollView.zoomScale)
+            scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
+            
+            
         }
     }
     
@@ -369,7 +458,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             for view in allViews{
                 if hasIntersection(zoomedView: scrollView, subView: view) {
                     currentViews.append(view)
-                    print(view.accessibilityIdentifier!)
+                    //print(view.accessibilityIdentifier!)
                 }
             }
             print("__________________")
@@ -936,10 +1025,12 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         let utterance = AVSpeechUtterance(string: input)
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
         
-        AudioServicesPlaySystemSound(1105)
+        //AudioServicesPlaySystemSound(1105)
         
-        synth.stopSpeaking(at: .immediate)
-        synth.speak(utterance)
+        //synth.stopSpeaking(at: .immediate)
+        //synth.speak(utterance)
+        
+        print(input)
     }
     
     @objc func hasIntersection(zoomedView: UIScrollView, subView: UIView) -> Bool{
