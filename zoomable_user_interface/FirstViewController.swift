@@ -10,13 +10,13 @@ import Foundation
 import UIKit
 import AVFoundation
 import CoreGraphics
-
+/*
 var mode = ""
 var PID = ""
 
 var objHi = false
 var centerZoom = false
-
+*/
 class FirstViewController: UIViewController, UIScrollViewDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var PIDTextField: UITextField! {

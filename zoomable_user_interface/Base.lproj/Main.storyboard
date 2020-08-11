@@ -345,6 +345,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <button key="tableFooterView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="fuB-LY-Qvc">
+                            <rect key="frame" x="0.0" y="534.5" width="414" height="44"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" title="START"/>
+                            <connections>
+                                <action selector="startButton:" destination="CcW-iX-etV" eventType="touchUpInside" id="T2k-mY-M0C"/>
+                                <segue destination="BYZ-38-t0r" kind="show" id="Gc1-Bw-I3X"/>
+                            </connections>
+                        </button>
                         <sections>
                             <tableViewSection id="WAP-Tx-LLa" userLabel="Basic settings">
                                 <cells>
@@ -435,9 +444,12 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="crT-Hi-K7K" customClass="DropDown" customModule="zoomable_user_interface" customModuleProvider="target">
-                                                    <rect key="frame" x="305" y="4.5" width="97" height="34"/>
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="0" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="crT-Hi-K7K" customClass="DropDown" customModule="zoomable_user_interface" customModuleProvider="target">
+                                                    <rect key="frame" x="257" y="5" width="145" height="34"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <accessibility key="accessibilityConfiguration">
+                                                        <accessibilityTraits key="traits" notEnabled="YES"/>
+                                                    </accessibility>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                 </textField>
@@ -458,8 +470,8 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6uc-t3-ewZ" customClass="DropDown" customModule="zoomable_user_interface" customModuleProvider="target">
-                                                    <rect key="frame" x="305" y="4" width="97" height="34"/>
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Continuous" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6uc-t3-ewZ" customClass="DropDown" customModule="zoomable_user_interface" customModuleProvider="target">
+                                                    <rect key="frame" x="257" y="4" width="145" height="34"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
@@ -505,8 +517,8 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Rzs-KK-EoV" customClass="DropDown" customModule="zoomable_user_interface" customModuleProvider="target">
-                                                    <rect key="frame" x="306" y="4" width="97" height="34"/>
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="None" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Rzs-KK-EoV" customClass="DropDown" customModule="zoomable_user_interface" customModuleProvider="target">
+                                                    <rect key="frame" x="208" y="4" width="195" height="34"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
@@ -528,8 +540,8 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9DD-HV-1LL" customClass="DropDown" customModule="zoomable_user_interface" customModuleProvider="target">
-                                                    <rect key="frame" x="306" y="4.5" width="97" height="34"/>
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="0" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9DD-HV-1LL" customClass="DropDown" customModule="zoomable_user_interface" customModuleProvider="target">
+                                                    <rect key="frame" x="258" y="5" width="145" height="34"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
@@ -551,8 +563,8 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Y5G-x7-2rg" customClass="DropDown" customModule="zoomable_user_interface" customModuleProvider="target">
-                                                    <rect key="frame" x="306" y="4" width="97" height="34"/>
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="None" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Y5G-x7-2rg" customClass="DropDown" customModule="zoomable_user_interface" customModuleProvider="target">
+                                                    <rect key="frame" x="236" y="4" width="167" height="34"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
@@ -574,8 +586,8 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5AC-vP-q7w" customClass="DropDown" customModule="zoomable_user_interface" customModuleProvider="target">
-                                                    <rect key="frame" x="306" y="4.5" width="97" height="34"/>
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="100" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5AC-vP-q7w" customClass="DropDown" customModule="zoomable_user_interface" customModuleProvider="target">
+                                                    <rect key="frame" x="258" y="5" width="145" height="34"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
@@ -597,8 +609,8 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Oqs-Nf-DXq" customClass="DropDown" customModule="zoomable_user_interface" customModuleProvider="target">
-                                                    <rect key="frame" x="306" y="4" width="97" height="34"/>
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="TopLeft" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Oqs-Nf-DXq" customClass="DropDown" customModule="zoomable_user_interface" customModuleProvider="target">
+                                                    <rect key="frame" x="258" y="4" width="145" height="34"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
@@ -630,7 +642,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lf3-08-D5K" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1367" y="-529"/>
+            <point key="canvasLocation" x="1366.6666666666667" y="-529.01785714285711"/>
         </scene>
         <!--View Controller2-->
         <scene sceneID="9FL-7q-CiI">
@@ -1163,7 +1175,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="Mvs-bS-NYw" kind="relationship" relationship="rootViewController" id="6Ox-kR-fw2"/>
+                        <segue destination="CcW-iX-etV" kind="relationship" relationship="rootViewController" id="MeD-ng-Ybb"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9KJ-bf-Icj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1254,7 +1266,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="VwI-ZC-q3f"/>
+        <segue reference="MeD-ng-Ybb"/>
+        <segue reference="Gc1-Bw-I3X"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="diagram" width="719" height="1194"/>

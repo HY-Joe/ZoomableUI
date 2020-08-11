@@ -9,6 +9,17 @@
 import Foundation
 import UIKit
 
+var mode = ""
+var PID = ""
+var condition = ""
+var imgID = ""
+var objectTarget = ""
+var zoomLevel = ""
+var centerPoint = ""
+var objHi = false
+var centerZoom = false
+var swipeEnabled = false
+
 class Option: UITableViewController {
     
     let userDefaults = UserDefaults.standard
@@ -23,6 +34,21 @@ class Option: UITableViewController {
     @IBOutlet weak var DropdownTarget: DropDown!
     @IBOutlet weak var DropdownZoomLV: DropDown!
     @IBOutlet weak var DropdownCenterPoint: DropDown!
+    
+    @IBAction func startButton(_ sender: Any) {
+        PID = DropdownPID.optionArray[DropdownPID.selectedIndex!]
+        mode = DropdownMode.optionArray[DropdownMode.selectedIndex!]
+        condition = DropdownCondition.optionArray[DropdownCondition.selectedIndex!]
+        imgID = DropdownImgID.optionArray[DropdownImgID.selectedIndex!]
+        objectTarget = DropdownTarget.optionArray[DropdownTarget.selectedIndex!]
+        zoomLevel = DropdownZoomLV.optionArray[DropdownZoomLV.selectedIndex!]
+        centerPoint = DropdownCenterPoint.optionArray[DropdownCenterPoint.selectedIndex!]
+        
+        objHi = UserDefaults.standard.bool(forKey: "mySwitchValue")
+        centerZoom = UserDefaults.standard.bool(forKey: "mySwitchValue2")
+        swipeEnabled = UserDefaults.standard.bool(forKey: "SwipeIsEnabled")
+        
+    }
     
     @IBAction func switchAction(_ sender: UISwitch) {
         userDefaults.set(sender.isOn, forKey: "mySwitchValue")
@@ -47,9 +73,21 @@ class Option: UITableViewController {
         option2.isOn = userDefaults.bool(forKey: "mySwitchValue2")
         SwipeIsEnabled.isOn = userDefaults.bool(forKey: "SwipeIsEnabled")
         
-         DropdownPID.optionArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
+        DropdownPID.optionArray = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
+        DropdownMode.optionArray = ["None", "Pan-Only", "Zoom-Only", "All(Pan+RegularZoom)", "Pan+SpecialZoom"]
+        DropdownCondition.optionArray = ["Continuous", "Pixel", "Object"]
+        DropdownImgID.optionArray = ["0", "1", "2", "3"]
+        DropdownTarget.optionArray = ["None", "Random"] // add objects
+        DropdownZoomLV.optionArray = ["100", "200", "300", "400", "500", "600", "700", "800", "900"]
+        DropdownCenterPoint.optionArray = ["Random", "TopLeft", "ImgCenter"] // add objects
         
-         DropdownPID.optionIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+        DropdownPID.selectedIndex = 0
+        DropdownMode.selectedIndex = 0
+        DropdownCondition.selectedIndex = 0
+        DropdownImgID.selectedIndex = 0
+        DropdownTarget.selectedIndex = 0
+        DropdownZoomLV.selectedIndex = 0
+        DropdownCenterPoint.selectedIndex = 0
         
     }
 }

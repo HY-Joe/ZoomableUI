@@ -17,6 +17,7 @@ extension UIView {
             var result = getAllSubviews(from: subView) as [T]
             if let view = subView as? T {
                 if view.accessibilityIdentifier! != "background" {
+                    /*
                     if objHi == true {
                         result.append(view)
                     }
@@ -25,6 +26,8 @@ extension UIView {
                             result.append(view)
                         }
                     }
+                    */
+                    
                 }
             }
             return result
@@ -156,6 +159,11 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     
     var rotateMode = 0 // 0: touch-to-explore, 1: panning
     
+    var objectGroups = [[String]]([["house1", "window1", "window2", "petal1", "petal2", "petal3", "flowerpot1"],
+                        ["house2", "window3", "window4", "petal4", "petal5", "petal6", "flowerpot2"], ["house3", "window5", "window6", "door1", "petal11", "petal12", "petal13", "flowerpot4"],
+                        ["house4", "window7", "window8", "door2", "petal7", "petal8", "petal9", "petal10", "flowerpot3"],
+                        ["house5", "window9", "window10", "door3", "petal14", "petal15", "petal16", "petal17", "flowerpot5"]])
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -165,6 +173,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         //scrollView.zoomScale = 2.0
         //scrollView.zoom
         // outlet
+     
         background.accessibilityIdentifier = "background"
         
         roof1.accessibilityIdentifier = "roof1"
@@ -221,6 +230,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         group3.accessibilityIdentifier = "house and flower3"
         group4.accessibilityIdentifier = "house and flower4"
         group5.accessibilityIdentifier = "house and flower5"
+        
+        
         
         // two finger triple tap (zoom reset to default)
         let tftripletap = UITapGestureRecognizer(target: self, action: #selector(twoFingerTripleTap))
