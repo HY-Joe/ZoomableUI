@@ -42,8 +42,24 @@ class Option: UITableViewController {
     @IBOutlet weak var DropdownTarget: DropDown!
     @IBOutlet weak var DropdownZoomLV: DropDown!
     @IBOutlet weak var DropdownCenterPoint: DropDown!
+ 
+    // save imageID -> add selected object group to optionArray of Target and Center Point
+    @IBAction func saveButton(_ sender: Any) {
+        
+        imgID = DropdownImgID.optionArray[DropdownImgID.selectedIndex!]
+        
+        selectedGroup = [String] ()
+        
+        getSelectedGroup(imgID: imgID)
+        
+        DropdownTarget.optionArray.append(contentsOf: selectedGroup)
+        DropdownCenterPoint.optionArray.append(contentsOf: selectedGroup)
+        
+        outputAlert(title: "Image ID saved", message: "Selected Objects were added to Target and Center Point list", text: "Enter")
+    }
     
     @IBAction func startButton(_ sender: Any) {
+        
         PID = DropdownPID.optionArray[DropdownPID.selectedIndex!]
         mode = DropdownMode.optionArray[DropdownMode.selectedIndex!]
         condition = DropdownCondition.optionArray[DropdownCondition.selectedIndex!]
@@ -56,51 +72,9 @@ class Option: UITableViewController {
         centerZoom = UserDefaults.standard.bool(forKey: "mySwitchValue2")
         swipeEnabled = UserDefaults.standard.bool(forKey: "SwipeIsEnabled")
         
-        print(imgID)
-        print(zoomLevel)
-        
         selectedGroup = [String] ()
-       
-        if imgID == "0" { // 0 1
-            selectedGroup.append(contentsOf: objectGroups[0])
-            selectedGroup.append(contentsOf: objectGroups[1])
-        }
-        else if imgID == "1" { // 0 2
-            selectedGroup.append(contentsOf: objectGroups[0])
-            selectedGroup.append(contentsOf: objectGroups[2])
-        }
-        else if imgID == "2" { // 0 3
-            selectedGroup.append(contentsOf: objectGroups[0])
-            selectedGroup.append(contentsOf: objectGroups[3])
-        }
-        else if imgID == "3" { // 0 4
-            selectedGroup.append(contentsOf: objectGroups[0])
-            selectedGroup.append(contentsOf: objectGroups[4])
-        }
-        else if imgID == "4" { // 1 2
-            selectedGroup.append(contentsOf: objectGroups[1])
-            selectedGroup.append(contentsOf: objectGroups[2])
-        }
-        else if imgID == "5" { // 1 3
-            selectedGroup.append(contentsOf: objectGroups[1])
-            selectedGroup.append(contentsOf: objectGroups[3])
-        }
-        else if imgID == "6" { // 1 4
-            selectedGroup.append(contentsOf: objectGroups[1])
-            selectedGroup.append(contentsOf: objectGroups[4])
-        }
-        else if imgID == "7" { // 2 3
-            selectedGroup.append(contentsOf: objectGroups[2])
-            selectedGroup.append(contentsOf: objectGroups[3])
-        }
-        else if imgID == "8" { // 2 4
-            selectedGroup.append(contentsOf: objectGroups[2])
-            selectedGroup.append(contentsOf: objectGroups[4])
-        }
-        else if imgID == "9" { // 3 4
-            selectedGroup.append(contentsOf: objectGroups[3])
-            selectedGroup.append(contentsOf: objectGroups[4])
-        }
+        
+        getSelectedGroup(imgID: imgID)
         
     }
     
@@ -119,21 +93,13 @@ class Option: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-    
-        option1.isOn = userDefaults.bool(forKey: "mySwitchValue")
-        option2.isOn = userDefaults.bool(forKey: "mySwitchValue2")
-        SwipeIsEnabled.isOn = userDefaults.bool(forKey: "SwipeIsEnabled")
-        
         DropdownPID.optionArray = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
         DropdownMode.optionArray = ["None", "Pan-Only", "Zoom-Only", "All(Pan+RegularZoom)", "Pan+SpecialZoom"]
         DropdownCondition.optionArray = ["Continuous", "Pixel", "Object"]
         DropdownImgID.optionArray = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-        DropdownTarget.optionArray = ["None", "Random"] // add objects
+        DropdownTarget.optionArray = ["None", "Random"] // should add objects
         DropdownZoomLV.optionArray = ["100", "200", "300", "400", "500", "600", "700", "800", "900"]
-        DropdownCenterPoint.optionArray = ["Random", "TopLeft", "ImgCenter"] // add objects
+        DropdownCenterPoint.optionArray = ["Random", "TopLeft", "ImgCenter"] // should add objects
         
         DropdownPID.selectedIndex = 0
         DropdownMode.selectedIndex = 0
@@ -142,6 +108,70 @@ class Option: UITableViewController {
         DropdownTarget.selectedIndex = 0
         DropdownZoomLV.selectedIndex = 0
         DropdownCenterPoint.selectedIndex = 0
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+    
+        option1.isOn = userDefaults.bool(forKey: "mySwitchValue")
+        option2.isOn = userDefaults.bool(forKey: "mySwitchValue2")
+        SwipeIsEnabled.isOn = userDefaults.bool(forKey: "SwipeIsEnabled")
         
     }
+    
+    func outputAlert(title : String, message : String, text : String) {
+
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
+
+        let okButton = UIAlertAction(title: text, style: UIAlertAction.Style.cancel, handler: nil)
+
+        alertController.addAction(okButton)
+
+        return self.present(alertController, animated: true, completion: nil)
+
+    }
+    
+    func getSelectedGroup(imgID: String) {
+         if imgID == "0" { // 0 1
+             selectedGroup.append(contentsOf: objectGroups[0])
+             selectedGroup.append(contentsOf: objectGroups[1])
+         }
+         else if imgID == "1" { // 0 2
+             selectedGroup.append(contentsOf: objectGroups[0])
+             selectedGroup.append(contentsOf: objectGroups[2])
+         }
+         else if imgID == "2" { // 0 3
+             selectedGroup.append(contentsOf: objectGroups[0])
+             selectedGroup.append(contentsOf: objectGroups[3])
+         }
+         else if imgID == "3" { // 0 4
+             selectedGroup.append(contentsOf: objectGroups[0])
+             selectedGroup.append(contentsOf: objectGroups[4])
+         }
+         else if imgID == "4" { // 1 2
+             selectedGroup.append(contentsOf: objectGroups[1])
+             selectedGroup.append(contentsOf: objectGroups[2])
+         }
+         else if imgID == "5" { // 1 3
+             selectedGroup.append(contentsOf: objectGroups[1])
+             selectedGroup.append(contentsOf: objectGroups[3])
+         }
+         else if imgID == "6" { // 1 4
+             selectedGroup.append(contentsOf: objectGroups[1])
+             selectedGroup.append(contentsOf: objectGroups[4])
+         }
+         else if imgID == "7" { // 2 3
+             selectedGroup.append(contentsOf: objectGroups[2])
+             selectedGroup.append(contentsOf: objectGroups[3])
+         }
+         else if imgID == "8" { // 2 4
+             selectedGroup.append(contentsOf: objectGroups[2])
+             selectedGroup.append(contentsOf: objectGroups[4])
+         }
+         else if imgID == "9" { // 3 4
+             selectedGroup.append(contentsOf: objectGroups[3])
+             selectedGroup.append(contentsOf: objectGroups[4])
+         }
+        
+    }
+
 }
