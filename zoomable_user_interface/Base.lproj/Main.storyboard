@@ -28,10 +28,6 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             </imageView>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LFM-2T-oio">
-                                                <rect key="frame" x="29" y="125" width="125" height="154"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            </imageView>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5LP-yp-bfH">
                                                 <rect key="frame" x="63" y="142" width="72" height="124"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -58,14 +54,6 @@
                                             </imageView>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7PI-Zj-qjY">
                                                 <rect key="frame" x="44" y="256" width="13" height="12"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            </imageView>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IUc-vi-a7j">
-                                                <rect key="frame" x="260" y="316" width="119" height="126"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            </imageView>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lzb-Ui-tWV">
-                                                <rect key="frame" x="47" y="327" width="119" height="128"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             </imageView>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QWD-Iq-QOa">
@@ -137,16 +125,8 @@
                                                 <rect key="frame" x="53" y="430" width="13" height="12"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             </imageView>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PdA-5l-LIE">
-                                                <rect key="frame" x="269" y="520" width="110" height="120"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            </imageView>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sMl-wS-oXF">
                                                 <rect key="frame" x="297" y="527" width="70" height="27"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            </imageView>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B8P-qQ-TOf">
-                                                <rect key="frame" x="49" y="542" width="117" height="143"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             </imageView>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Xi-3l-VCR">
@@ -251,11 +231,6 @@
                         <outlet property="flowerpot3" destination="kIC-5g-guq" id="Sq5-Pv-IBu"/>
                         <outlet property="flowerpot4" destination="liE-LI-rm0" id="g6R-iu-5mz"/>
                         <outlet property="flowerpot5" destination="cLF-pH-4EG" id="tLe-7B-7Qk"/>
-                        <outlet property="group1" destination="LFM-2T-oio" id="1n1-kW-b8L"/>
-                        <outlet property="group2" destination="Lzb-Ui-tWV" id="9XT-QU-qT3"/>
-                        <outlet property="group3" destination="IUc-vi-a7j" id="4u7-Il-hpQ"/>
-                        <outlet property="group4" destination="B8P-qQ-TOf" id="Lyb-vk-9Py"/>
-                        <outlet property="group5" destination="PdA-5l-LIE" id="iWq-hC-LzB"/>
                         <outlet property="house1" destination="5LP-yp-bfH" id="06a-wW-LAy"/>
                         <outlet property="house2" destination="JVS-Ts-KLm" id="Uk7-oY-vNJ"/>
                         <outlet property="house3" destination="1XF-1o-c94" id="xGL-rV-Pkm"/>
