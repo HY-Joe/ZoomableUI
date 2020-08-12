@@ -17,7 +17,7 @@ extension UIView {
             var result = getAllSubviews(from: subView) as [T]
             if let view = subView as? T {
                 if view.accessibilityIdentifier! != "background" {
-                    /*
+                    
                     if objHi == true {
                         result.append(view)
                     }
@@ -26,7 +26,7 @@ extension UIView {
                             result.append(view)
                         }
                     }
-                    */
+                    
                     
                 }
             }
