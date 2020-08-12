@@ -17,18 +17,10 @@ extension UIView {
             var result = getAllSubviews(from: subView) as [T]
             if let view = subView as? T {
                 if view.accessibilityIdentifier! != "background" {
-                    /*
-                    if objHi == true {
+                    
+                    if selectedGroup.contains(view.accessibilityIdentifier!) {
                         result.append(view)
                     }
-                    else if objHi == false {
-                        if !view.accessibilityIdentifier!.contains("and") {
-                            result.append(view)
-                        }
-                    }
-                    */
-                    
-                    
                 }
             }
             return result
@@ -160,13 +152,9 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     
     var rotateMode = 0 // 0: touch-to-explore, 1: panning
     
-    var objectGroups = [[String]]([["house1", "window1", "window2", "petal1", "petal2", "petal3", "flowerpot1"],
-                        ["house2", "window3", "window4", "petal4", "petal5", "petal6", "flowerpot2"], ["house3", "window5", "window6", "door1", "petal11", "petal12", "petal13", "flowerpot4"],
-                        ["house4", "window7", "window8", "door2", "petal7", "petal8", "petal9", "petal10", "flowerpot3"],
-                        ["house5", "window9", "window10", "door3", "petal14", "petal15", "petal16", "petal17", "flowerpot5"]])
-    
     override func viewDidLoad() {
         
+
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         //drawHouse(origin_x: 0, origin_y: 0)
@@ -225,14 +213,6 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         flowerpot3.accessibilityIdentifier = "flowerpot3"
         flowerpot4.accessibilityIdentifier = "flowerpot4"
         flowerpot5.accessibilityIdentifier = "flowerpot5"
-        
-        group1.accessibilityIdentifier = "house and flower1"
-        group2.accessibilityIdentifier = "house and flower2"
-        group3.accessibilityIdentifier = "house and flower3"
-        group4.accessibilityIdentifier = "house and flower4"
-        group5.accessibilityIdentifier = "house and flower5"
-        
-        
         
         // two finger triple tap (zoom reset to default)
         let tftripletap = UITapGestureRecognizer(target: self, action: #selector(twoFingerTripleTap))
@@ -297,6 +277,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                    currentIndexes.append(i)
                }
            }
+        }
+        
+        for view in allViews {
+            view.layer.borderWidth = 1
         }
         
         /*
@@ -513,7 +497,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             currentIndex = 0
             
             for view in allViews{
-                view.layer.borderWidth = 0
+                view.layer.borderWidth = 1
             }
             
             allViews[highlighted].layer.borderWidth = 5
@@ -593,7 +577,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 currentIndex = 0
                 
                 for view in allViews{
-                    view.layer.borderWidth = 0
+                    view.layer.borderWidth = 1
                 }
                 
                 allViews[highlighted].layer.borderWidth = 5
@@ -679,7 +663,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 currentIndex = 0
                 
                 for view in allViews{
-                    view.layer.borderWidth = 0
+                    view.layer.borderWidth = 1
                 }
                 
                 allViews[highlighted].layer.borderWidth = 5
@@ -782,7 +766,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 currentIndex = 0
                 
                 for view in allViews{
-                    view.layer.borderWidth = 0
+                    view.layer.borderWidth = 1
                 }
                 
                 allViews[highlighted].layer.borderWidth = 5
@@ -805,7 +789,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         var touchedIndex = -1
          
          for view in allViews{
-             view.layer.borderWidth = 0
+             view.layer.borderWidth = 1
          }
         
         for view in allViews {
@@ -814,7 +798,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             let origin = view.frame.origin
             if position.x >= origin.x && position.x <= origin.x + view.frame.width && position.y >= origin.y && position.y <= origin.y + view.frame.height{
                 
-                allViews[highlighted].layer.borderWidth = 0
+                allViews[highlighted].layer.borderWidth = 1
                
                 touched = view.accessibilityIdentifier!
                 
@@ -843,7 +827,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             //print("Swipe right detected")
             self.navigationItem.title = "swipe right"
             if highlighted < currentIndexes.last! {
-                allViews[highlighted].layer.borderWidth = 0
+                allViews[highlighted].layer.borderWidth = 1
                 
                //print(currentIndexes)
                 //print(highlighted)
@@ -864,7 +848,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             //print("Swipe left detected")
             self.navigationItem.title = "swipe left"
             if highlighted > currentIndexes.first! {
-                allViews[highlighted].layer.borderWidth = 0
+                allViews[highlighted].layer.borderWidth = 1
                
                 highlighted = getNextIndex(highlighted: highlighted, currentIndexes: currentIndexes, mode: "left")
                 
@@ -920,7 +904,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                 
             }
             
-            if speed > 600 && gestureRecognizer.state == .ended { // swipe
+            if speed > 600 && gestureRecognizer.state == .ended && swipeEnabled == true { // swipe
                 let allViews = UIView.getAllSubviews(from: innerView)
                 
                 if direction == "right" {
@@ -931,16 +915,15 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                         AudioServicesPlaySystemSound(1053)
                     }
                     else if highlighted < currentIndexes.last! {
-                        allViews[highlighted].layer.borderWidth = 0
+                        allViews[highlighted].layer.borderWidth = 1
                         
                         highlighted = getNextIndex(highlighted: highlighted, currentIndexes: currentIndexes, mode: "right")
                         
                         for view in allViews{
-                            view.layer.borderWidth = 0
+                            view.layer.borderWidth = 1
                         }
                         
                         allViews[highlighted].layer.borderWidth = 5
-                        allViews[highlighted].layer
 
                         tts(input: allViews[highlighted].accessibilityIdentifier!)
                     }
@@ -958,12 +941,12 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                         AudioServicesPlaySystemSound(1053)
                     }
                     else if highlighted > currentIndexes.first! {
-                        allViews[highlighted].layer.borderWidth = 0
+                        allViews[highlighted].layer.borderWidth = 1
                        
                         highlighted = getNextIndex(highlighted: highlighted, currentIndexes: currentIndexes, mode: "left")
                         
                         for view in allViews{
-                            view.layer.borderWidth = 0
+                            view.layer.borderWidth = 1
                         }
                         
                         allViews[highlighted].layer.borderWidth = 5
@@ -1010,7 +993,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
               if previous != flag {
                 
                 for view in allViews {
-                    view.layer.borderWidth = 0
+                    view.layer.borderWidth = 1
                 }
                 
                 if flag != "background" {
