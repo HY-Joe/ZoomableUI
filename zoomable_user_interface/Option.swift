@@ -14,7 +14,7 @@ var PID = ""
 var condition = ""
 var imgID = ""
 var objectTarget = ""
-var zoomLevel = ""
+var initialZoomLevel = ""
 var centerPoint = ""
 var objHi = false
 var centerZoom = false
@@ -65,7 +65,7 @@ class Option: UITableViewController {
         condition = DropdownCondition.optionArray[DropdownCondition.selectedIndex!]
         imgID = DropdownImgID.optionArray[DropdownImgID.selectedIndex!]
         objectTarget = DropdownTarget.optionArray[DropdownTarget.selectedIndex!]
-        zoomLevel = DropdownZoomLV.optionArray[DropdownZoomLV.selectedIndex!]
+        initialZoomLevel = DropdownZoomLV.optionArray[DropdownZoomLV.selectedIndex!]
         centerPoint = DropdownCenterPoint.optionArray[DropdownCenterPoint.selectedIndex!]
         
         objHi = UserDefaults.standard.bool(forKey: "mySwitchValue")

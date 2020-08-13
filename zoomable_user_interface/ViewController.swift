@@ -258,10 +258,12 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         pan.delegate = self
         innerView.addGestureRecognizer(pan)
         
-        let twofingerpan = UIPanGestureRecognizer(target: self, action: #selector(handleTwoFingerPan))
-        twofingerpan.delegate = self
-        twofingerpan.minimumNumberOfTouches = 2
-        innerView.addGestureRecognizer(twofingerpan)
+        if condition == "Continuous" { // two-finger panning
+            let twofingerpan = UIPanGestureRecognizer(target: self, action: #selector(handleTwoFingerPan))
+            twofingerpan.delegate = self
+            twofingerpan.minimumNumberOfTouches = 2
+            innerView.addGestureRecognizer(twofingerpan)
+        }
       
         let rotate = UIRotationGestureRecognizer(target: self, action: #selector(handleRotation))
         rotate.delegate = self
@@ -283,45 +285,65 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             view.layer.borderWidth = 1
         }
         
-        /*
-        var i = 0
-        
-        for view in allViews {
-            view.isAccessibilityElement = true
-            
-            let fileManager = FileManager.default
-                    
-            let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
-
-            let fileURL = documentsURL.appendingPathComponent("annotations.csv")
-            
-            var fileText = try? String(contentsOf: fileURL, encoding: .utf8)
-            
-            let indexString = "index, object_name, origin_x, origin_y, width, height"
-            
-            let logString = String(i) + ", " + view.accessibilityIdentifier! + ", " + "\(view.frame.origin.x)" + ", " + "\(view.frame.origin.y)" + ", " + "\(view.frame.width)" + ", " + "\(view.frame.height)"
-                
-            if fileText == nil { // if the file does not exist
-                fileText = indexString
-            }
-        
-            let myTextString = NSString(string: fileText! + "\n" + logString)
-
-            try? myTextString.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8.rawValue)
-            
-            i += 1
-        }
-        */
-        
         allViews[highlighted].layer.borderWidth = 5
-
+        
+        background.layer.borderWidth = 1
+        //background.layer.borderColor = UIColor.red.cgColor
+        
+        setInitialZoomScale()
+        
     }
     
-    @objc func handleTwoFingerPan(_ gestureRecognizer: UIPanGestureRecognizer) {
+    func setInitialZoomScale() {
+        
+        let initialZoomScale : CGFloat = CGFloat((initialZoomLevel as NSString).floatValue) / 100
+        
+        var initialObject = ""
+        //var initialOrigin = CGPoint()
+        
+        if centerPoint == "Random" {
+            initialObject = selectedGroup.randomElement()!
+            
+        }
+        else if centerPoint == "TopLeft" && initialZoomLevel != "100" {
+            scrollView.zoom(to: CGRect(x: scrollView.frame.origin.x, y: scrollView.frame.origin.y, width: scrollView.frame.width / initialZoomScale, height: scrollView.frame.height / initialZoomScale ), animated: false)
+        }
+            
+        else if centerPoint == "ImgCenter" && initialZoomLevel != "100" {
+            let imgCenterPoint_x = innerView.frame.origin.x + innerView.frame.width / 2
+            let imgCenterPoint_y = innerView.frame.origin.y + innerView.frame.height / 2
+            scrollView.zoom(to: CGRect( x: imgCenterPoint_x - (innerView.frame.width / initialZoomScale) / 2, y: imgCenterPoint_y - (innerView.frame.height / initialZoomScale) / 2, width: innerView.frame.width / initialZoomScale, height: innerView.frame.height / initialZoomScale), animated: false)
+            print(imgCenterPoint_x)
+            
+        }
+        
+    }
+    
+    @objc func handleTwoFingerPan(_ gestureRecognizer: UIPanGestureRecognizer) { // only for "continuous" condition
         scrollView.isScrollEnabled = true
         scrollView.panGestureRecognizer.isEnabled = true
         //print(gestureRecognizer.velocity(in: innerView).x)
+        /*
+        var panned_x = 0.0 - gestureRecognizer.velocity(in: innerView).x / scrollView.zoomScale
         
+        var panned_y = 0.0 - gestureRecognizer.velocity(in: innerView).y / scrollView.zoomScale
+        
+        if panned_x < 0.0 {
+            panned_x = 0.0
+        }
+        else if panned_x >= innerView.frame.width {
+            panned_x = innerView.frame.width
+        }
+        
+        if panned_y < 0.0 {
+            panned_y = 0.0
+        }
+        else if panned_y >= innerView.frame.height {
+            panned_y = innerView.frame.height
+        }
+        
+        scrollView.setContentOffset(CGPoint(x: panned_x, y: panned_y), animated: true)
+        */
         var panned_x = scrollView.contentOffset.x - gestureRecognizer.velocity(in: innerView).x
         
         var panned_y = scrollView.contentOffset.y - gestureRecognizer.velocity(in: innerView).y
@@ -341,6 +363,17 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         }
         
         scrollView.setContentOffset(CGPoint(x: panned_x, y: panned_y), animated: true)
+        
+        /*
+        print("scrollViewoffset")
+        
+       print(scrollView.contentOffset)
+       print("panned_x")
+       print(panned_x)
+       print("panned_y")
+       print(panned_y)
+ */
+        
     }
     
     @objc func getDirection(targetPoint: CGPoint) {
@@ -1172,6 +1205,37 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         return "null"
     }
     
+    func getObjectCoordinatesFromImageView () {
+        var i = 0
+        
+        let allViews = UIView.getAllSubviews(from: innerView)
+        
+        for view in allViews {
+            view.isAccessibilityElement = true
+            
+            let fileManager = FileManager.default
+                    
+            let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+
+            let fileURL = documentsURL.appendingPathComponent("annotations.csv")
+            
+            var fileText = try? String(contentsOf: fileURL, encoding: .utf8)
+            
+            let indexString = "index, object_name, origin_x, origin_y, width, height"
+            
+            let logString = String(i) + ", " + view.accessibilityIdentifier! + ", " + "\(view.frame.origin.x)" + ", " + "\(view.frame.origin.y)" + ", " + "\(view.frame.width)" + ", " + "\(view.frame.height)"
+                
+            if fileText == nil { // if the file does not exist
+                fileText = indexString
+            }
+        
+            let myTextString = NSString(string: fileText! + "\n" + logString)
+
+            try? myTextString.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8.rawValue)
+            
+            i += 1
+        }
+    }
     
 }
 
