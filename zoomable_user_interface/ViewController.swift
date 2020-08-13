@@ -296,25 +296,57 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     
     func setInitialZoomScale() {
         
+        let allViews = UIView.getAllSubviews(from: innerView)
+        
         let initialZoomScale : CGFloat = CGFloat((initialZoomLevel as NSString).floatValue) / 100
         
         var initialObject = ""
-        //var initialOrigin = CGPoint()
+        var initialObjectCenterPoint = CGPoint()
         
-        if centerPoint == "Random" {
-            initialObject = selectedGroup.randomElement()!
-            
-        }
-        else if centerPoint == "TopLeft" && initialZoomLevel != "100" {
-            scrollView.zoom(to: CGRect(x: scrollView.frame.origin.x, y: scrollView.frame.origin.y, width: scrollView.frame.width / initialZoomScale, height: scrollView.frame.height / initialZoomScale ), animated: false)
-        }
-            
-        else if centerPoint == "ImgCenter" && initialZoomLevel != "100" {
-            let imgCenterPoint_x = innerView.frame.origin.x + innerView.frame.width / 2
-            let imgCenterPoint_y = innerView.frame.origin.y + innerView.frame.height / 2
-            scrollView.zoom(to: CGRect( x: imgCenterPoint_x - (innerView.frame.width / initialZoomScale) / 2, y: imgCenterPoint_y - (innerView.frame.height / initialZoomScale) / 2, width: innerView.frame.width / initialZoomScale, height: innerView.frame.height / initialZoomScale), animated: false)
-            print(imgCenterPoint_x)
-            
+        if initialZoomLevel != "100" {
+            if centerPoint == "Random" {
+                initialObject = selectedGroup.randomElement()!
+                
+                print(initialObject)
+                
+                for view in allViews {
+                    if view.accessibilityIdentifier! == initialObject {
+                        initialObjectCenterPoint = CGPoint(x: view.frame.origin.x + view.frame.width / 2, y: view.frame.origin.y + view.frame.height / 2)
+                        
+                        scrollView.zoom(to: CGRect( x: initialObjectCenterPoint.x - (innerView.frame.width / initialZoomScale) / 2, y: initialObjectCenterPoint.y - (innerView.frame.height / initialZoomScale) / 2, width: innerView.frame.width / initialZoomScale, height: innerView.frame.height / initialZoomScale), animated: false)
+                        
+                        break
+                    }
+                }
+            }
+            else if centerPoint == "TopLeft" {
+                scrollView.zoom(to: CGRect(x: scrollView.frame.origin.x, y: scrollView.frame.origin.y, width: scrollView.frame.width / initialZoomScale, height: scrollView.frame.height / initialZoomScale ), animated: false)
+            }
+                
+            else if centerPoint == "ImgCenter" {
+                let imgCenterPoint_x = innerView.frame.origin.x + innerView.frame.width / 2
+                let imgCenterPoint_y = innerView.frame.origin.y + innerView.frame.height / 2
+                scrollView.zoom(to: CGRect( x: imgCenterPoint_x - (innerView.frame.width / initialZoomScale) / 2, y: imgCenterPoint_y - (innerView.frame.height / initialZoomScale) / 2, width: innerView.frame.width / initialZoomScale, height: innerView.frame.height / initialZoomScale), animated: false)
+                print(imgCenterPoint_x - (innerView.frame.width / initialZoomScale) / 2)
+                print(imgCenterPoint_y - (innerView.frame.height / initialZoomScale) / 2)
+            }
+            else { // certain object
+                initialObject = centerPoint
+                
+                for view in allViews {
+                    
+                    if view.accessibilityIdentifier! == initialObject {
+                        print(view.frame.origin.x)
+                        print(view.frame.width / 2)
+                        initialObjectCenterPoint = CGPoint(x: view.frame.origin.x + view.frame.width / 2, y: view.frame.origin.y + view.frame.height / 2)
+                        
+                        scrollView.zoom(to: CGRect( x: initialObjectCenterPoint.x - (innerView.frame.width / initialZoomScale) / 2, y: initialObjectCenterPoint.y - (innerView.frame.height / initialZoomScale) / 4, width: innerView.frame.width / initialZoomScale, height: innerView.frame.height / initialZoomScale), animated: false)
+                        
+                        break
+                    }
+                }
+            }
+
         }
         
     }

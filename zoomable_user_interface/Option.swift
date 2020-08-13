@@ -46,11 +46,16 @@ class Option: UITableViewController {
     // save imageID -> add selected object group to optionArray of Target and Center Point
     @IBAction func saveButton(_ sender: Any) {
         
+        print(imgID)
+        
         imgID = DropdownImgID.optionArray[DropdownImgID.selectedIndex!]
         
-        selectedGroup = [String] ()
-        
         getSelectedGroup(imgID: imgID)
+        
+        print(selectedGroup)
+        
+        DropdownTarget.optionArray = ["None", "Random"] // should add objects
+        DropdownCenterPoint.optionArray = ["Random", "TopLeft", "ImgCenter"] // should add objects
         
         DropdownTarget.optionArray.append(contentsOf: selectedGroup)
         DropdownCenterPoint.optionArray.append(contentsOf: selectedGroup)
@@ -131,6 +136,9 @@ class Option: UITableViewController {
     }
     
     func getSelectedGroup(imgID: String) {
+        
+        selectedGroup.removeAll()
+        
          if imgID == "0" { // 0 1
              selectedGroup.append(contentsOf: objectGroups[0])
              selectedGroup.append(contentsOf: objectGroups[1])
