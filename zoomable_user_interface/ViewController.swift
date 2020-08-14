@@ -238,13 +238,15 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
 
         scrollView.minimumZoomScale = 1.0
         //scrollView.maximumZoomScale = scrollView.frame.width / petal1.frame.width
-        if mode == "None" || mode == "Pan-Only" { // no zooming
+        
+        if mode == "None" || mode == "Pan-Only" { // no zooming(no pinch)
             scrollView.maximumZoomScale = 1.0
             scrollView.pinchGestureRecognizer?.isEnabled = false
         }
         else {
             scrollView.maximumZoomScale = 28.0
         }
+        
         scrollView.delegate = self
         
         scrollView.isScrollEnabled = false
@@ -275,11 +277,15 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             twofingerpan.delegate = self
             twofingerpan.minimumNumberOfTouches = 2
             innerView.addGestureRecognizer(twofingerpan)
+            
+            let rotate = UIRotationGestureRecognizer(target: self, action: #selector(handleRotation))
+            rotate.delegate = self
+            innerView.addGestureRecognizer(rotate)
         }
-        
-        let rotate = UIRotationGestureRecognizer(target: self, action: #selector(handleRotation))
-        rotate.delegate = self
-        innerView.addGestureRecognizer(rotate)
+        else if condition == "Pixel" || condition == "Object" { // not continuous
+            print(condition)
+            scrollView.pinchGestureRecognizer?.isEnabled = false
+        }
         
         let allViews = UIView.getAllSubviews(from: innerView)
             
