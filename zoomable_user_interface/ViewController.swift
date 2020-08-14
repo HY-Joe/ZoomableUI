@@ -213,23 +213,21 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         flowerpot5.accessibilityIdentifier = "flowerpot5"
         
         // two finger triple tap (zoom reset to default)
-        let tftripletap = UITapGestureRecognizer(target: self, action: #selector(twoFingerTripleTap))
+        let tftripletap = UITapGestureRecognizer(target: self, action: #selector(handleTwoFingerTripleTap))
         tftripletap.numberOfTapsRequired = 3
         tftripletap.numberOfTouchesRequired = 2
         innerView.addGestureRecognizer(tftripletap)
     
-        /*
         // two finger double tap
-        let tfdoubletap = UITapGestureRecognizer(target: self, action: #selector(twoFingerDoubleTap))
+        let tfdoubletap = UITapGestureRecognizer(target: self, action: #selector(handleTwoFingerDoubleTap))
         tfdoubletap.numberOfTapsRequired = 2
         tfdoubletap.numberOfTouchesRequired = 2
         tfdoubletap.require(toFail: tftripletap)
         innerView.addGestureRecognizer(tfdoubletap)
-        */
         
         // three finger double tap
         let threefingertap = UITapGestureRecognizer(target: self, action: #selector(handleThreeFingerTap))
-        threefingertap.numberOfTapsRequired = 2
+        threefingertap.numberOfTapsRequired = 1
         threefingertap.numberOfTouchesRequired = 3
         innerView.addGestureRecognizer(threefingertap)
         
@@ -266,6 +264,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         tap.require(toFail: doubletap)
+        tap.require(toFail: threefingertap)
         innerView.addGestureRecognizer(tap)
    
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
@@ -428,11 +427,11 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
     }
     
-    @objc func getDirection(targetPoint: CGPoint) {
+    @objc func getDirection(targetPoint: CGPoint) -> String {
         // scrollView center point(absolute)
-        let centerPoint = CGPoint(x: scrollView.frame.origin.x + scrollView.frame.width / 2, y: scrollView.frame.origin.y + scrollView.frame.height / 2)
+        let centerPoint = CGPoint(x: scrollView.frame.width / 2, y: scrollView.frame.height / 2)
         
-        let defaultPoint = CGPoint(x: scrollView.frame.origin.x + scrollView.frame.width / 2, y: scrollView.frame.origin.y)
+        let defaultPoint = CGPoint(x: scrollView.frame.origin.x + scrollView.frame.width / 2, y: scrollView.frame.origin.y) // default vector (12 o'clock direction)
         
         let vector1 = CGVector(dx: defaultPoint.x - centerPoint.x, dy: defaultPoint.y - centerPoint.y)
         let vector2 = CGVector(dx: targetPoint.x - centerPoint.x, dy: targetPoint.y - centerPoint.y)
@@ -443,22 +442,79 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         if degree < 0 { degree += 360.0 }
         
-        if degree > 0 && degree <= 30 {
-            
+        if degree > 345.0 {
+            return "12"
         }
-        
-        print(degree)
+        else if degree <= 15.0 {
+            return "12"
+        }
+        else if degree <= 45.0 {
+            return "1"
+        }
+        else if degree <= 75.0 {
+            return "2"
+        }
+        else if degree <= 105.0 {
+            return "3"
+        }
+        else if degree <= 135.0 {
+            return "4"
+        }
+        else if degree <= 165.0 {
+            return "5"
+        }
+        else if degree <= 195.0 {
+            return "6"
+        }
+        else if degree <= 225.0 {
+            return "7"
+        }
+        else if degree <= 255.0 {
+            return "8"
+        }
+        else if degree <= 285.0 {
+            return "9"
+        }
+        else if degree <= 315.0 {
+            return "10"
+        }
+        else if degree <= 345 {
+            return "11"
+        }
+        else {
+            return ""
+        }
         
     }
     
     @objc func handleThreeFingerTap(_ gestureRecognizer:
-        UITapGestureRecognizer) {
-        scrollView.zoom(to: CGRect(x: 0.0, y: 0.0, width: scrollView.frame.width, height: scrollView.frame.height), animated: true)
+        UITapGestureRecognizer) { // get current state
+        //scrollView.zoom(to: CGRect(x: 0.0, y: 0.0, width: scrollView.frame.width, height: scrollView.frame.height), animated: true)
+        
+        let origin = CGPoint(x: scrollView.contentOffset.x / scrollView.zoomScale, y: scrollView.contentOffset.y / scrollView.zoomScale)
+        let size = CGSize(width: scrollView.contentSize.width / (scrollView.zoomScale * scrollView.zoomScale) , height: scrollView.contentSize.height / (scrollView.zoomScale * scrollView.zoomScale))
+        
+        let rect = CGRect(origin: origin, size: size)
+        
+        let absoluteCenterPoint = CGPoint(x: scrollView.frame.width / 2, y: scrollView.frame.height / 2)
+        
+        let currentCenterPoint = CGPoint(x: rect.origin.x + rect.width / 2, y: rect.origin.y + rect.height / 2)
+        
+        let distance = sqrt(pow(currentCenterPoint.x - absoluteCenterPoint.x, 2) + pow(currentCenterPoint.y - absoluteCenterPoint.y, 2))
+     
+        let zoomscale = Int(Double(round(1000 * scrollView.zoomScale) / 1000) * 100 / 10) * 10
+        
+        print(origin)
+        print(absoluteCenterPoint)
+        print(currentCenterPoint)
+        tts(input: String(zoomscale) + "%, " + getDirection(targetPoint: currentCenterPoint) + " o'clock, " + String(format: "%.1f", Double(distance)) + " pixels")
+        
     }
     
-    @objc func twoFingerTripleTap(_ gestureRecognizer: UITapGestureRecognizer) {
-        tts(input: "reset zoom to default")
+    @objc func handleTwoFingerTripleTap(_ gestureRecognizer: UITapGestureRecognizer) {
+        tts(input: "reset zoom to default, 100%")
         
+        /*
         let allViews = UIView.getAllSubviews(from: innerView)
         
         let point = allViews[highlighted].frame.origin
@@ -472,6 +528,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         let origin = CGPoint(x: point_x - size.width / 2,
                              y: point_y - size.height / 2)
         scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
+        */
+        
+        scrollView.zoom(to:CGRect(x: 0.0, y: 0.0, width: innerView.frame.width, height: innerView.frame.height), animated: true)
+        
     }
     
     @objc func handleRotation(_ gestureRecognizer: UIRotationGestureRecognizer) {
@@ -519,6 +579,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
+      
         if centerZoom == true {
                 
             let allViews = UIView.getAllSubviews(from: innerView)
@@ -543,6 +604,11 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     }
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+        
+        let origin = CGPoint(x: scrollView.contentOffset.x / scrollView.zoomScale, y: scrollView.contentOffset.y / scrollView.zoomScale)
+        let size = CGSize(width: scrollView.contentSize.width / (scrollView.zoomScale * scrollView.zoomScale) , height: scrollView.contentSize.height / (scrollView.zoomScale * scrollView.zoomScale))
+        
+        let rect = CGRect(origin: origin, size: size)
         
         if mode == "pinch" {
             
@@ -764,7 +830,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
        }
     
-    @objc func twoFingerDoubleTap(_ gestureRecognizer: UITapGestureRecognizer) {
+    @objc func handleTwoFingerDoubleTap(_ gestureRecognizer: UITapGestureRecognizer) {
         if mode == "pinch" || mode == "functional" {
             let origin = scrollView.frame.origin
             
