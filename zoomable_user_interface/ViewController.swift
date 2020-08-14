@@ -157,12 +157,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
 
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        //drawHouse(origin_x: 0, origin_y: 0)
+
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
-        //scrollView.zoomScale = 2.0
-        //scrollView.zoom
+    
         // outlet
-     
         background.accessibilityIdentifier = "background"
         
         roof1.accessibilityIdentifier = "roof1"
@@ -352,49 +350,51 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     }
     
     @objc func handleTwoFingerPan(_ gestureRecognizer: UIPanGestureRecognizer) { // only for "continuous" condition
-        scrollView.isScrollEnabled = true
-        scrollView.panGestureRecognizer.isEnabled = true
-        //print(gestureRecognizer.velocity(in: innerView).x)
-        /*
-        var panned_x = 0.0 - gestureRecognizer.velocity(in: innerView).x / scrollView.zoomScale
-        
-        var panned_y = 0.0 - gestureRecognizer.velocity(in: innerView).y / scrollView.zoomScale
-        
-        if panned_x < 0.0 {
-            panned_x = 0.0
+        if rotateMode == 1 { // panning mode
+            scrollView.isScrollEnabled = true
+            scrollView.panGestureRecognizer.isEnabled = true
+            //print(gestureRecognizer.velocity(in: innerView).x)
+            /*
+            var panned_x = 0.0 - gestureRecognizer.velocity(in: innerView).x / scrollView.zoomScale
+            
+            var panned_y = 0.0 - gestureRecognizer.velocity(in: innerView).y / scrollView.zoomScale
+            
+            if panned_x < 0.0 {
+                panned_x = 0.0
+            }
+            else if panned_x >= innerView.frame.width {
+                panned_x = innerView.frame.width
+            }
+            
+            if panned_y < 0.0 {
+                panned_y = 0.0
+            }
+            else if panned_y >= innerView.frame.height {
+                panned_y = innerView.frame.height
+            }
+            
+            scrollView.setContentOffset(CGPoint(x: panned_x, y: panned_y), animated: true)
+            */
+            var panned_x = scrollView.contentOffset.x - gestureRecognizer.velocity(in: innerView).x
+            
+            var panned_y = scrollView.contentOffset.y - gestureRecognizer.velocity(in: innerView).y
+            
+            if panned_x < 0.0 {
+                panned_x = 0.0
+            }
+            else if panned_x > scrollView.frame.width {
+                panned_x = scrollView.frame.width
+            }
+            
+            if panned_y < 0.0 {
+                panned_y = 0.0
+            }
+            else if panned_y > scrollView.frame.height {
+                panned_y = scrollView.frame.height
+            }
+            
+            scrollView.setContentOffset(CGPoint(x: panned_x, y: panned_y), animated: true)
         }
-        else if panned_x >= innerView.frame.width {
-            panned_x = innerView.frame.width
-        }
-        
-        if panned_y < 0.0 {
-            panned_y = 0.0
-        }
-        else if panned_y >= innerView.frame.height {
-            panned_y = innerView.frame.height
-        }
-        
-        scrollView.setContentOffset(CGPoint(x: panned_x, y: panned_y), animated: true)
-        */
-        var panned_x = scrollView.contentOffset.x - gestureRecognizer.velocity(in: innerView).x
-        
-        var panned_y = scrollView.contentOffset.y - gestureRecognizer.velocity(in: innerView).y
-        
-        if panned_x < 0.0 {
-            panned_x = 0.0
-        }
-        else if panned_x > scrollView.frame.width {
-            panned_x = scrollView.frame.width
-        }
-        
-        if panned_y < 0.0 {
-            panned_y = 0.0
-        }
-        else if panned_y > scrollView.frame.height {
-            panned_y = scrollView.frame.height
-        }
-        
-        scrollView.setContentOffset(CGPoint(x: panned_x, y: panned_y), animated: true)
         
         /*
         print("scrollViewoffset")
