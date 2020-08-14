@@ -238,8 +238,9 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
 
         scrollView.minimumZoomScale = 1.0
         //scrollView.maximumZoomScale = scrollView.frame.width / petal1.frame.width
-        if mode == "None" { // no zooming
+        if mode == "None" || mode == "Pan-Only" { // no zooming
             scrollView.maximumZoomScale = 1.0
+            scrollView.pinchGestureRecognizer?.isEnabled = false
         }
         else {
             scrollView.maximumZoomScale = 28.0
@@ -247,6 +248,14 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         scrollView.delegate = self
         
         scrollView.isScrollEnabled = false
+        
+        
+        if mode == "Pan-Only" { // mode: panning only
+            rotateMode = 1
+        }
+        else if mode == "Zoom-Only" { // mode: zooming only
+            rotateMode = 0
+        }
         
         let doubletap = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap))
         doubletap.numberOfTapsRequired = 2
@@ -460,7 +469,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     }
     
     @objc func handleRotation(_ gestureRecognizer: UIRotationGestureRecognizer) {
-        if mode != "None" {
+        if mode != "None" || mode != "Pan-Only" || mode != "Zoom-Only" {
             scrollView.isScrollEnabled = false
             if gestureRecognizer.state == .ended && gestureRecognizer.rotation > 0.4 {
                 
