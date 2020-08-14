@@ -238,7 +238,12 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
 
         scrollView.minimumZoomScale = 1.0
         //scrollView.maximumZoomScale = scrollView.frame.width / petal1.frame.width
-        scrollView.maximumZoomScale = 28.0
+        if mode == "None" { // no zooming
+            scrollView.maximumZoomScale = 1.0
+        }
+        else {
+            scrollView.maximumZoomScale = 28.0
+        }
         scrollView.delegate = self
         
         scrollView.isScrollEnabled = false
@@ -262,7 +267,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             twofingerpan.minimumNumberOfTouches = 2
             innerView.addGestureRecognizer(twofingerpan)
         }
-      
+        
         let rotate = UIRotationGestureRecognizer(target: self, action: #selector(handleRotation))
         rotate.delegate = self
         innerView.addGestureRecognizer(rotate)
@@ -350,7 +355,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     }
     
     @objc func handleTwoFingerPan(_ gestureRecognizer: UIPanGestureRecognizer) { // only for "continuous" condition
-        if rotateMode == 1 { // panning mode
+        if rotateMode == 1 && condition == "Continuous" { // panning mode
             scrollView.isScrollEnabled = true
             scrollView.panGestureRecognizer.isEnabled = true
             //print(gestureRecognizer.velocity(in: innerView).x)
@@ -455,23 +460,25 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     }
     
     @objc func handleRotation(_ gestureRecognizer: UIRotationGestureRecognizer) {
-        scrollView.isScrollEnabled = false
-        if gestureRecognizer.state == .ended && gestureRecognizer.rotation > 0.4 {
+        if mode != "None" {
+            scrollView.isScrollEnabled = false
+            if gestureRecognizer.state == .ended && gestureRecognizer.rotation > 0.4 {
+                
+                if rotateMode == 0 {
+                    rotateMode = 1
+                    tts(input: "panning mode")
+                    scrollView.pinchGestureRecognizer?.isEnabled = false
+                }
+                else {
+                    rotateMode = 0
+                    tts(input: "zooming mode")
+                    scrollView.pinchGestureRecognizer?.isEnabled = true
+                   
+                }
+            }
             
-            if rotateMode == 0 {
-                rotateMode = 1
-                tts(input: "panning mode")
-                scrollView.pinchGestureRecognizer?.isEnabled = false
-            }
-            else {
-                rotateMode = 0
-                tts(input: "zooming mode")
-                scrollView.pinchGestureRecognizer?.isEnabled = true
-               
-            }
+            writeLog(PID: PID, mode: mode, objHi: objHi, centerZoom: centerZoom, rotateMode: rotateMode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "rotation", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
         }
-        
-        writeLog(PID: PID, mode: mode, objHi: objHi, centerZoom: centerZoom, rotateMode: rotateMode, timestamp: "\(NSDate().timeIntervalSince1970)", state: gestureRecognizer.state.rawValue, gesture: "rotation", zoomScale: scrollView.zoomScale, location: gestureRecognizer.location(in: innerView), highlightedObject: highlighted, currentViews: "\(currentIndexes)")
         
     }
     
