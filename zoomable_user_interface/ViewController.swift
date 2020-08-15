@@ -16,12 +16,12 @@ extension UIView {
         return parenView.subviews.flatMap { subView -> [T] in
             var result = getAllSubviews(from: subView) as [T]
             if let view = subView as? T {
-                if view.accessibilityIdentifier! != "background" {
+                //if view.accessibilityIdentifier! != "background" {
                     
                     if selectedGroup.contains(view.accessibilityIdentifier!) {
                         result.append(view)
                     }
-                }
+                //}
             }
             return result
         }
@@ -249,7 +249,6 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         scrollView.isScrollEnabled = false
         
-        
         if mode == "Pan-Only" { // mode: panning only
             rotateMode = 1
         }
@@ -257,14 +256,23 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             rotateMode = 0
         }
         
+        let tripletap = UITapGestureRecognizer(target: self, action: #selector(handleTripleTap))
+        tripletap.numberOfTapsRequired = 3
+        tripletap.numberOfTouchesRequired = 1
+        view.addGestureRecognizer(tripletap)
+        
         let doubletap = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap))
         doubletap.numberOfTapsRequired = 2
         doubletap.numberOfTouchesRequired = 1
+        doubletap.require(toFail: tripletap)
         view.addGestureRecognizer(doubletap)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        tap.numberOfTapsRequired = 1
+        tap.numberOfTouchesRequired = 1
         tap.require(toFail: doubletap)
         tap.require(toFail: threefingertap)
+        tap.require(toFail: tripletap)
         innerView.addGestureRecognizer(tap)
    
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
@@ -309,6 +317,14 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         setInitialZoomScale()
         
+        informTarget()
+    }
+    
+    func informTarget() {
+        if taskTarget == "Random" {
+            taskTarget = selectedGroup.randomElement()!
+        }
+        tts(input: "Find " + taskTarget)
     }
     
     func setInitialZoomScale() {
@@ -330,7 +346,11 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                     if view.accessibilityIdentifier! == initialObject {
                         initialObjectCenterPoint = CGPoint(x: view.frame.origin.x + view.frame.width / 2, y: view.frame.origin.y + view.frame.height / 2)
                         
-                        scrollView.zoom(to: CGRect( x: initialObjectCenterPoint.x - (innerView.frame.width / initialZoomScale) / 2, y: initialObjectCenterPoint.y - (innerView.frame.height / initialZoomScale) / 2, width: innerView.frame.width / initialZoomScale, height: innerView.frame.height / initialZoomScale), animated: false)
+                        print(initialObjectCenterPoint)
+                        
+                        scrollView.zoom(to: CGRect( x: initialObjectCenterPoint.x - (scrollView.frame.width / initialZoomScale) / 2, y: initialObjectCenterPoint.y - (scrollView.frame.height / initialZoomScale) / 2, width: scrollView.frame.width / initialZoomScale, height: scrollView.frame.height / initialZoomScale), animated: false)
+                        
+                        print(CGRect( x: initialObjectCenterPoint.x - (scrollView.frame.width / initialZoomScale) / 2, y: initialObjectCenterPoint.y - (scrollView.frame.height / initialZoomScale) / 2, width: scrollView.frame.width / initialZoomScale, height: scrollView.frame.height / initialZoomScale))
                         
                         break
                     }
@@ -357,13 +377,25 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                         print(view.frame.width / 2)
                         initialObjectCenterPoint = CGPoint(x: view.frame.origin.x + view.frame.width / 2, y: view.frame.origin.y + view.frame.height / 2)
                         
-                        scrollView.zoom(to: CGRect( x: initialObjectCenterPoint.x - (innerView.frame.width / initialZoomScale) / 2, y: initialObjectCenterPoint.y - (innerView.frame.height / initialZoomScale) / 4, width: innerView.frame.width / initialZoomScale, height: innerView.frame.height / initialZoomScale), animated: false)
+                        scrollView.zoom(to: CGRect( x: initialObjectCenterPoint.x - (scrollView.frame.width / initialZoomScale) / 2, y: initialObjectCenterPoint.y - (scrollView.frame.height / initialZoomScale) / 4, width: scrollView.frame.width / initialZoomScale, height: scrollView.frame.height / initialZoomScale), animated: false)
                         
                         break
                     }
                 }
             }
 
+        }
+        
+    }
+    
+    // target found (task end)
+    @objc func handleTripleTap(_ gestureRecognizer: UITapGestureRecognizer) {
+        let allViews = UIView.getAllSubviews(from: innerView)
+        
+        if allViews[highlighted].accessibilityIdentifier! == taskTarget {
+            outputAlert(title: "Task complete!", message: "You've found the target object.", text: "Enter")
+            
+            print("Task complete, you've found the target object.")
         }
         
     }
@@ -504,9 +536,6 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
      
         let zoomscale = Int(Double(round(1000 * scrollView.zoomScale) / 1000) * 100 / 10) * 10
         
-        print(origin)
-        print(absoluteCenterPoint)
-        print(currentCenterPoint)
         tts(input: String(zoomscale) + "%, " + getDirection(targetPoint: currentCenterPoint) + " o'clock, " + String(format: "%.1f", Double(distance)) + " pixels")
         
     }
@@ -666,7 +695,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         let allViews = UIView.getAllSubviews(from: innerView)
         
-        if mode == "functional" {
+        if condition == "Object" {
              
             let scale = allViews[highlighted].frame.width + CGFloat(60)
 
@@ -686,7 +715,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                     
                     AudioServicesPlaySystemSound(1109)
                      
-                    tts(input: String(allViews[highlighted].accessibilityIdentifier!) + "zoomed")
+                    tts(input: String(allViews[highlighted].accessibilityIdentifier!) + " zoomed")
                          
                  } else if scrollView.zoomScale == allViews[highlighted].frame.width { //zoom out
                      let point = allViews[highlighted].frame.origin
@@ -737,7 +766,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             }
         }
         
-        else if mode == "fixed" {
+        else if condition == "Pixel" { // linear
             
             if zoomLevel == 1 { // zoom in
                 //AudioServicesPlaySystemSound(1109)
@@ -831,7 +860,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
        }
     
     @objc func handleTwoFingerDoubleTap(_ gestureRecognizer: UITapGestureRecognizer) {
-        if mode == "pinch" || mode == "functional" {
+        //if mode == "pinch" || mode == "functional" {
+        if mode == "Object" {
             let origin = scrollView.frame.origin
             
             scrollView.zoom(to:CGRect(origin: origin, size: scrollView.frame.size), animated: true)
@@ -839,7 +869,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             tts(input: "zoomed out")
         }
         
-        else if mode == "fixed" {
+        else if condition == "Pixel" {
             if scrollView.zoomScale == 1.0 { // zoom in
             
             }
@@ -973,6 +1003,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
     }
      
+    /*
      @objc func handleSwipe(_ gestureRecognizer: UISwipeGestureRecognizer){
         let allViews = UIView.getAllSubviews(from: innerView)
         
@@ -1022,6 +1053,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         }
      
      }
+    */
     
     func delay(delay:Double, closure:()->()) {
 
@@ -1323,6 +1355,18 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         }
         
         return "null"
+    }
+    
+    func outputAlert(title : String, message : String, text : String) {
+
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
+
+        let okButton = UIAlertAction(title: text, style: UIAlertAction.Style.cancel, handler: nil)
+
+        alertController.addAction(okButton)
+
+        return self.present(alertController, animated: true, completion: nil)
+
     }
     
     func getObjectCoordinatesFromImageView () {

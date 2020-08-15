@@ -13,7 +13,7 @@ var mode = ""
 var PID = ""
 var condition = ""
 var imgID = ""
-var objectTarget = ""
+var taskTarget = ""
 var initialZoomLevel = ""
 var centerPoint = ""
 var objHi = false
@@ -69,7 +69,7 @@ class Option: UITableViewController {
         mode = DropdownMode.optionArray[DropdownMode.selectedIndex!]
         condition = DropdownCondition.optionArray[DropdownCondition.selectedIndex!]
         imgID = DropdownImgID.optionArray[DropdownImgID.selectedIndex!]
-        objectTarget = DropdownTarget.optionArray[DropdownTarget.selectedIndex!]
+        taskTarget = DropdownTarget.optionArray[DropdownTarget.selectedIndex!]
         initialZoomLevel = DropdownZoomLV.optionArray[DropdownZoomLV.selectedIndex!]
         centerPoint = DropdownCenterPoint.optionArray[DropdownCenterPoint.selectedIndex!]
         
