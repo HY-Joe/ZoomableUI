@@ -238,7 +238,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         //scrollView.maximumZoomScale = scrollView.frame.width / petal1.frame.width
         
         if mode == "None" || mode == "Pan-Only" { // no zooming(no pinch)
-            scrollView.maximumZoomScale = 1.0
+            //scrollView.maximumZoomScale = 1.0
             scrollView.pinchGestureRecognizer?.isEnabled = false
         }
         else {
@@ -256,6 +256,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             rotateMode = 0
         }
         
+        // target found
         let tripletap = UITapGestureRecognizer(target: self, action: #selector(handleTripleTap))
         tripletap.numberOfTapsRequired = 3
         tripletap.numberOfTouchesRequired = 1
@@ -292,6 +293,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         else if condition == "Pixel" || condition == "Object" { // not continuous
             print(condition)
             scrollView.pinchGestureRecognizer?.isEnabled = false
+            scrollView.isScrollEnabled = false
         }
         
         let allViews = UIView.getAllSubviews(from: innerView)
@@ -318,13 +320,18 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         setInitialZoomScale()
         
         informTarget()
+        
+        if mode == "Pan+SpecialZoom" {
+            centerZoom = true
+        }
+
     }
     
     func informTarget() {
         if taskTarget == "Random" {
             taskTarget = selectedGroup.randomElement()!
+            tts(input: "Find " + taskTarget)
         }
-        tts(input: "Find " + taskTarget)
     }
     
     func setInitialZoomScale() {
@@ -348,9 +355,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                         
                         print(initialObjectCenterPoint)
                         
-                        scrollView.zoom(to: CGRect( x: initialObjectCenterPoint.x - (scrollView.frame.width / initialZoomScale) / 2, y: initialObjectCenterPoint.y - (scrollView.frame.height / initialZoomScale) / 2, width: scrollView.frame.width / initialZoomScale, height: scrollView.frame.height / initialZoomScale), animated: false)
-                        
-                        print(CGRect( x: initialObjectCenterPoint.x - (scrollView.frame.width / initialZoomScale) / 2, y: initialObjectCenterPoint.y - (scrollView.frame.height / initialZoomScale) / 2, width: scrollView.frame.width / initialZoomScale, height: scrollView.frame.height / initialZoomScale))
+                        scrollView.zoom(to: CGRect( x: initialObjectCenterPoint.x - (background.frame.width / initialZoomScale) / 2, y: initialObjectCenterPoint.y - (background.frame.height / initialZoomScale) / 3, width: background.frame.width / initialZoomScale, height: background.frame.height / initialZoomScale), animated: false)
                         
                         break
                     }
@@ -609,13 +614,23 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
       
+    }
+    
+    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+        
+        let origin = CGPoint(x: scrollView.contentOffset.x / scrollView.zoomScale, y: scrollView.contentOffset.y / scrollView.zoomScale)
+        let size = CGSize(width: scrollView.contentSize.width / (scrollView.zoomScale * scrollView.zoomScale) , height: scrollView.contentSize.height / (scrollView.zoomScale * scrollView.zoomScale))
+        
+        let rect = CGRect(origin: origin, size: size)
+        
         if centerZoom == true {
-                
+                    
             let allViews = UIView.getAllSubviews(from: innerView)
             
             //scrollView.contentInset = CGPoint(x: allViews[highlighted].frame.origin.x + allViews[highlighted].frame.width / 2, y: allViews[highlighted].frame.origin.y + allViews[highlighted].frame.height / 2)
             
             //innerView.center = CGPoint(x: allViews[highlighted].frame.origin.x + allViews[highlighted].frame.width / 2, y: allViews[highlighted].frame.origin.y + allViews[highlighted].frame.height / 2)
+            print(allViews[highlighted].accessibilityIdentifier!)
             
             let point = allViews[highlighted].frame.origin
             
@@ -628,18 +643,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                                  y: point_y - scrollView.frame.height / scrollView.zoomScale)
             scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
             
-            
         }
-    }
-    
-    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        
-        let origin = CGPoint(x: scrollView.contentOffset.x / scrollView.zoomScale, y: scrollView.contentOffset.y / scrollView.zoomScale)
-        let size = CGSize(width: scrollView.contentSize.width / (scrollView.zoomScale * scrollView.zoomScale) , height: scrollView.contentSize.height / (scrollView.zoomScale * scrollView.zoomScale))
-        
-        let rect = CGRect(origin: origin, size: size)
-        
-        if mode == "pinch" {
+        else if condition == "Continuous" {
             
             let zoomscale = Int(Double(round(1000 * scrollView.zoomScale) / 1000) * 100 / 10) * 10
             tts(input: String(zoomscale) + "%")
@@ -684,7 +689,6 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             
             allViews[highlighted].layer.borderWidth = 5
             //(PID: String, mode: String, timestamp: String, state: Int, gesture: String, zoomScale: CGFloat, location: CGPoint, highlightedObject: Int, currentViews: String)
-          
             
         }
     
@@ -710,7 +714,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
                      let size = CGSize(width: scale,
                                        height: scale)
                      let origin = CGPoint(x: point_x - size.width / 2,
-                                          y: point_y - size.height / 2)
+                                          y: point_y - size.height / 3)
                      scrollView.zoom(to:CGRect(origin: origin, size: size), animated: true)
                     
                     AudioServicesPlaySystemSound(1109)
