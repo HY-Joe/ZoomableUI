@@ -240,6 +240,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         if mode == "None" || mode == "Pan-Only" { // no zooming(no pinch)
             //scrollView.maximumZoomScale = 1.0
             scrollView.pinchGestureRecognizer?.isEnabled = false
+            scrollView.maximumZoomScale = CGFloat((initialZoomLevel as NSString).floatValue) / 100
+            scrollView.minimumZoomScale = CGFloat((initialZoomLevel as NSString).floatValue) / 100
         }
         else {
             scrollView.maximumZoomScale = 28.0
@@ -363,6 +365,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             }
             else if centerPoint == "TopLeft" {
                 scrollView.zoom(to: CGRect(x: scrollView.frame.origin.x, y: scrollView.frame.origin.y, width: scrollView.frame.width / initialZoomScale, height: scrollView.frame.height / initialZoomScale ), animated: false)
+                print("topleft")
             }
                 
             else if centerPoint == "ImgCenter" {
